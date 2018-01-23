@@ -1,8 +1,18 @@
 #include "../headers/core/Files.hpp"
+#include "../headers/core/Errors.hpp"
+#include "../headers/core/Macros.hpp"
 
 std::string read_file(const char* path)
 {
     std::ifstream file(path);
+
+	if(!file.good())
+	{
+		error("File couldn't be found!");
+		cout("File: "); coutln(path);
+		file.close();
+		return "";
+	}	
 
 	std::string output = "";
 
@@ -12,6 +22,7 @@ std::string read_file(const char* path)
         while(getline(file, line))
         {
             output += line;
+			output += "\n";
         }
     }
 

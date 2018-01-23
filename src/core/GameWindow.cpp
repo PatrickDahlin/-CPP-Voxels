@@ -9,10 +9,18 @@ window(NULL), context(NULL), flags(flags), title(title), width(width), height(he
 
 GameWindow::~GameWindow()
 {
+	destroy();
+}
+
+void GameWindow::destroy()
+{
 	if(context)
 		SDL_GL_DeleteContext(context);
 	if(window)
 		SDL_DestroyWindow(window);
+
+	context = NULL;
+	window = NULL;
 }
 
 void GameWindow::set_window_flags(SDL_WindowFlags flags)

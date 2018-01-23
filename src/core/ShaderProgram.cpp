@@ -3,9 +3,9 @@
 #include <vector>
 
 ShaderProgram::ShaderProgram(const char* vert_src, const char* frag_src) :
-shader_program(0), vert_shader_src(vert_src), frag_shader_src(frag_src)
+shader_program(0)
 {
-	load_shaders();	
+	load_shaders(vert_src, frag_src);	
 }
 
 ShaderProgram::~ShaderProgram()
@@ -14,11 +14,9 @@ ShaderProgram::~ShaderProgram()
 	{
 		glDeleteProgram(shader_program);
 	}
-	delete vert_shader_src;
-	delete frag_shader_src;
 }
 
-void ShaderProgram::load_shaders()
+void ShaderProgram::load_shaders(const char* v_src, const char* f_src)
 {
 	GLuint vert_shader_id = glCreateShader(GL_VERTEX_SHADER);
 	GLuint frag_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
@@ -28,7 +26,7 @@ void ShaderProgram::load_shaders()
 
 	std::cout << "Compiling vertex shader..." << std::endl;
 
-	glShaderSource(vert_shader_id, 1, &vert_shader_src , NULL);
+	glShaderSource(vert_shader_id, 1, &v_src , NULL);
 	glCompileShader(vert_shader_id);
 
 	glGetShaderiv(vert_shader_id, GL_COMPILE_STATUS, &result);
@@ -47,7 +45,7 @@ void ShaderProgram::load_shaders()
 
 	std::cout << "Compiling fragment shader..." << std::endl;
 
-	glShaderSource(frag_shader_id, 1, &frag_shader_src , NULL);
+	glShaderSource(frag_shader_id, 1, &f_src , NULL);
 	glCompileShader(frag_shader_id);
 
 	glGetShaderiv(frag_shader_id, GL_COMPILE_STATUS, &result);

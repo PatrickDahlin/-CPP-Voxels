@@ -13,11 +13,9 @@ public:
 
 protected:
 
-	void load_shaders();
+	void load_shaders(const char* v_src, const char* f_src);
 
 	GLuint		shader_program;
-	const char* vert_shader_src;
-	const char* frag_shader_src;
 
 };
 

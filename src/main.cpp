@@ -6,6 +6,8 @@
 #include "headers/core/GameWindow.hpp"
 #include "headers/core/Errors.hpp"
 #include "headers/core/ShaderProgram.hpp"
+#include "headers/core/Files.hpp"
+#include "headers/core/Macros.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -19,7 +21,12 @@ int main(int argc, char* argv[])
 	GameWindow game_window = GameWindow("Game", 1280, 720, SDL_WINDOW_OPENGL);
 
 
-	glewInit();
+	GLenum res = glewInit();
+	if(res != GLEW_OK)
+	{
+		error("GLEW failed to initialize!");
+		return -1;
+	}
 
 	GLuint vao_id;
 	glGenVertexArrays(1, &vao_id);
@@ -36,13 +43,34 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
-	
 
-	const char* vert = "";
-	const char* frag = "";
+	const char* vert = read_file("src/shaders/Basic-vert.glsl").data();
+	const char* frag = read_file("src/shaders/Basic-frag.glsl").data();
+//*/
+/*
+	const char* vert = "#version 330 core\n\
+\
+in vec3 pos;\
+void main(){\
+    gl_Position = vec4(pos,1);\
+}";
+
+const char* frag = "#version 330 core\n\
+\
+out vec4 frag_color;\
+void main(){\
+	frag_color = vec4(1,0,0,1);\
+}";//*/
 
 	ShaderProgram shader = ShaderProgram(vert, frag);
-//*/
+
+	coutln("---- Vertex Shader code: ----");
+	coutln(vert);
+	coutln("---- Fragment Shader code: ----");
+	coutln(frag);
+	coutln("-------------------------------");
+
+
 	bool run = true;
 	while(run)
 	{
@@ -71,12 +99,13 @@ int main(int argc, char* argv[])
 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDisableVertexAttribArray(0);
-//*/
-		game_window.swap_buffers();
-		SDL_Delay(16); // 16 ms is about 60 fps
-	}
 
-	//glUseProgram(0);
+		game_window.swap_buffers();
+		SDL_Delay(100); // 16 ms is about 60 fps
+	}
+	
+	game_window.destroy();
+
 	SDL_Quit();
 	return 0;
 }

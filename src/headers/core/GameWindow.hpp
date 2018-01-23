@@ -21,6 +21,8 @@ public:
 
 	void set_vsync(bool vsync);
 
+	void destroy();
+
 protected:
 
 	void create_window();

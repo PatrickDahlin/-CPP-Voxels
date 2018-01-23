@@ -2,7 +2,7 @@
 #define _ERRORS_HPP_
 #include <iostream>
 
-#define error(x) std::cout << "ERROR " << __FILE__ << ":" << __LINE__ << " > " << x << std::endl;
+#define error(x) std::cout << "-----------------------------" << std::endl << "ERROR " << __FILE__ << ":" << __LINE__ << " > " << x << std::endl << "-----------------------------" << std::endl;
 
 #else
 
