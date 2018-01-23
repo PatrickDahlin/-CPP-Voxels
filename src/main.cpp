@@ -2,6 +2,7 @@
 #include <GL\glew.h>
 #include <SDL2\SDL.h>
 #include <iostream>
+#include <fstream>
 #include "headers/core/GameWindow.hpp"
 #include "headers/core/Errors.hpp"
 #include "headers/core/ShaderProgram.hpp"
@@ -35,16 +36,10 @@ int main(int argc, char* argv[])
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
-	const char* vert = "#version 330 core \n\
-	in vec3 pos;\
-	void main(){\
-	gl_Position = vec4(pos,1);\
-	}";
-	const char* frag = "#version 330 core \n\
-	out vec4 frag_color;\
-	void main(){\
-	frag_color = vec4(1,0,0,1);\
-	}";
+	
+
+	const char* vert = "";
+	const char* frag = "";
 
 	ShaderProgram shader = ShaderProgram(vert, frag);
 //*/
