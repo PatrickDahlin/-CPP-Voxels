@@ -20,7 +20,6 @@ int main(int argc, char* argv[])
 
 	glewInit();
 
-
 	GLuint vao_id;
 	glGenVertexArrays(1, &vao_id);
 	glBindVertexArray(vao_id);
@@ -48,7 +47,7 @@ int main(int argc, char* argv[])
 	}";
 
 	ShaderProgram shader = ShaderProgram(vert, frag);
-
+//*/
 	bool run = true;
 	while(run)
 	{
@@ -60,6 +59,7 @@ int main(int argc, char* argv[])
 		}
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
 		shader.use();
 
@@ -76,12 +76,12 @@ int main(int argc, char* argv[])
 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDisableVertexAttribArray(0);
-
+//*/
 		game_window.swap_buffers();
 		SDL_Delay(16); // 16 ms is about 60 fps
 	}
 
-	glUseProgram(0);
+	//glUseProgram(0);
 	SDL_Quit();
 	return 0;
 }
