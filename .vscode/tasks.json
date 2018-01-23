@@ -1,0 +1,43 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "(Debug) Build & Run",
+			"type": "shell",
+			"command": "Compile_Debug.bat && bin\\build.exe",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "(Debug) Build",
+			"type": "shell",
+			"command": "Compile_Debug.bat",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "(Release) Build & Run",
+			"type": "shell",
+			"command": "Compile_Release.bat && bin\\build.exe",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "(Release) Build",
+			"type": "shell",
+			"command": "Compile_Release.bat",
+			"problemMatcher": [
+				"$gcc"
+			]
+		}
+	]
+}
