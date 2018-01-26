@@ -13,7 +13,7 @@ set libs=-lopengl32 -lglew32 -lmingw32 -lsdl2main -lsdl2
 
 for /f %%A in ('forfiles /s /m *.cpp /c "cmd /c echo @relpath"') do set var=!var! %%~A
 
-set total=-Wall %var% %include_dir% %lib_dir% %libs% -o %output% -O3 -mwindows
+set total=-std=c++11 -Wall %var% %include_dir% %lib_dir% %libs% -o %output% -O3 -mwindows
 
 echo Compile options:
 echo %total%
