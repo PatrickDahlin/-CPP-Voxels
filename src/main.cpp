@@ -8,6 +8,7 @@
 #include "headers/core/ShaderProgram.hpp"
 #include "headers/core/Files.hpp"
 #include "headers/core/Macros.hpp"
+#include "headers/core/GLBuffer.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -28,6 +29,10 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
+
+
+
+
 	GLuint vao_id;
 	glGenVertexArrays(1, &vao_id);
 	glBindVertexArray(vao_id);
@@ -35,41 +40,26 @@ int main(int argc, char* argv[])
 	static const GLfloat g_vertex_buffer_data[] = {
 		-1.0f, -1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f
+		0.0f, 1.5f, 0.0f
 	};
 
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+	GLBuffer myBuffer((void*)g_vertex_buffer_data, sizeof(g_vertex_buffer_data), 3);
+		
 
 
-	const char* vert = read_file("src/shaders/Basic-vert.glsl").data();
-	const char* frag = read_file("src/shaders/Basic-frag.glsl").data();
-//*/
-/*
-	const char* vert = "#version 330 core\n\
-\
-in vec3 pos;\
-void main(){\
-    gl_Position = vec4(pos,1);\
-}";
+	//
+	// Shader stuff
+	//
 
-const char* frag = "#version 330 core\n\
-\
-out vec4 frag_color;\
-void main(){\
-	frag_color = vec4(1,0,0,1);\
-}";//*/
+	std::string vert = read_file("src/shaders/Basic-vert.glsl");
+	std::string frag = read_file("src/shaders/Basic-frag.glsl");
+	ShaderProgram shader = ShaderProgram(vert.data(), frag.data());
 
-	ShaderProgram shader = ShaderProgram(vert, frag);
 
-	coutln("---- Vertex Shader code: ----");
-	coutln(vert);
-	coutln("---- Fragment Shader code: ----");
-	coutln(frag);
-	coutln("-------------------------------");
-
+	//
+	// Main loop
+	//
 
 	bool run = true;
 	while(run)
@@ -86,24 +76,18 @@ void main(){\
 
 		shader.use();
 
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glVertexAttribPointer(
-			0,			// Attrib 0, must match layout in shader
-			3,			// size
-			GL_FLOAT,	// type
-			GL_FALSE,	// normalized?
-			0,			// stride
-			(void*)0	// offset
-		);
-
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glDisableVertexAttribArray(0);
+		myBuffer.bind();
+		myBuffer.data_pointer(0, 3, GL_FLOAT, 3 * sizeof(float), true, BUFFER_OFFSET(0));
+		myBuffer.draw();
+		myBuffer.unbind();
 
 		game_window.swap_buffers();
 		SDL_Delay(100); // 16 ms is about 60 fps
 	}
 	
+	// Unbind vao
+	glBindVertexArray(0);
+
 	game_window.destroy();
 
 	SDL_Quit();

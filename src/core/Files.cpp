@@ -4,29 +4,8 @@
 
 std::string read_file(const char* path)
 {
-    std::ifstream file(path);
+	std::ifstream infile { path };
+	std::string file_contents { std::istreambuf_iterator<char>(infile), std::istreambuf_iterator<char>() };
 
-	if(!file.good())
-	{
-		error("File couldn't be found!");
-		cout("File: "); coutln(path);
-		file.close();
-		return "";
-	}	
-
-	std::string output = "";
-
-    if(file.is_open())
-    {
-        std::string line;
-        while(getline(file, line))
-        {
-            output += line;
-			output += "\n";
-        }
-    }
-
-	file.close();
-
-    return output;
+    return file_contents;
 }

@@ -1,19 +1,20 @@
 #ifndef _SHADERPGROGRAM_HPP_
 #define _SHADERPGROGRAM_HPP_
 
+#include <string>
 #include <GL/glew.h>
 
 class ShaderProgram
 {
 public:
-	ShaderProgram(const char* vert_src, const char* frag_src);
+	ShaderProgram(std::string vert_src, std::string frag_src);
 	~ShaderProgram();
 
 	void use();
 
 protected:
 
-	void load_shaders(const char* v_src, const char* f_src);
+	void load_shaders(std::string v_src, std::string f_src);
 
 	GLuint		shader_program;
 
