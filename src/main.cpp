@@ -4,11 +4,31 @@
 #include <iostream>
 #include <fstream>
 #include "headers/core/GameWindow.hpp"
-#include "headers/core/Errors.hpp"
 #include "headers/core/ShaderProgram.hpp"
 #include "headers/core/Files.hpp"
 #include "headers/core/Macros.hpp"
 #include "headers/core/GLBuffer.hpp"
+#include "headers/core/Thread.hpp"
+
+
+/*
+
+SDL_Event event;
+    while (F_EVENT_LOOP == RUNNING)
+    {
+        if (SDL_WaitEvent(&event)) // execution suspends here while waiting on an event
+        {
+            switch (event.type)
+            {
+                case SDL_QUIT:
+                    printf("SDL_QUIT signal received.\n");
+                    F_EVENT_LOOP = STOPPED;
+            }
+        }
+    }
+
+ */
+
 
 int main(int argc, char* argv[])
 {
@@ -32,7 +52,8 @@ int main(int argc, char* argv[])
 
 
 
-
+	// GLBuffer needs a Vao bound at all times
+	// this is new in GL 3.3+ ..why?.. Q.Q
 	GLuint vao_id;
 	glGenVertexArrays(1, &vao_id);
 	glBindVertexArray(vao_id);
@@ -85,6 +106,7 @@ int main(int argc, char* argv[])
 		SDL_Delay(100); // 16 ms is about 60 fps
 	}
 	
+
 	// Unbind vao
 	glBindVertexArray(0);
 

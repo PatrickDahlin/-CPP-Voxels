@@ -4,8 +4,4 @@
 
 #define error(x) std::cout << "-----------------------------" << std::endl << "ERROR " << __FILE__ << ":" << __LINE__ << " > " << x << std::endl << "-----------------------------" << std::endl;
 
-#else
-
-#define error(x)
-
 #endif
