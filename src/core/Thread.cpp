@@ -5,23 +5,9 @@
 static int run(void* data)
 {
 	Thread* t = (Thread*)data;
-
-	/*std::string s = "Started a new thread: ";
-	long time = SDL_GetTicks();
-	s += std::to_string(time);
-	s += "\n";
-
-	t->print(s);
-
-	SDL_Delay(1000);
-
-	s = "Thread finished: ";
-	time = SDL_GetTicks();
-	s += std::to_string(time);
-	s += "\n";
-
-	//t->print(s);*/
 	
+	cout("Hai from thread");
+
 	t->run_internal();
 
 	return 0;
@@ -36,11 +22,6 @@ Thread::Thread()
 		error("Failed to create thread!\n");
 		return;
 	}
-}
-
-void Thread::print(std::string msg)
-{
-	cout(msg);
 }
 
 void Thread::join()

@@ -66,7 +66,6 @@ int main(int argc, char* argv[])
 
 
 	GLBuffer myBuffer((void*)g_vertex_buffer_data, sizeof(g_vertex_buffer_data), 3);
-		
 
 
 	//

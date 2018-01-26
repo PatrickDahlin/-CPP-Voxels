@@ -9,9 +9,6 @@ public:
 	Thread();
 	~Thread();
 
-	// Print message to main thread output stream
-	void print(std::string msg);
-
 	// Request thread to close
 	void join();
 
@@ -22,6 +19,7 @@ public:
 protected:
 
 	SDL_Thread*		thread;
+	// Internal run can check this var to see if it needs to shut down
 	bool			running = true;
 
 };
