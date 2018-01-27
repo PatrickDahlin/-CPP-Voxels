@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <SDL2/SDL.h>
+#include <glm/fwd.hpp>
 
 // States for each key
 // PRESSED = the frame the key was pressed
@@ -31,7 +32,11 @@ class Input
 
 	KeyState get_mouse_btn(unsigned short button);
 
-	
+	glm::ivec2 get_mouse_pos() const;
+
+	glm::ivec2 get_mouse_pos_delta() const;
+
+	int get_scroll_delta() const;
 
 	// @TODO SDL supports text input compositions which
 	// make text inputting easier. implement this in the future

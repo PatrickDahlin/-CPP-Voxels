@@ -1,6 +1,7 @@
 #include "../headers/core/Input.hpp"
 #include "../headers/core/Macros.hpp"
 #include <SDL2/SDL.h>
+#include <glm/vec2.hpp>
 
 Input::Input() : key_map(),
 				 mouse_x(0),
@@ -24,6 +25,21 @@ KeyState Input::get_key(SDL_Keycode key)
 KeyState Input::get_mouse_btn(unsigned short button)
 {
 	return mouse_btn_state[button];
+}
+
+glm::ivec2 Input::get_mouse_pos() const
+{
+	return glm::ivec2(mouse_x,mouse_y);
+}
+
+glm::ivec2 Input::get_mouse_pos_delta() const
+{
+	return glm::ivec2(mouse_delta_x, mouse_delta_y);
+}
+
+int Input::get_scroll_delta() const
+{
+	return scroll_delta;
 }
 
 void Input::poll_events()

@@ -2,15 +2,15 @@
 #include <GL\glew.h>
 #include <SDL2\SDL.h>
 #include <iostream>
+#include <cstdio>
 #include <fstream>
 #include "headers/core/GameWindow.hpp"
 #include "headers/core/ShaderProgram.hpp"
 #include "headers/core/Files.hpp"
 #include "headers/core/Macros.hpp"
 #include "headers/core/GLBuffer.hpp"
-#include "headers/core/Thread.hpp"
 #include "headers/core/Input.hpp"
-
+#include "headers/core/Transform.hpp"
 
 
 
@@ -60,7 +60,17 @@ int main(int argc, char* argv[])
 	std::string frag = read_file("src/shaders/Basic-frag.glsl");
 	ShaderProgram shader = ShaderProgram(vert.data(), frag.data());
 
+	Transform myTransform;
 
+	myTransform.translate(1,0,0);
+	myTransform.rotate(90,0,0);
+	
+	glm::mat4 m = myTransform.get_combined();
+	printf("%f,%f,%f,%f\n%f,%f,%f,%f\n%f,%f,%f,%f\n%f,%f,%f,%f\n",m[0][0],m[1][0],m[2][0],m[3][0],
+																	m[0][1],m[1][1],m[2][1],m[3][1],
+																	m[0][2],m[1][2],m[2][2],m[3][2],
+																	m[0][3],m[1][3],m[2][3],m[3][3]);
+//*/
 	Input myInput;
 
 	//
@@ -75,8 +85,8 @@ int main(int argc, char* argv[])
 		if(myInput.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
 			exit(0);
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.use();
 
