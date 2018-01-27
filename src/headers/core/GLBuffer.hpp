@@ -37,6 +37,8 @@ class GLBuffer
 
   protected:
 
+	
+
 	unsigned int element_count;
 	unsigned int size_bytes;
 	unsigned int vbo_id;

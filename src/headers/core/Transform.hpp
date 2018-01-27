@@ -26,6 +26,8 @@ private:
 	glm::vec3 position;
 	glm::vec3 euler_angles;
 	glm::vec3 model_scale;
+
+	
 };
 
 #endif
