@@ -21,6 +21,11 @@ KeyState Input::get_key(SDL_Keycode key)
 	return key_map[key];
 }
 
+KeyState Input::get_mouse_btn(unsigned short button)
+{
+	return mouse_btn_state[button];
+}
+
 void Input::poll_events()
 {
 

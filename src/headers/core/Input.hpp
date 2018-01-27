@@ -29,6 +29,10 @@ class Input
 
 	KeyState get_key(SDL_Keycode code);
 
+	KeyState get_mouse_btn(unsigned short button);
+
+	
+
 	// @TODO SDL supports text input compositions which
 	// make text inputting easier. implement this in the future
 	void start_text_input();  // @unimplemented
