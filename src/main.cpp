@@ -9,25 +9,9 @@
 #include "headers/core/Macros.hpp"
 #include "headers/core/GLBuffer.hpp"
 #include "headers/core/Thread.hpp"
+#include "headers/core/Input.hpp"
 
 
-/*
-
-SDL_Event event;
-    while (F_EVENT_LOOP == RUNNING)
-    {
-        if (SDL_WaitEvent(&event)) // execution suspends here while waiting on an event
-        {
-            switch (event.type)
-            {
-                case SDL_QUIT:
-                    printf("SDL_QUIT signal received.\n");
-                    F_EVENT_LOOP = STOPPED;
-            }
-        }
-    }
-
- */
 
 
 int main(int argc, char* argv[])
@@ -77,6 +61,8 @@ int main(int argc, char* argv[])
 	ShaderProgram shader = ShaderProgram(vert.data(), frag.data());
 
 
+	Input myInput;
+
 	//
 	// Main loop
 	//
@@ -84,13 +70,11 @@ int main(int argc, char* argv[])
 	bool run = true;
 	while(run)
 	{
-		SDL_Event event;
-		while(SDL_PollEvent(&event))
-		{
-			if(event.key.keysym.sym == SDLK_ESCAPE)
-				run = false;
-		}
-		
+		myInput.poll_events();
+
+		if(myInput.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
+			exit(0);
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -102,7 +86,7 @@ int main(int argc, char* argv[])
 		myBuffer.unbind();
 
 		game_window.swap_buffers();
-		SDL_Delay(100); // 16 ms is about 60 fps
+		SDL_Delay(16); // 16 ms is about 60 fps
 	}
 	
 

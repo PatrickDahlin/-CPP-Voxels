@@ -1,11 +1,14 @@
 #include "../headers/core/Input.hpp"
+#include "../headers/core/Macros.hpp"
 #include <SDL2/SDL.h>
 
 Input::Input() : key_map(),
 				 mouse_x(0),
 				 mouse_y(0),
 				 mouse_delta_x(0),
-				 mouse_delta_y(0)
+				 mouse_delta_y(0),
+				 mouse_btn_state(),
+				 scroll_delta(0)
 {
 }
 
@@ -13,8 +16,17 @@ Input::~Input()
 {
 }
 
+KeyState Input::get_key(SDL_Keycode key)
+{
+	return key_map[key];
+}
+
 void Input::poll_events()
 {
+
+	mouse_delta_x = 0;
+	mouse_delta_y = 0;
+	scroll_delta = 0;
 
 	for (auto it : key_map)
 	{
@@ -46,10 +58,10 @@ void Input::poll_events()
 			exit(0); // this is NOT ok in the future, just temporarily here
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-
+			mouse_btn_state[event.button.button] = KeyState::PRESSED;
 			break;
 		case SDL_MOUSEBUTTONUP:
-
+			mouse_btn_state[event.button.button] = KeyState::RELEASED;
 			break;
 		case SDL_MOUSEMOTION:
 			mouse_x = event.motion.x;
@@ -59,11 +71,12 @@ void Input::poll_events()
 			break;
 		case SDL_MOUSEWHEEL:
 			// Scroll
-
+			scroll_delta = event.wheel.y;
 			break;
 		case SDL_WINDOWEVENT:
 			// Window resize
-
+			break;
+		default:
 			break;
 		}
 	}

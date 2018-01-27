@@ -24,7 +24,7 @@ class Input
   public:
 	Input();
 	~Input();
-	
+
 	void poll_events();
 
 	KeyState get_key(SDL_Keycode code);
@@ -41,6 +41,9 @@ class Input
 	int mouse_y;
 	int mouse_delta_x;
 	int mouse_delta_y;
+
+	std::unordered_map<int, KeyState> mouse_btn_state;
+	int scroll_delta;
 };
 
 #endif
