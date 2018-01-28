@@ -26,6 +26,8 @@ class GLBuffer
 	/* Bind this buffer to GL_ARRAY_BUFFER slot */
 	void bind();
 
+	void clear();
+
 	/* Unbind this buffer and it's attribute arrays */
 	void unbind();
 	
@@ -33,11 +35,11 @@ class GLBuffer
 	   Note that data_pointer needs to be called first to define layout */
 	void draw();
 
-	void uploadData(void *data);
+	void uploadData(void *data, unsigned int size_bytes, unsigned int vertex_count);
 
   protected:
 
-	
+
 
 	unsigned int element_count;
 	unsigned int size_bytes;

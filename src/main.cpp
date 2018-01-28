@@ -25,6 +25,29 @@ TODO:
 		Same thing for uploading/binding camera matrices to shaders
 
 
+vertexarray.addVertex(vec3)
+vertexarray.addNorm(vec3)
+vertexarray.addColor(vec3)
+vertexarray.addUv(vec2)
+
+vertexarray.addTangent(vec3)
+vertexarray.addBitangent(vec3)
+
+
+class VertexArray
+{
+	vector<GLBuffer> buffers
+	vector<DataPointer> ptrs
+}
+
+class Mesh
+{
+	VertexArray	arr
+
+}
+
+
+
 */
 
 
@@ -85,6 +108,10 @@ int main(int argc, char* argv[])
 	// Main loop
 	//
 
+	myBuffer.bind();
+	myBuffer.data_pointer(0, 3, GL_FLOAT, 3 * sizeof(float), true, BUFFER_OFFSET(0));
+		
+
 	bool run = true;
 	while(run)
 	{
@@ -96,17 +123,15 @@ int main(int argc, char* argv[])
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		RenderPass myPass;
+		//RenderPass myPass;
 		
-		myPass.draw_model(&myBuffer, &shader, &mat);
+		//myPass.draw_model(&myBuffer, &shader, &mat);
 
-		myPass.do_render();
+		//myPass.do_render();
 
-		//shader.use();
+		shader.use();
 
-		//myBuffer.bind();
-		//myBuffer.data_pointer(0, 3, GL_FLOAT, 3 * sizeof(float), true, BUFFER_OFFSET(0));
-		//myBuffer.draw();
+		myBuffer.draw();
 		//myBuffer.unbind();
 
 		game_window.swap_buffers();

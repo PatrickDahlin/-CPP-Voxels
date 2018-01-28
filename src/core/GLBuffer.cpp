@@ -7,7 +7,7 @@ GLBuffer::GLBuffer(void *data, unsigned int size_bytes,
 												vbo_id(0),
 												attribute_count(0)
 {
-	uploadData(data);
+	uploadData(data, size_bytes, vertex_count);
 }
 
 GLBuffer::~GLBuffer()
@@ -17,14 +17,32 @@ GLBuffer::~GLBuffer()
 	size_bytes = 0;
 }
 
-void GLBuffer::uploadData(void *data)
+void GLBuffer::uploadData(void *data, unsigned int size_bytes, unsigned int vertex_count)
 {
+	this->size_bytes = size_bytes;
+	this->element_count = element_count;
+
 	if (vbo_id == 0)
 		glGenBuffers(1, &vbo_id);
 
 	bind();
 
+	clear();
+	
 	glBufferData(GL_ARRAY_BUFFER, size_bytes, data, GL_STATIC_DRAW);
+
+	unbind();
+}
+
+void GLBuffer::clear()
+{
+	if(vbo_id == 0) return;
+
+	bind();
+
+	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // We don't care about old data, if any, that driver can discard
+
+	unbind();
 }
 
 void GLBuffer::bind()

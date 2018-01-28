@@ -37,7 +37,7 @@ void RenderPass::do_render()
 		// This is just for testing, won't use buffers directly in the future
 		it.buf->data_pointer(0, 3, GL_FLOAT, 3*sizeof(float), false, (void*)0);
 		it.buf->draw();
-		it.buf->unbind();
+		//it.buf->unbind();
 	}
 
 	cout("There are ");
