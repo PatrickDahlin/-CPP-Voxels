@@ -37,5 +37,6 @@
 		"xutility": "cpp",
 		"fstream": "cpp",
 		"string": "cpp"
-	}
+	},
+	"C_Cpp.errorSquiggles": "Disabled"
 }

@@ -27,6 +27,11 @@ public:
 	void set_colors(vector<vec4> cols);
 	void set_texcoords(vector<vec2> coords);
 
+	void add_vertex(vec3 vert);
+	void add_normal(vec3 norm);
+	void add_color(vec4 color);
+	void add_texcoord(vec2 coord);
+
 	void upload_data();
 
 	void draw();
@@ -34,8 +39,8 @@ public:
 	void bind();
 
 	void unbind();
-
-protected:
+	
+private:
 	
 	vector<vec3>			vertices;
 	vector<vec3>			normals;

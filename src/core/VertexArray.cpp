@@ -41,6 +41,7 @@ void VertexArray::upload_data()
 	else 
 	{
 		glBindVertexArray(0);
+		error("No vertices to upload");
 		return;	// We don't want to render if we have no vertices
 	}
 	//
@@ -113,10 +114,28 @@ void VertexArray::clear()
 	glbuffers.clear();
 }
 
+void VertexArray::draw()
+{
+	if(vertices.size() <= 0) return;
+
+	//bind();
+
+	CHECK_GL_ERROR();
+
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+
+	CHECK_GL_ERROR();
+
+	//unbind();
+
+}
+
 void VertexArray::bind()
 {
 	if(vao != 0)
 		glBindVertexArray(vao);
+
+	if(vao == 0) error("bound vertexarray with 0 id");
 }
 
 void VertexArray::unbind()
@@ -124,3 +143,42 @@ void VertexArray::unbind()
 	glBindVertexArray(0);
 }
 
+void VertexArray::set_vertices(vector<vec3> verts)
+{
+	vertices = verts;
+}
+
+void VertexArray::set_normals(vector<vec3> norms)
+{
+	normals = norms;
+}
+
+void VertexArray::set_colors(vector<vec4> cols)
+{
+	colors = cols;
+}
+
+void VertexArray::set_texcoords(vector<vec2> coords)
+{
+	texcoords = coords;
+}
+
+void VertexArray::add_vertex(vec3 vert)
+{
+	vertices.emplace_back(vert);
+}
+
+void VertexArray::add_normal(vec3 norm)
+{
+	normals.emplace_back(norm);
+}
+
+void VertexArray::add_color(vec4 color)
+{
+	colors.emplace_back(color);
+}
+
+void VertexArray::add_texcoord(vec2 coord)
+{
+	texcoords.emplace_back(coord);
+}

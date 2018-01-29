@@ -13,6 +13,7 @@
 #include "headers/core/Transform.hpp"
 #include "headers/core/Material.hpp"
 #include "headers/core/RenderPass.hpp"
+#include "headers/core/VertexArray.hpp"
 
 
 /*
@@ -24,29 +25,7 @@ TODO:
 	Materials aren't usable yet, need a way to upload the data, !Uniform buffer objects!
 		Same thing for uploading/binding camera matrices to shaders
 
-
-vertexarray.addVertex(vec3)
-vertexarray.addNorm(vec3)
-vertexarray.addColor(vec3)
-vertexarray.addUv(vec2)
-
-vertexarray.addTangent(vec3)
-vertexarray.addBitangent(vec3)
-
-
-class VertexArray
-{
-	vector<GLBuffer> buffers
-	vector<DataPointer> ptrs
-}
-
-class Mesh
-{
-	VertexArray	arr
-
-}
-
-
+	GLBuffer dispose in destructor thing
 
 */
 
@@ -88,7 +67,7 @@ int main(int argc, char* argv[])
 	};
 
 
-	GLBuffer myBuffer((void*)g_vertex_buffer_data, sizeof(g_vertex_buffer_data), 3);
+	//GLBuffer myBuffer((void*)g_vertex_buffer_data, sizeof(g_vertex_buffer_data), 3);
 
 
 	//
@@ -99,6 +78,8 @@ int main(int argc, char* argv[])
 	std::string frag = read_file("src/shaders/Basic-frag.glsl");
 	ShaderProgram shader = ShaderProgram(vert.data(), frag.data());
 
+	CHECK_GL_ERROR();
+
 	Material mat;
 	mat.tint = Color(127,127,127,255);
 
@@ -108,9 +89,17 @@ int main(int argc, char* argv[])
 	// Main loop
 	//
 
-	myBuffer.bind();
-	myBuffer.data_pointer(0, 3, GL_FLOAT, 3 * sizeof(float), true, BUFFER_OFFSET(0));
-		
+	//myBuffer.bind();
+	//myBuffer.data_pointer(0, 3, GL_FLOAT, 3 * sizeof(float), true, BUFFER_OFFSET(0));
+	
+	VertexArray myVertArr;
+
+	myVertArr.add_vertex(glm::vec3(-1,-1,0));
+	myVertArr.add_vertex(glm::vec3(-1,1,0));
+	myVertArr.add_vertex(glm::vec3(1,1,0));
+	myVertArr.upload_data();
+
+	CHECK_GL_ERROR();
 
 	bool run = true;
 	while(run)
@@ -131,13 +120,22 @@ int main(int argc, char* argv[])
 
 		shader.use();
 
-		myBuffer.draw();
+		CHECK_GL_ERROR();
+
+		myVertArr.bind();
+		CHECK_GL_ERROR();
+		myVertArr.draw();
+
+		CHECK_GL_ERROR();
+
+		//myBuffer.draw();
 		//myBuffer.unbind();
 
 		game_window.swap_buffers();
 		SDL_Delay(16); // 16 ms is about 60 fps
 	}
 	
+	myVertArr.clear();
 
 	// Unbind vao
 	glBindVertexArray(0);

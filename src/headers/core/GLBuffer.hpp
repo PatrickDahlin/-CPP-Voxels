@@ -37,6 +37,8 @@ class GLBuffer
 
 	void uploadData(void *data, unsigned int size_bytes, unsigned int vertex_count);
 
+	void dispose();
+
   protected:
 
 

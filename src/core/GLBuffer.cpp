@@ -1,4 +1,5 @@
 #include "../headers/core/GLBuffer.hpp"
+#include "../headers/core/Macros.hpp"
 #include <GL/glew.h>
 
 GLBuffer::GLBuffer(void *data, unsigned int size_bytes,
@@ -11,6 +12,19 @@ GLBuffer::GLBuffer(void *data, unsigned int size_bytes,
 }
 
 GLBuffer::~GLBuffer()
+{
+
+	/*
+	
+		TODO: if dispose is called here the buffer is prematurely deleted
+		This will cause an instant crash but no error is reported, why?
+	
+	*/
+
+	//dispose();
+}
+
+void GLBuffer::dispose()
 {
 	glDeleteBuffers(1, &vbo_id);
 	element_count = 0;
@@ -42,12 +56,13 @@ void GLBuffer::clear()
 
 	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // We don't care about old data, if any, that driver can discard
 
-	unbind();
+	//unbind();
 }
 
 void GLBuffer::bind()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
+	if(vbo_id == 0) error("bound glbuffer with 0 id");
 }
 
 void GLBuffer::unbind()
