@@ -1,9 +1,10 @@
 #ifndef _RENDERPASS_HPP_
 #define _RENDERPASS_HPP_
 
-class GLBuffer;
+class VertexArray;
 class ShaderProgram;
 class Material;
+class Camera;
 
 #include <vector>
 
@@ -12,16 +13,17 @@ public:
 	RenderPass();
 	~RenderPass();
 
-	void draw_model(GLBuffer* buf, ShaderProgram* shader, Material* mat);
+	void draw_model(VertexArray* buf, ShaderProgram* shader, Material* mat, Camera* c);
 
 	void do_render();
 
 protected:
 
 	struct DrawCall {
-		GLBuffer* buf;
+		VertexArray* buf;
 		ShaderProgram* shader;
 		Material* mat;
+		Camera* cam;
 	};
 
 	std::vector<DrawCall>		draw_calls;

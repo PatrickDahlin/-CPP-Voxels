@@ -170,9 +170,19 @@ void VertexArray::add_vertex(vec3 vert)
 	vertices.emplace_back(vert);
 }
 
+void VertexArray::add_vertex(float x, float y, float z)
+{
+	vertices.emplace_back(x, y, z);
+}
+
 void VertexArray::add_normal(vec3 norm)
 {
 	normals.emplace_back(norm);
+}
+
+void VertexArray::add_normal(float x, float y, float z)
+{
+	normals.emplace_back(x, y, z);
 }
 
 void VertexArray::add_color(vec4 color)
@@ -180,7 +190,17 @@ void VertexArray::add_color(vec4 color)
 	colors.emplace_back(color);
 }
 
+void VertexArray::add_color(float r, float g, float b, float a)
+{
+	colors.emplace_back(r, g, b, a);
+}
+
 void VertexArray::add_texcoord(vec2 coord)
 {
 	texcoords.emplace_back(coord);
+}
+
+void VertexArray::add_texcoord(float u, float v)
+{
+	texcoords.emplace_back(u, v);
 }

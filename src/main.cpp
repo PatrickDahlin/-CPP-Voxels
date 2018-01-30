@@ -14,6 +14,7 @@
 #include "headers/core/Material.hpp"
 #include "headers/core/RenderPass.hpp"
 #include "headers/core/VertexArray.hpp"
+#include "headers/core/Camera.hpp"
 
 
 /*
@@ -25,7 +26,8 @@ TODO:
 	Materials aren't usable yet, need a way to upload the data, !Uniform buffer objects!
 		Same thing for uploading/binding camera matrices to shaders
 
-	GLBuffer dispose in destructor thing
+	Camera shouldn't use Transform to get viewmatrix
+		Use position and lookat vector instead and get view matrix from glm
 
 */
 
@@ -60,15 +62,6 @@ int main(int argc, char* argv[])
 	glGenVertexArrays(1, &vao_id);
 	glBindVertexArray(vao_id);
 
-	static const GLfloat g_vertex_buffer_data[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.5f, 0.0f
-	};
-
-
-	//GLBuffer myBuffer((void*)g_vertex_buffer_data, sizeof(g_vertex_buffer_data), 3);
-
 
 	//
 	// Shader stuff
@@ -83,6 +76,8 @@ int main(int argc, char* argv[])
 	Material mat;
 	mat.tint = Color(127,127,127,255);
 
+	Camera cam(90.0f, 1280, 720, 0.1f, 100.0f);
+
 	Input myInput;
 
 	//
@@ -92,17 +87,17 @@ int main(int argc, char* argv[])
 
 	VertexArray myVertArr;
 
-	myVertArr.add_vertex(glm::vec3(-1,-1,0));
-	myVertArr.add_color(glm::vec4(1,1,0,1));
-	myVertArr.add_normal(glm::vec3(1,0,0));
+	myVertArr.add_vertex(-100,-100,2);
+	myVertArr.add_color(1,1,0,1);
+	myVertArr.add_normal(1,0,0);
 
-	myVertArr.add_vertex(glm::vec3(-1,1,0));
-	myVertArr.add_color(glm::vec4(0,0,1,1));
-	myVertArr.add_normal(glm::vec3(1,0,0));
+	myVertArr.add_vertex(-100,100,-2);
+	myVertArr.add_color(0,0,1,1);
+	myVertArr.add_normal(1,0,0);
 
-	myVertArr.add_vertex(glm::vec3(1,1,0));
-	myVertArr.add_color(glm::vec4(0,1,0,1));
-	myVertArr.add_normal(glm::vec3(1,0,0));
+	myVertArr.add_vertex(100,100,2);
+	myVertArr.add_color(0,1,0,1);
+	myVertArr.add_normal(1,0,0);
 
 	myVertArr.upload_data();
 
@@ -118,20 +113,15 @@ int main(int argc, char* argv[])
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		//RenderPass myPass;
+
+
+		RenderPass myPass;
 		
-		//myPass.draw_model(&myBuffer, &shader, &mat);
+		myPass.draw_model(&myVertArr, &shader, &mat, &cam);
 
-		//myPass.do_render();
-
-		shader.use();
+		myPass.do_render();
 
 
-		myVertArr.draw();
-
-
-		//myBuffer.draw();
-		//myBuffer.unbind();
 
 		game_window.swap_buffers();
 		SDL_Delay(16); // 16 ms is about 60 fps

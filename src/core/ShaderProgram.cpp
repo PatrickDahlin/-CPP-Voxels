@@ -3,6 +3,7 @@
 #include "../headers/core/Macros.hpp"
 #include "../headers/core/Files.hpp"
 #include <vector>
+#include <glm/gtc/type_ptr.hpp>
 
 ShaderProgram::ShaderProgram(std::string vert_src, std::string frag_src) :
 shader_program(0)
@@ -102,8 +103,36 @@ void ShaderProgram::load_shaders(std::string v_src, std::string f_src)
 
 	glDeleteShader(frag_shader_id);
 	glDeleteShader(vert_shader_id);
+
+	CHECK_GL_ERROR();
+
+	load_uniform_locations();
 }
 
+void ShaderProgram::load_uniform_locations()
+{
+
+	mat4_proj_loc  = glGetUniformLocation(shader_program, SHADER_PROJECTIONMAT_UNIFORM_NAME);
+	mat4_view_loc  = glGetUniformLocation(shader_program, SHADER_VIEWMAT_UNIFORM_NAME);
+	mat4_model_loc = glGetUniformLocation(shader_program, SHADER_MODELMAT_UNIFORM_NAME);
+	
+	CHECK_GL_ERROR();
+}
+
+void ShaderProgram::upload_projection(glm::mat4 proj)
+{
+	glUniformMatrix4fv(mat4_proj_loc, 1, GL_FALSE, glm::value_ptr(proj));
+}
+
+void ShaderProgram::upload_view(glm::mat4 view)
+{
+	glUniformMatrix4fv(mat4_proj_loc, 1, GL_FALSE, glm::value_ptr(view));
+}
+
+void ShaderProgram::upload_model(glm::mat4 model)
+{
+	glUniformMatrix4fv(mat4_proj_loc, 1, GL_FALSE, glm::value_ptr(model));
+}
 
 void ShaderProgram::use()
 {

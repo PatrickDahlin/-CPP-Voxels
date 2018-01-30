@@ -1,8 +1,9 @@
 #include "../headers/core/RenderPass.hpp"
 #include "../headers/core/Macros.hpp"
-#include "../headers/core/GLBuffer.hpp"
+#include "../headers/core/VertexArray.hpp"
 #include "../headers/core/ShaderProgram.hpp"
 #include "../headers/core/Material.hpp"
+#include "../headers/core/Camera.hpp"
 
 
 
@@ -16,13 +17,14 @@ RenderPass::~RenderPass()
 
 }
 
-void RenderPass::draw_model(GLBuffer* buf, ShaderProgram* shader, Material* mat)
+void RenderPass::draw_model(VertexArray* buf, ShaderProgram* shader, Material* mat, Camera* c)
 {
 	DrawCall d;
 
 	d.buf = buf;
 	d.shader = shader;
 	d.mat = mat;
+	d.cam = c;
 
 	draw_calls.emplace_back(d);
 }
@@ -33,11 +35,10 @@ void RenderPass::do_render()
 	{
 		it.shader->use();
 
-		it.buf->bind();
-		// This is just for testing, won't use buffers directly in the future
-		it.buf->data_pointer(0, 3, GL_FLOAT, 3*sizeof(float), false, (void*)0);
+		it.shader->upload_projection(it.cam->get_projection());
+		it.shader->upload_view(it.cam->get_view());
+		it.shader->upload_model(glm::mat4(1.0f));
 		it.buf->draw();
-		//it.buf->unbind();
 	}
 
 	cout("There are ");

@@ -3,6 +3,11 @@
 
 #include <string>
 #include <GL/glew.h>
+#include <glm/mat4x4.hpp>
+
+#define SHADER_PROJECTIONMAT_UNIFORM_NAME "projectionMatrix"
+#define SHADER_VIEWMAT_UNIFORM_NAME "viewMatrix"
+#define SHADER_MODELMAT_UNIFORM_NAME "modelMatrix"
 
 class ShaderProgram
 {
@@ -12,11 +17,21 @@ public:
 
 	void use();
 
+	void upload_projection(glm::mat4 proj);
+	void upload_view(glm::mat4 view);
+	void upload_model(glm::mat4 model);
+
 protected:
 
 	void load_shaders(std::string v_src, std::string f_src);
 
+	void load_uniform_locations();
+
 	GLuint		shader_program;
+
+	GLuint		mat4_proj_loc;
+	GLuint		mat4_view_loc;
+	GLuint		mat4_model_loc;
 
 };
 

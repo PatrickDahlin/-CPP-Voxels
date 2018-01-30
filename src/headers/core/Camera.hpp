@@ -49,14 +49,6 @@ draw front-to-back
 all meshes with the same shader at once, so sort by shader
 
 
-
-
-void render()
-{
-
-	*clear*
-
-
 	renderpass pass
 	
 	Option 1:
@@ -72,6 +64,5 @@ void render()
 
 	opaque front-to-back because of z-testing, reduces overdraw perhaps?
 
-	*swapbuffers*
-}
+
 */

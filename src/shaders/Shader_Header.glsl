@@ -9,6 +9,7 @@
 	28.01.2018 20:30
 	Patrick Dahlin
 */
-
-uniform mat4 MVP;
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 modelMatrix;
 

@@ -28,9 +28,13 @@ public:
 	void set_texcoords(vector<vec2> coords);
 
 	void add_vertex(vec3 vert);
+	void add_vertex(float x, float y, float z);
 	void add_normal(vec3 norm);
+	void add_normal(float x, float y, float z);
 	void add_color(vec4 color);
+	void add_color(float r, float g, float b, float a);
 	void add_texcoord(vec2 coord);
+	void add_texcoord(float u, float v);
 
 	void upload_data();
 
