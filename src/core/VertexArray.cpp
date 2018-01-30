@@ -19,13 +19,24 @@ glbuffers()
 
 VertexArray::~VertexArray()
 {
+}
+
+void VertexArray::dispose()
+{
+	for(GLBuffer& it : glbuffers)
+		it.dispose();
 
 	glDeleteVertexArrays(1, &vao);
-
 }
 
 void VertexArray::upload_data()
 {
+	// Clean up old buffers
+	for(GLBuffer& it : glbuffers)
+		it.dispose();
+
+	glbuffers.clear();
+
 	glBindVertexArray(vao);
 	
 	//
@@ -33,14 +44,12 @@ void VertexArray::upload_data()
 	//
 	if(vertices.size() > 0)
 	{
-		GLBuffer verts = GLBuffer(vertices.data(), sizeof(vertices), vertices.size());
-		verts.bind();
+		GLBuffer verts = GLBuffer(vertices.data(), vertices.size() * 3 * sizeof(float), vertices.size());
 		verts.data_pointer(SHADER_POSITION_LOCATION, 3, GL_FLOAT, 3 * sizeof(float), false, BUFFER_OFFSET(0));
 		glbuffers.emplace_back(verts);
 	}
 	else 
 	{
-		glBindVertexArray(0);
 		error("No vertices to upload");
 		return;	// We don't want to render if we have no vertices
 	}
@@ -52,11 +61,9 @@ void VertexArray::upload_data()
 		if(normals.size() != vertices.size())
 		{
 			error("VertexArray: Normal and Vertex count mismatch!");
-			glBindVertexArray(0);
 			return;
 		}
-		GLBuffer norms = GLBuffer(normals.data(), sizeof(normals), normals.size());
-		norms.bind();
+		GLBuffer norms = GLBuffer(normals.data(), normals.size() * 3 * sizeof(float), normals.size());
 		norms.data_pointer(SHADER_NORMAL_LOCATION, 3, GL_FLOAT, 3 * sizeof(float), false, BUFFER_OFFSET(0));
 		glbuffers.emplace_back(norms);
 	}
@@ -69,11 +76,9 @@ void VertexArray::upload_data()
 		if(colors.size() != vertices.size())
 		{
 			error("VertexArray: Color and Vertex count mismatch!");
-			glBindVertexArray(0);
 			return;
 		}
-		GLBuffer cols = GLBuffer(colors.data(), sizeof(colors), colors.size());
-		cols.bind();
+		GLBuffer cols = GLBuffer(colors.data(), colors.size() * 4 * sizeof(float), colors.size());
 		cols.data_pointer(SHADER_COLOR_LOCATION, 4, GL_FLOAT, 4 * sizeof(float), true, BUFFER_OFFSET(0));
 		glbuffers.emplace_back(cols);
 	}
@@ -86,11 +91,9 @@ void VertexArray::upload_data()
 		if(texcoords.size() != vertices.size())
 		{
 			error("VertexArray: UV and Vertex count mismatch!");
-			glBindVertexArray(0);
 			return;
 		}
-		GLBuffer tex = GLBuffer(texcoords.data(), sizeof(texcoords), texcoords.size());
-		tex.bind();
+		GLBuffer tex = GLBuffer(texcoords.data(), texcoords.size() * 2 * sizeof(float), texcoords.size());
 		tex.data_pointer(SHADER_UV_LOCATION, 2, GL_FLOAT, 2 * sizeof(float), false, BUFFER_OFFSET(0));
 		glbuffers.emplace_back(tex);
 	}
@@ -106,7 +109,7 @@ void VertexArray::clear()
 	texcoords.clear();
 
 	// Do buffer clearing stuff
-	for(GLBuffer it : glbuffers)
+	for(GLBuffer& it : glbuffers)
 	{
 		it.clear(); // Frees/releases the underlying data for this buffer
 	}
@@ -118,7 +121,7 @@ void VertexArray::draw()
 {
 	if(vertices.size() <= 0) return;
 
-	//bind();
+	bind();
 
 	CHECK_GL_ERROR();
 
@@ -126,7 +129,6 @@ void VertexArray::draw()
 
 	CHECK_GL_ERROR();
 
-	//unbind();
 
 }
 
@@ -135,7 +137,7 @@ void VertexArray::bind()
 	if(vao != 0)
 		glBindVertexArray(vao);
 
-	if(vao == 0) error("bound vertexarray with 0 id");
+	if(vao == 0) error("tried to bind vertexarray with 0 id");
 }
 
 void VertexArray::unbind()

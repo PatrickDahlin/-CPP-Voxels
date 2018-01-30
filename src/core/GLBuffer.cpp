@@ -12,17 +12,7 @@ GLBuffer::GLBuffer(void *data, unsigned int size_bytes,
 }
 
 GLBuffer::~GLBuffer()
-{
-
-	/*
-	
-		TODO: if dispose is called here the buffer is prematurely deleted
-		This will cause an instant crash but no error is reported, why?
-	
-	*/
-
-	//dispose();
-}
+{}
 
 void GLBuffer::dispose()
 {
@@ -45,18 +35,12 @@ void GLBuffer::uploadData(void *data, unsigned int size_bytes, unsigned int vert
 	
 	glBufferData(GL_ARRAY_BUFFER, size_bytes, data, GL_STATIC_DRAW);
 
-	unbind();
+	
 }
 
 void GLBuffer::clear()
 {
-	if(vbo_id == 0) return;
-
-	bind();
-
-	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // We don't care about old data, if any, that driver can discard
-
-	//unbind();
+	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // We don't care about old data, if any, that driver can discard	
 }
 
 void GLBuffer::bind()

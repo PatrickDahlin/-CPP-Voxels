@@ -39,7 +39,9 @@ public:
 	void bind();
 
 	void unbind();
-	
+
+	void dispose();
+
 private:
 	
 	vector<vec3>			vertices;

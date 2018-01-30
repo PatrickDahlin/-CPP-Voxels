@@ -89,14 +89,21 @@ int main(int argc, char* argv[])
 	// Main loop
 	//
 
-	//myBuffer.bind();
-	//myBuffer.data_pointer(0, 3, GL_FLOAT, 3 * sizeof(float), true, BUFFER_OFFSET(0));
-	
+
 	VertexArray myVertArr;
 
 	myVertArr.add_vertex(glm::vec3(-1,-1,0));
+	myVertArr.add_color(glm::vec4(1,1,0,1));
+	myVertArr.add_normal(glm::vec3(1,0,0));
+
 	myVertArr.add_vertex(glm::vec3(-1,1,0));
+	myVertArr.add_color(glm::vec4(0,0,1,1));
+	myVertArr.add_normal(glm::vec3(1,0,0));
+
 	myVertArr.add_vertex(glm::vec3(1,1,0));
+	myVertArr.add_color(glm::vec4(0,1,0,1));
+	myVertArr.add_normal(glm::vec3(1,0,0));
+
 	myVertArr.upload_data();
 
 	CHECK_GL_ERROR();
@@ -109,7 +116,6 @@ int main(int argc, char* argv[])
 		if(myInput.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
 			exit(0);
 
-
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		//RenderPass myPass;
@@ -120,13 +126,9 @@ int main(int argc, char* argv[])
 
 		shader.use();
 
-		CHECK_GL_ERROR();
 
-		myVertArr.bind();
-		CHECK_GL_ERROR();
 		myVertArr.draw();
 
-		CHECK_GL_ERROR();
 
 		//myBuffer.draw();
 		//myBuffer.unbind();
