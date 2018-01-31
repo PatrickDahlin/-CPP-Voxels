@@ -159,7 +159,7 @@ int main(int argc, char* argv[])
 
 	VertexArray myVertArr;
 
-	make_cube(myVertArr, glm::vec4(0,1,0,1), glm::vec3(0,0,-40), 40);
+	make_cube(myVertArr, glm::vec4(0,1,0,1), glm::vec3(0,0,0), 40);
 
 	myVertArr.upload_data();
 

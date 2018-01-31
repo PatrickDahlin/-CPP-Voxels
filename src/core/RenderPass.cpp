@@ -39,7 +39,7 @@ void RenderPass::do_render()
 
 		it.shader->upload_projection(it.cam->get_projection());
 		it.shader->upload_view(it.cam->get_view());
-		it.shader->upload_model(glm::rotate( glm::translate( glm::mat4(1.0f), glm::vec3(0,0,-20)), r, glm::vec3(0,1,0)));
+		it.shader->upload_model(glm::rotate( glm::mat4(1.0f), r, glm::vec3(0,1,0)));
 		it.buf->draw();
 
 		r += 0.05f;
