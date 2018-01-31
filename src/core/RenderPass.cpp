@@ -29,6 +29,8 @@ void RenderPass::draw_model(VertexArray* buf, ShaderProgram* shader, Material* m
 	draw_calls.emplace_back(d);
 }
 
+float r = 0;
+
 void RenderPass::do_render()
 {
 	for(auto it : draw_calls)
@@ -36,15 +38,16 @@ void RenderPass::do_render()
 		it.shader->use();
 
 		it.shader->upload_projection(it.cam->get_projection());
-		//it.shader->upload_view(glm::lookAt(glm::vec3(0,0,-4), glm::vec3(0,0,0), glm::vec3(0,1,0)));
 		it.shader->upload_view(it.cam->get_view());
-		it.shader->upload_model(glm::mat4(1.0f));
+		it.shader->upload_model(glm::rotate( glm::translate( glm::mat4(1.0f), glm::vec3(0,0,-20)), r, glm::vec3(0,1,0)));
 		it.buf->draw();
+
+		r += 0.05f;
 	}
 
-	cout("There are ");
-	cout(draw_calls.size());
-	cout(" calls this frame\n");
+	//cout("There are ");
+	//cout(draw_calls.size());
+	//cout(" calls this frame\n");
 
 	draw_calls.clear(); 
 }

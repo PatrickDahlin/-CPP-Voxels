@@ -8,7 +8,7 @@ set output=bin\build
 
 set include_dir=-I./include
 set lib_dir=-L./lib
-set libs=-lglew32 -lopengl32 -lglu32 -lglew32.dll -lmingw32 -lsdl2main -lsdl2
+set libs=-lglew32 -lopengl32 -lmingw32 -lsdl2main -lsdl2
 
 for /f %%A in ('forfiles /s /m *.cpp /p src /c "cmd /c echo @relpath"') do set var=!var! .\src\%%~A
 

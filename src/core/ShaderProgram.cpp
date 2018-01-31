@@ -6,7 +6,10 @@
 #include <glm/gtc/type_ptr.hpp>
 
 ShaderProgram::ShaderProgram(std::string vert_src, std::string frag_src) :
-shader_program(0)
+shader_program(0),
+mat4_proj_loc(0),
+mat4_view_loc(0),
+mat4_model_loc(0)
 {
 	load_shaders(vert_src, frag_src);	
 }
@@ -112,10 +115,18 @@ void ShaderProgram::load_shaders(std::string v_src, std::string f_src)
 void ShaderProgram::load_uniform_locations()
 {
 
-	mat4_proj_loc  = glGetUniformLocation(shader_program, SHADER_PROJECTIONMAT_UNIFORM_NAME);
-	mat4_view_loc  = glGetUniformLocation(shader_program, SHADER_VIEWMAT_UNIFORM_NAME);
-	mat4_model_loc = glGetUniformLocation(shader_program, SHADER_MODELMAT_UNIFORM_NAME);
+	mat4_proj_loc  = glGetUniformLocation(shader_program, "projectionMatrix");//SHADER_PROJECTIONMAT_UNIFORM_NAME);
+	mat4_view_loc  = glGetUniformLocation(shader_program, "viewMatrix");//SHADER_VIEWMAT_UNIFORM_NAME);
+	mat4_model_loc = glGetUniformLocation(shader_program, "modelMatrix");//SHADER_MODELMAT_UNIFORM_NAME);
 	
+	cout("proj loc: ");
+	cout(mat4_proj_loc);
+	cout("\nview loc: ");
+	cout(mat4_view_loc);
+	cout("\nmodel loc: ");
+	cout(mat4_model_loc);
+	cout("\n");
+
 	CHECK_GL_ERROR();
 }
 
@@ -126,12 +137,12 @@ void ShaderProgram::upload_projection(glm::mat4 proj)
 
 void ShaderProgram::upload_view(glm::mat4 view)
 {
-	glUniformMatrix4fv(mat4_proj_loc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(mat4_view_loc, 1, GL_FALSE, glm::value_ptr(view));
 }
 
 void ShaderProgram::upload_model(glm::mat4 model)
 {
-	glUniformMatrix4fv(mat4_proj_loc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(mat4_model_loc, 1, GL_FALSE, glm::value_ptr(model));
 }
 
 void ShaderProgram::use()

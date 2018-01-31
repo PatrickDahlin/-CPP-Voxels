@@ -11,6 +11,7 @@ width(width),
 height(height),
 near(near),
 far(far),
+position(0,0,0),
 pitch(0),
 yaw(0)
 {
@@ -22,7 +23,7 @@ Camera::~Camera()
 glm::mat4 Camera::get_projection()
 {
 	if(update_proj)
-		projection_mat = glm::perspectiveFov(fov, (float)width, (float)height, near, far);
+		projection_mat = glm::perspective(fov, ((float)width / (float)height), near, far);
 
 	update_proj = false;
 	return projection_mat;

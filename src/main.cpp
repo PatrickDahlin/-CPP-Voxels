@@ -32,6 +32,78 @@ TODO:
 */
 
 
+void make_cube(VertexArray& varr, glm::vec4 col, glm::vec3 pos, float scale)
+{
+	float n = -0.5f;
+	float p = 0.5f;
+
+	// FRONT
+	varr.add_vertex(pos + glm::vec3(n,n,n) * scale);
+	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,n) * scale);	
+	varr.add_vertex(pos + glm::vec3(n,n,n) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,n) * scale);
+	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
+
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+
+	// TOP
+	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,n) * scale);
+	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
+	varr.add_vertex(pos + glm::vec3(n,p,p) * scale);
+
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+
+	// LEFT
+	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
+	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
+	varr.add_vertex(pos + glm::vec3(n,n,n) * scale);
+	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
+	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
+	varr.add_vertex(pos + glm::vec3(n,p,p) * scale);
+
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+
+	// RIGHT
+	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
+	varr.add_vertex(pos + glm::vec3(p,n,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,n) * scale);
+	
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+
+	// BOTTOM
+	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,n,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
+	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
+	varr.add_vertex(pos + glm::vec3(n,n,n) * scale);
+	
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+
+	// BACK
+	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,n,p) * scale);
+	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
+	varr.add_vertex(pos + glm::vec3(n,p,p) * scale);
+	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
+	
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+
+}
 
 
 int main(int argc, char* argv[])
@@ -76,7 +148,7 @@ int main(int argc, char* argv[])
 	Material mat;
 	mat.tint = Color(127,127,127,255);
 
-	Camera cam(180.0f, 1280, 720, 0.0001f, 100.0f);
+	Camera cam(3.14f/4.0f, 1280, 720, 0.1f, 5000.0f);
 
 	Input myInput;
 
@@ -87,17 +159,7 @@ int main(int argc, char* argv[])
 
 	VertexArray myVertArr;
 
-	myVertArr.add_vertex(-100,-100,2);
-	myVertArr.add_color(1,1,0,1);
-	myVertArr.add_normal(1,0,0);
-
-	myVertArr.add_vertex(-100,100,-2);
-	myVertArr.add_color(0,0,1,1);
-	myVertArr.add_normal(1,0,0);
-
-	myVertArr.add_vertex(100,100,2);
-	myVertArr.add_color(0,1,0,1);
-	myVertArr.add_normal(1,0,0);
+	make_cube(myVertArr, glm::vec4(0,1,0,1), glm::vec3(0,0,-40), 40);
 
 	myVertArr.upload_data();
 
@@ -110,6 +172,11 @@ int main(int argc, char* argv[])
 
 		if(myInput.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
 			exit(0);
+		if(myInput.get_key(SDLK_w) == KeyState::REPEAT || myInput.get_key(SDLK_w) == KeyState::PRESSED)
+			cam.translate(0,0,10.0f);
+	
+		if(myInput.get_key(SDLK_s) == KeyState::REPEAT || myInput.get_key(SDLK_s) == KeyState::PRESSED)
+			cam.translate(0,0,-10.0f);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		

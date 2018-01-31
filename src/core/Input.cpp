@@ -49,14 +49,16 @@ void Input::poll_events()
 	mouse_delta_y = 0;
 	scroll_delta = 0;
 
-	for (auto it : key_map)
+	for (auto& it : key_map)
 	{
 		switch (it.second)
 		{
 		case KeyState::PRESSED:
 			it.second = KeyState::REPEAT;
+			break;
 		case KeyState::RELEASED:
 			it.second = KeyState::NONE;
+			break;
 		case KeyState::NONE:
 		default:
 			break;

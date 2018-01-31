@@ -8,5 +8,6 @@ out vec4 fragColor;
 void main()
 {
 	fragColor = color;
-	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position,1.0);
+	
+	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
 }
