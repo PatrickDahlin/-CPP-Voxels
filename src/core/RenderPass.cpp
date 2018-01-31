@@ -5,7 +5,7 @@
 #include "../headers/core/Material.hpp"
 #include "../headers/core/Camera.hpp"
 
-
+#include <glm/gtc/matrix_transform.hpp>
 
 RenderPass::RenderPass()
 {
@@ -36,6 +36,7 @@ void RenderPass::do_render()
 		it.shader->use();
 
 		it.shader->upload_projection(it.cam->get_projection());
+		//it.shader->upload_view(glm::lookAt(glm::vec3(0,0,-4), glm::vec3(0,0,0), glm::vec3(0,1,0)));
 		it.shader->upload_view(it.cam->get_view());
 		it.shader->upload_model(glm::mat4(1.0f));
 		it.buf->draw();

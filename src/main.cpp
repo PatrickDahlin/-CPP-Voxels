@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 	Material mat;
 	mat.tint = Color(127,127,127,255);
 
-	Camera cam(90.0f, 1280, 720, 0.1f, 100.0f);
+	Camera cam(180.0f, 1280, 720, 0.0001f, 100.0f);
 
 	Input myInput;
 

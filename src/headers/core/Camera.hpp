@@ -30,14 +30,17 @@ protected:
 	bool			update_proj;
 	glm::mat4		projection_mat;
 
+	bool			update_view;
+	glm::mat4		view_mat;
+
 	float			fov;
 	int				width;
 	int				height;
 	float			near;
 	float 			far;
 
-	// Used for viewmatrix
-	Transform		transform;
+	glm::vec3		position;
+	float			pitch, yaw;
 	
 };
 
