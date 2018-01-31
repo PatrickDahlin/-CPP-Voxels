@@ -172,11 +172,47 @@ int main(int argc, char* argv[])
 
 		if(myInput.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
 			exit(0);
-		if(myInput.get_key(SDLK_w) == KeyState::REPEAT || myInput.get_key(SDLK_w) == KeyState::PRESSED)
-			cam.translate(0,0,10.0f);
+		if(myInput.get_key(SDLK_w) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_w) == KeyState::PRESSED)
+			cam.translate( cam.get_forward() * -10.0f);
 	
-		if(myInput.get_key(SDLK_s) == KeyState::REPEAT || myInput.get_key(SDLK_s) == KeyState::PRESSED)
-			cam.translate(0,0,-10.0f);
+		if(myInput.get_key(SDLK_s) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_s) == KeyState::PRESSED)
+			cam.translate( cam.get_forward() * 10.0f);
+
+		if(myInput.get_key(SDLK_a) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_a) == KeyState::PRESSED)
+			cam.translate( cam.get_right() * -10.0f);
+	
+		if(myInput.get_key(SDLK_d) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_d) == KeyState::PRESSED)
+			cam.translate( cam.get_right() * 10.0f);
+		
+		if(myInput.get_key(SDLK_LEFT) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_LEFT) == KeyState::PRESSED)
+			cam.rotate( 0, 0.03f, 0 );
+		
+		if(myInput.get_key(SDLK_RIGHT) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_RIGHT) == KeyState::PRESSED)
+			cam.rotate( 0, -0.03f, 0 );
+
+		if(myInput.get_key(SDLK_UP) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_UP) == KeyState::PRESSED)
+			cam.rotate( 0.03f, 0, 0 );
+
+		if(myInput.get_key(SDLK_DOWN) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_DOWN) == KeyState::PRESSED)
+			cam.rotate( -0.03f, 0, 0 );
+
+		if(myInput.get_key(SDLK_e) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_e) == KeyState::PRESSED)
+			cam.translate( cam.get_up() * 10.0f);
+
+		if(myInput.get_key(SDLK_q) == KeyState::REPEAT || 
+			myInput.get_key(SDLK_q) == KeyState::PRESSED)
+			cam.translate( cam.get_up() * -10.0f);
+		
+
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		

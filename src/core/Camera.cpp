@@ -29,6 +29,24 @@ glm::mat4 Camera::get_projection()
 	return projection_mat;
 }
 
+glm::vec3 Camera::get_forward()
+{
+	glm::vec4 res = glm::vec4(0,0,1,1) * get_view();
+	return glm::vec3(res.x,res.y,res.z);
+}
+
+glm::vec3 Camera::get_up()
+{
+	glm::vec4 res = glm::vec4(0,1,0,1) * get_view();
+	return glm::vec3(res.x,res.y,res.z);
+}
+
+glm::vec3 Camera::get_right()
+{
+	glm::vec4 res = glm::vec4(1,0,0,1) * get_view();
+	return glm::vec3(res.x, res.y, res.z);
+}
+
 glm::mat4 Camera::get_view()
 {
 	if(update_view)
@@ -40,10 +58,10 @@ glm::mat4 Camera::get_view()
 		// yaw rotation
 		view_mat = glm::rotate(view_mat, yaw, up);
 		
-		// Need to be orthogonal to up
-		glm::vec3 pitchvec = glm::vec3(1,0,0);
 		// rotate the pitch
-		view_mat = glm::rotate(view_mat, pitch, pitchvec);
+		view_mat = glm::rotate(view_mat, pitch, glm::vec3(1,0,0));
+
+		view_mat = glm::rotate(view_mat, roll, glm::vec3(0,0,1));
 
 		// lastly get the matrix with inverse
 		view_mat = glm::inverse(view_mat);
@@ -85,10 +103,17 @@ void Camera::translate(float x, float y, float z)
 	update_view = true;
 }
 
+void Camera::translate(glm::vec3 amount)
+{
+	position += amount;
+	update_view = true;
+}
+
 void Camera::rotate(float x, float y, float z)
 {
 	pitch += x;
 	yaw += y;
+	roll += z;
 	update_view = true;
 }
 
@@ -98,10 +123,24 @@ void Camera::set_position(float x, float y, float z)
 	update_view = true;
 }
 
+void Camera::set_position(glm::vec3 amount)
+{
+	position = amount;
+	update_view = true;
+}
+
 void Camera::set_rotation(float x, float y, float z)
 {
 	pitch = x;
 	yaw = y;
+	roll = z;
 	update_view = true;
 }
 
+void Camera::set_rotation(glm::vec3 amount)
+{
+	pitch = amount.x;
+	yaw = amount.y;
+	roll = amount.z;
+	update_view = true;
+}

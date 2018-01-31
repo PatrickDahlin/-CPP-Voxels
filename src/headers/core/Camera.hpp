@@ -11,10 +11,13 @@ public:
 	~Camera();
 
 	void translate(float x, float y, float z);
+	void translate(glm::vec3 vec);
 	void rotate(float x, float y, float z);
 
 	void set_position(float x, float y, float z);
+	void set_position(glm::vec3 vec);
 	void set_rotation(float x, float y, float z);
+	void set_rotation(glm::vec3 vec);
 
 	void set_fov(float fov);
 	void resize(int width, int height);
@@ -24,6 +27,10 @@ public:
 
 	glm::mat4 get_projection();
 	glm::mat4 get_view();
+
+	glm::vec3 get_forward();
+	glm::vec3 get_up();
+	glm::vec3 get_right();
 
 protected:
 
@@ -40,7 +47,7 @@ protected:
 	float 			far;
 
 	glm::vec3		position;
-	float			pitch, yaw;
+	float			pitch, yaw, roll;
 	
 };
 
