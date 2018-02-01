@@ -17,6 +17,22 @@ Input::~Input()
 {
 }
 
+void Input::set_lock_mouse(bool lock)
+{
+	if(lock)
+		SDL_SetRelativeMouseMode(SDL_TRUE);
+	else
+		SDL_SetRelativeMouseMode(SDL_FALSE);
+}
+
+void Input::show_cursor(bool show)
+{
+	if(show)
+		SDL_ShowCursor(1);
+	else
+		SDL_ShowCursor(0);
+}
+
 KeyState Input::get_key(SDL_Keycode key)
 {
 	return key_map[key];

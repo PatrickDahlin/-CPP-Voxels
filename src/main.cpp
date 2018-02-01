@@ -128,7 +128,8 @@ int main(int argc, char* argv[])
 
 
 
-	// GLBuffer needs a Vao bound at all times
+	// GLBuffer needs a Vao bound at all times if you draw it
+	// Should not be used tho.......
 	// this is new in GL 3.3+ ..why?.. Q.Q
 	GLuint vao_id;
 	glGenVertexArrays(1, &vao_id);
@@ -151,6 +152,8 @@ int main(int argc, char* argv[])
 	Camera cam(3.14f/4.0f, 1280, 720, 0.1f, 5000.0f);
 
 	Input myInput;
+	myInput.set_lock_mouse(true);
+	myInput.show_cursor(false);
 
 	//
 	// Main loop
@@ -212,7 +215,8 @@ int main(int argc, char* argv[])
 			myInput.get_key(SDLK_q) == KeyState::PRESSED)
 			cam.translate( cam.get_up() * -10.0f);
 		
-
+		cam.rotate( -myInput.get_mouse_pos_delta().y * 0.003f ,
+					-myInput.get_mouse_pos_delta().x * 0.003f, 0);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		

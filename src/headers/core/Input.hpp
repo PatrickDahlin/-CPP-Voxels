@@ -38,6 +38,10 @@ class Input
 
 	int get_scroll_delta() const;
 
+	void set_lock_mouse(bool lock);
+
+	void show_cursor(bool show);
+	
 	// @TODO SDL supports text input compositions which
 	// make text inputting easier. implement this in the future
 	void start_text_input();  // @unimplemented
