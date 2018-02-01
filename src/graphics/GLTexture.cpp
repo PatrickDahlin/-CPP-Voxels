@@ -1,5 +1,5 @@
-#include "../headers/core/GLTexture.hpp"
-#include "../headers/core/Macros.hpp"
+#include "graphics/GLTexture.hpp"
+#include "core/Macros.hpp"
 
 
 GLTexture::GLTexture(unsigned char* data, int width, int height) :

@@ -1,6 +1,6 @@
-#include "../headers/core/Model.hpp"
-#include "../headers/core/VertexArray.hpp"
-#include "../headers/core/Material.hpp"
+#include "graphics/Model.hpp"
+#include "graphics/VertexArray.hpp"
+#include "graphics/Material.hpp"
 
 Model::Model() :
 needs_upload(false)

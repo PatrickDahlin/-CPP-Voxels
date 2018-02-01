@@ -1,5 +1,5 @@
-#include "../headers/core/Thread.hpp"
-#include "../headers/core/Macros.hpp"
+#include "core/Thread.hpp"
+#include "core/Macros.hpp"
 #include <SDL2/SDL.h>
 
 static int run(void* data)

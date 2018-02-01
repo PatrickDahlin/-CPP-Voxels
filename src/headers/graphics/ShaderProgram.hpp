@@ -5,14 +5,12 @@
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 
-#define SHADER_PROJECTIONMAT_UNIFORM_NAME "projectionMatrix"
-#define SHADER_VIEWMAT_UNIFORM_NAME "viewMatrix"
-#define SHADER_MODELMAT_UNIFORM_NAME "modelMatrix"
+
 
 class ShaderProgram
 {
 public:
-	ShaderProgram(std::string vert_src, std::string frag_src);
+	ShaderProgram(std::string vert_src, std::string frag_src, std::string header);
 	~ShaderProgram();
 
 	void use();
@@ -27,7 +25,7 @@ public:
 
 protected:
 
-	void load_shaders(std::string v_src, std::string f_src);
+	void load_shaders(std::string v_src, std::string f_src, std::string header);
 
 	void load_uniform_locations();
 

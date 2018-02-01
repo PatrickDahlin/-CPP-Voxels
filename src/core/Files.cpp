@@ -1,6 +1,6 @@
-#include "../headers/core/Files.hpp"
-#include "../headers/core/Errors.hpp"
-#include "../headers/core/Macros.hpp"
+#include "core/Files.hpp"
+#include "core/Errors.hpp"
+#include "core/Macros.hpp"
 
 std::string read_file(const char* path)
 {

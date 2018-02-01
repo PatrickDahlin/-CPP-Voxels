@@ -1,5 +1,5 @@
-#include "../headers/core/GLBuffer.hpp"
-#include "../headers/core/Macros.hpp"
+#include "graphics/GLBuffer.hpp"
+#include "core/Macros.hpp"
 #include <GL/glew.h>
 
 GLBuffer::GLBuffer(void *data, unsigned int size_bytes,

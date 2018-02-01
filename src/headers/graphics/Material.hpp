@@ -1,7 +1,7 @@
 #ifndef _MATERIAL_HPP_
 #define _MATERIAL_HPP_
 
-#include "GLTexture.hpp"
+#include "graphics/GLTexture.hpp"
 
 struct Color 
 {

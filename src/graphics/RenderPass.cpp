@@ -1,9 +1,9 @@
-#include "../headers/core/RenderPass.hpp"
-#include "../headers/core/Macros.hpp"
-#include "../headers/core/Model.hpp"
-#include "../headers/core/ShaderProgram.hpp"
-#include "../headers/core/Material.hpp"
-#include "../headers/core/Camera.hpp"
+#include "core/Macros.hpp"
+#include "graphics/Camera.hpp"
+#include "graphics/RenderPass.hpp"
+#include "graphics/Model.hpp"
+#include "graphics/ShaderProgram.hpp"
+#include "graphics/Material.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 

@@ -1,17 +1,18 @@
-#include "../headers/core/ShaderProgram.hpp"
-#include "../headers/core/Errors.hpp"
-#include "../headers/core/Macros.hpp"
-#include "../headers/core/Files.hpp"
+#include "graphics/ShaderProgram.hpp"
+#include "graphics/Shader_vars.hpp"
+#include "core/Errors.hpp"
+#include "core/Macros.hpp"
+#include "core/Files.hpp"
 #include <vector>
 #include <glm/gtc/type_ptr.hpp>
 
-ShaderProgram::ShaderProgram(std::string vert_src, std::string frag_src) :
+ShaderProgram::ShaderProgram(std::string vert_src, std::string frag_src, std::string header) :
 shader_program(0),
 mat4_proj_loc(0),
 mat4_view_loc(0),
 mat4_model_loc(0)
 {
-	load_shaders(vert_src, frag_src);	
+	load_shaders(vert_src, frag_src, header);	
 }
 
 ShaderProgram::~ShaderProgram()
@@ -22,9 +23,9 @@ ShaderProgram::~ShaderProgram()
 	}
 }
 
-void ShaderProgram::load_shaders(std::string v_src, std::string f_src)
+void ShaderProgram::load_shaders(std::string v_src, std::string f_src, std::string header)
 {
-	std::string header = read_file("../src/shaders/Shader_Header.glsl");
+	//std::string header = read_file(header);
 
 	v_src = header + v_src;
 	f_src = header + f_src;

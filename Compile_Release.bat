@@ -7,7 +7,7 @@ echo This is optimized release build, expect longer compile-time...
 setlocal EnableDelayedExpansion
 set output=bin\build
 
-set include_dir=-I./include
+set include_dir=-I./include -I./src/headers
 set lib_dir=-L./lib
 set libs=-lopengl32 -lglew32 -lmingw32 -lsdl2main -lsdl2
 

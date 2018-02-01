@@ -1,5 +1,5 @@
-#include "../headers/core/GameWindow.hpp"
-#include "../headers/core/Errors.hpp"
+#include "core/GameWindow.hpp"
+#include "core/Errors.hpp"
 
 GameWindow::GameWindow(const char* title, int width, int height, SDL_WindowFlags flags) : 
 window(NULL), context(NULL), flags(flags), title(title), width(width), height(height), vsync(false)

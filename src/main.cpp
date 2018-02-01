@@ -8,19 +8,19 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-#include "headers/core/GameWindow.hpp"
-#include "headers/core/ShaderProgram.hpp"
-#include "headers/core/Files.hpp"
-#include "headers/core/Macros.hpp"
-#include "headers/core/GLBuffer.hpp"
-#include "headers/core/Input.hpp"
-#include "headers/core/Transform.hpp"
-#include "headers/core/Material.hpp"
-#include "headers/core/RenderPass.hpp"
-#include "headers/core/VertexArray.hpp"
-#include "headers/core/Model.hpp"
-#include "headers/core/Camera.hpp"
-#include "headers/core/GLTexture.hpp"
+#include "core/GameWindow.hpp"
+#include "graphics/ShaderProgram.hpp"
+#include "core/Files.hpp"
+#include "core/Macros.hpp"
+#include "graphics/GLBuffer.hpp"
+#include "core/Input.hpp"
+#include "core/Transform.hpp"
+#include "graphics/Material.hpp"
+#include "graphics/RenderPass.hpp"
+#include "graphics/VertexArray.hpp"
+#include "graphics/Model.hpp"
+#include "graphics/Camera.hpp"
+#include "graphics/GLTexture.hpp"
 
 
 
@@ -37,7 +37,11 @@ TODO:
 	Heaps for prioritized jobs
 
 	TODO:
-		- Model class implementation
+		- Cleanup main []
+		- Scene management []
+		- Scene class []
+		- Actor class []
+		- Model class implementation [x]
 
 */
 
@@ -176,9 +180,10 @@ int main(int argc, char* argv[])
 	// Shader stuff
 	//
 
-	std::string vert = read_file("../src/shaders/Basic-vert.glsl");
-	std::string frag = read_file("../src/shaders/Basic-frag.glsl");
-	ShaderProgram shader = ShaderProgram(vert.data(), frag.data());
+	std::string vert = read_file("data/shaders/Basic-vert.glsl");
+	std::string frag = read_file("data/shaders/Basic-frag.glsl");
+	std::string header = read_file("data/shaders/Shader_Header.glsl");
+	ShaderProgram shader = ShaderProgram(vert.data(), frag.data(), header.data());
 
 	CHECK_GL_ERROR();
 
@@ -203,7 +208,7 @@ int main(int argc, char* argv[])
 	int width, height, channelnr;
 	width = 0;
 	height = 0;
-	unsigned char* data = stbi_load("grass.jpg", &width, &height, &channelnr, 0);
+	unsigned char* data = stbi_load("data/textures/grass.jpg", &width, &height, &channelnr, 0);
 	
 	GLTexture* myTexture = new GLTexture(data, width, height);
 	
@@ -268,8 +273,8 @@ int main(int argc, char* argv[])
 			myInput.get_key(SDLK_q) == KeyState::PRESSED)
 			cam.translate( cam.get_up() * -10.0f);
 		
-		cam.rotate( -myInput.get_mouse_pos_delta().y * 0.003f ,
-					-myInput.get_mouse_pos_delta().x * 0.003f, 0);
+		cam.rotate( -myInput.get_mouse_pos_delta().y * 0.01f ,
+					-myInput.get_mouse_pos_delta().x * 0.01f, 0);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

@@ -1,6 +1,6 @@
-#include "../headers/core/VertexArray.hpp"
-#include "../headers/core/GLBuffer.hpp"
-#include "../headers/core/Macros.hpp"
+#include "graphics/VertexArray.hpp"
+#include "graphics/GLBuffer.hpp"
+#include "core/Macros.hpp"
 #include <GL\glew.h>
 
 

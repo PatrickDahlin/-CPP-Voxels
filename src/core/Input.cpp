@@ -1,5 +1,5 @@
-#include "../headers/core/Input.hpp"
-#include "../headers/core/Macros.hpp"
+#include "core/Input.hpp"
+#include "core/Macros.hpp"
 #include <SDL2/SDL.h>
 #include <glm/vec2.hpp>
 

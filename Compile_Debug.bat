@@ -6,7 +6,7 @@ echo ------------------
 setlocal EnableDelayedExpansion
 set output=bin\build
 
-set include_dir=-I./include
+set include_dir=-I./include -I./src/headers
 set lib_dir=-L./lib
 set libs=-lglew32 -lopengl32 -lmingw32 -lsdl2main -lsdl2
 
