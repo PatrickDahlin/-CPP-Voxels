@@ -15,6 +15,7 @@
 #include "headers/core/RenderPass.hpp"
 #include "headers/core/VertexArray.hpp"
 #include "headers/core/Camera.hpp"
+#include "headers/core/GLTexture.hpp"
 
 
 /*
@@ -22,12 +23,12 @@
 
 TODO:
 
-	RenderPass shouldn't use GLBuffer to draw! Perhaps use a Mesh wrapper for buffer or a VertexArray rather
 	Materials aren't usable yet, need a way to upload the data, !Uniform buffer objects!
 		Same thing for uploading/binding camera matrices to shaders
 
-	Camera shouldn't use Transform to get viewmatrix
-		Use position and lookat vector instead and get view matrix from glm
+
+
+	Heaps for prioritized jobs
 
 */
 
@@ -165,6 +166,10 @@ int main(int argc, char* argv[])
 	make_cube(myVertArr, glm::vec4(0,1,0,1), glm::vec3(0,0,0), 40);
 
 	myVertArr.upload_data();
+
+	
+
+	GLTexture myTexture;
 
 	CHECK_GL_ERROR();
 
