@@ -1,6 +1,7 @@
 #ifndef _MATERIAL_HPP_
 #define _MATERIAL_HPP_
 
+#include "GLTexture.hpp"
 
 struct Color 
 {
@@ -11,9 +12,15 @@ struct Color
 	unsigned char r, g, b, a;
 };
 
-struct Material
+class Material
 {
+public:
+
 	Color tint;
+	GLTexture* texture;
+
+	void dispose() { delete texture; }
+
 };
 
 #endif

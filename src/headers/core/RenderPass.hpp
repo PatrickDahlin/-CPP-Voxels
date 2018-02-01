@@ -1,9 +1,8 @@
 #ifndef _RENDERPASS_HPP_
 #define _RENDERPASS_HPP_
 
-class VertexArray;
+class Model;
 class ShaderProgram;
-class Material;
 class Camera;
 
 #include <vector>
@@ -13,16 +12,15 @@ public:
 	RenderPass();
 	~RenderPass();
 
-	void draw_model(VertexArray* buf, ShaderProgram* shader, Material* mat, Camera* c);
+	void draw_model(Model* model, ShaderProgram* shader, Camera* c);
 
 	void do_render();
 
 protected:
 
 	struct DrawCall {
-		VertexArray* buf;
+		Model* model;
 		ShaderProgram* shader;
-		Material* mat;
 		Camera* cam;
 	};
 

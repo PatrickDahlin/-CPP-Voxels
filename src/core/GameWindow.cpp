@@ -116,6 +116,7 @@ void GameWindow::setup_gl_context()
 		std::cout << "Off" << std::endl;
 
 	glClearColor(0.3,0.6,0.8,1);
+	glViewport(0,0, width, height);
 }
 
 void GameWindow::set_vsync(bool vsync)

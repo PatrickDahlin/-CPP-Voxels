@@ -21,6 +21,10 @@ public:
 	void upload_view(glm::mat4 view);
 	void upload_model(glm::mat4 model);
 
+	void set_bool(const std::string& name, bool val) const;
+	void set_int(const std::string& name, int val) const;
+	void set_float(const std::string& name, float val) const;
+
 protected:
 
 	void load_shaders(std::string v_src, std::string f_src);

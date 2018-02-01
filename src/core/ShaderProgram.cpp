@@ -24,7 +24,7 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::load_shaders(std::string v_src, std::string f_src)
 {
-	std::string header = read_file("src/shaders/Shader_Header.glsl");
+	std::string header = read_file("../src/shaders/Shader_Header.glsl");
 
 	v_src = header + v_src;
 	f_src = header + f_src;
@@ -115,9 +115,9 @@ void ShaderProgram::load_shaders(std::string v_src, std::string f_src)
 void ShaderProgram::load_uniform_locations()
 {
 
-	mat4_proj_loc  = glGetUniformLocation(shader_program, "projectionMatrix");//SHADER_PROJECTIONMAT_UNIFORM_NAME);
-	mat4_view_loc  = glGetUniformLocation(shader_program, "viewMatrix");//SHADER_VIEWMAT_UNIFORM_NAME);
-	mat4_model_loc = glGetUniformLocation(shader_program, "modelMatrix");//SHADER_MODELMAT_UNIFORM_NAME);
+	mat4_proj_loc  = glGetUniformLocation(shader_program, SHADER_PROJECTIONMAT_UNIFORM_NAME);
+	mat4_view_loc  = glGetUniformLocation(shader_program, SHADER_VIEWMAT_UNIFORM_NAME);
+	mat4_model_loc = glGetUniformLocation(shader_program, SHADER_MODELMAT_UNIFORM_NAME);
 	
 	cout("proj loc: ");
 	cout(mat4_proj_loc);
@@ -148,5 +148,20 @@ void ShaderProgram::upload_model(glm::mat4 model)
 void ShaderProgram::use()
 {
 	glUseProgram(shader_program);
+}
+
+void ShaderProgram::set_bool(const std::string& name, bool val) const
+{
+	glUniform1i(glGetUniformLocation(shader_program, name.c_str()), (int)val );
+}
+
+void ShaderProgram::set_int(const std::string& name, int val) const
+{
+	glUniform1i(glGetUniformLocation(shader_program, name.c_str()), val);
+}
+
+void ShaderProgram::set_float(const std::string& name, float val) const
+{
+	glUniform1f(glGetUniformLocation(shader_program, name.c_str()), val);
 }
 

@@ -4,6 +4,10 @@
 #include <iostream>
 #include <cstdio>
 #include <fstream>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 #include "headers/core/GameWindow.hpp"
 #include "headers/core/ShaderProgram.hpp"
 #include "headers/core/Files.hpp"
@@ -14,8 +18,10 @@
 #include "headers/core/Material.hpp"
 #include "headers/core/RenderPass.hpp"
 #include "headers/core/VertexArray.hpp"
+#include "headers/core/Model.hpp"
 #include "headers/core/Camera.hpp"
 #include "headers/core/GLTexture.hpp"
+
 
 
 /*
@@ -30,80 +36,109 @@ TODO:
 
 	Heaps for prioritized jobs
 
+	TODO:
+		- Model class implementation
+
 */
 
 
-void make_cube(VertexArray& varr, glm::vec4 col, glm::vec3 pos, float scale)
+void make_cube(Model& model, glm::vec4 col, glm::vec3 pos, float scale)
 {
 	float n = -0.5f;
 	float p = 0.5f;
 
-	// FRONT
-	varr.add_vertex(pos + glm::vec3(n,n,n) * scale);
-	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,n) * scale);	
-	varr.add_vertex(pos + glm::vec3(n,n,n) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,n) * scale);
-	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
+	std::vector<glm::vec3> verts;
+	std::vector<glm::vec4> colors;
+	std::vector<glm::vec2> texcoords;
 
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+
+	// FRONT
+	verts.emplace_back(pos + glm::vec3(n,n,n) * scale);
+	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,n) * scale);	
+	verts.emplace_back(pos + glm::vec3(n,n,n) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,n) * scale);
+	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
+
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
 
 	// TOP
-	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,n) * scale);
-	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
-	varr.add_vertex(pos + glm::vec3(n,p,p) * scale);
+	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,n) * scale);
+	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
+	verts.emplace_back(pos + glm::vec3(n,p,p) * scale);
 
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
 
 	// LEFT
-	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
-	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
-	varr.add_vertex(pos + glm::vec3(n,n,n) * scale);
-	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
-	varr.add_vertex(pos + glm::vec3(n,p,n) * scale);
-	varr.add_vertex(pos + glm::vec3(n,p,p) * scale);
+	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
+	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
+	verts.emplace_back(pos + glm::vec3(n,n,n) * scale);
+	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
+	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
+	verts.emplace_back(pos + glm::vec3(n,p,p) * scale);
 
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
 
 	// RIGHT
-	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
-	varr.add_vertex(pos + glm::vec3(p,n,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,n) * scale);
+	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
+	verts.emplace_back(pos + glm::vec3(p,n,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,n) * scale);
 	
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
 
 	// BOTTOM
-	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,n,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
-	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,n,n) * scale);
-	varr.add_vertex(pos + glm::vec3(n,n,n) * scale);
+	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,n,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
+	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
+	verts.emplace_back(pos + glm::vec3(n,n,n) * scale);
 	
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
 
 	// BACK
-	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,n,p) * scale);
-	varr.add_vertex(pos + glm::vec3(n,n,p) * scale);
-	varr.add_vertex(pos + glm::vec3(n,p,p) * scale);
-	varr.add_vertex(pos + glm::vec3(p,p,p) * scale);
+	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,n,p) * scale);
+	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
+	verts.emplace_back(pos + glm::vec3(n,p,p) * scale);
+	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
 	
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
-	varr.add_color(col); varr.add_color(col); varr.add_color(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
+	
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
+	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
 
+	model.set_vertices(verts);
+	model.set_colors(colors);
+	model.set_texcoords(texcoords);
 }
 
 
@@ -141,8 +176,8 @@ int main(int argc, char* argv[])
 	// Shader stuff
 	//
 
-	std::string vert = read_file("src/shaders/Basic-vert.glsl");
-	std::string frag = read_file("src/shaders/Basic-frag.glsl");
+	std::string vert = read_file("../src/shaders/Basic-vert.glsl");
+	std::string frag = read_file("../src/shaders/Basic-frag.glsl");
 	ShaderProgram shader = ShaderProgram(vert.data(), frag.data());
 
 	CHECK_GL_ERROR();
@@ -160,16 +195,29 @@ int main(int argc, char* argv[])
 	// Main loop
 	//
 
+	//make_cube(myVertArr, glm::vec4(0,1,0,1), glm::vec3(0,0,0), 40);
 
-	VertexArray myVertArr;
-
-	make_cube(myVertArr, glm::vec4(0,1,0,1), glm::vec3(0,0,0), 40);
-
-	myVertArr.upload_data();
+	//myVertArr.upload_data();
 
 	
+	int width, height, channelnr;
+	width = 0;
+	height = 0;
+	unsigned char* data = stbi_load("grass.jpg", &width, &height, &channelnr, 0);
+	
+	GLTexture* myTexture = new GLTexture(data, width, height);
+	
+	mat.texture = myTexture;
 
-	GLTexture myTexture;
+	Model model;
+	model.set_material(&mat);
+
+	make_cube(model, glm::vec4(0,1,0,1), glm::vec3(0,0,0), 40);
+
+	// Free the data when no longer needed
+	stbi_image_free(data);
+
+	glEnable(GL_DEPTH_TEST);
 
 	CHECK_GL_ERROR();
 
@@ -224,12 +272,11 @@ int main(int argc, char* argv[])
 					-myInput.get_mouse_pos_delta().x * 0.003f, 0);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
 
 
 		RenderPass myPass;
 		
-		myPass.draw_model(&myVertArr, &shader, &mat, &cam);
+		myPass.draw_model(&model, &shader, &cam);
 
 		myPass.do_render();
 
@@ -239,7 +286,7 @@ int main(int argc, char* argv[])
 		SDL_Delay(16); // 16 ms is about 60 fps
 	}
 	
-	myVertArr.clear();
+	model.dispose();
 
 	// Unbind vao
 	glBindVertexArray(0);

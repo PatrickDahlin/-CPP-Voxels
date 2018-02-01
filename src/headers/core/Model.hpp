@@ -26,6 +26,10 @@ public:
 
 	void draw();
 
+	void dispose();
+
+	Material* get_material() const;
+
 	Transform		transform;
 	
 protected:
@@ -33,7 +37,7 @@ protected:
 	bool			needs_upload;
     
     VertexArray*	vert_arr;
-	Material*		mat;
+	Material*		material;
 
 };
 

@@ -23,7 +23,7 @@ void GLTexture::bind()
 
 void GLTexture::dispose()
 {
-	glDeleteTexture(&tex_id);
+	glDeleteTextures(1, &tex_id);
 }
 
 void GLTexture::upload_data(unsigned char* data)
