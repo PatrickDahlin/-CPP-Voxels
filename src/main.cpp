@@ -32,7 +32,10 @@ TODO:
 	Materials aren't usable yet, need a way to upload the data, !Uniform buffer objects!
 		Same thing for uploading/binding camera matrices to shaders
 
-
+	"packages"
+		core
+		graphics
+		physics @future
 
 	Heaps for prioritized jobs
 
@@ -41,7 +44,17 @@ TODO:
 		- Scene management []
 		- Scene class []
 		- Actor class []
+		- Text rendering
+		- Nanovg ui package perhaps
+		- OpenAL for sound
 		- Model class implementation [x]
+
+
+	main should only 
+		1 - set up scene management
+		2 - load first scene
+		3 - update scene and render it
+		4 - dispose of scene manager and quit
 
 */
 
