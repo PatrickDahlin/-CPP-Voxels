@@ -1,5 +1,4 @@
 {
-	"C_Cpp.intelliSenseEngineFallback": "Enabled",
 	"files.associations": {
 		"xiosbase": "cpp",
 		"xlocale": "cpp",
@@ -38,6 +37,5 @@
 		"fstream": "cpp",
 		"string": "cpp",
 		"list": "cpp"
-	},
-	"C_Cpp.errorSquiggles": "Disabled"
+	}
 }

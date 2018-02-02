@@ -29,7 +29,7 @@ public:
 	void dispose();
 
 	Material* get_material() const;
-
+	
 	Transform		transform;
 	
 protected:

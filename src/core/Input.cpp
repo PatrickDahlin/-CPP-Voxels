@@ -93,7 +93,7 @@ void Input::poll_events()
 			key_map[event.key.keysym.sym] = KeyState::RELEASED;
 			break;
 		case SDL_QUIT:
-			// OMG do stuff here
+			// @TODO OMG do stuff here
 			exit(0); // this is NOT ok in the future, just temporarily here
 			break;
 		case SDL_MOUSEBUTTONDOWN:

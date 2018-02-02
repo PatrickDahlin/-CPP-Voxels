@@ -7,7 +7,7 @@ class Scene
 {
 public:
 	Scene();
-	~Scene();
+	virtual ~Scene();
 
 	virtual void load() = 0;
 	// Effect: Loads resources from file
@@ -29,7 +29,13 @@ public:
 	// Effect: Disposes all actors and resources loaded
 	// Postcond: Scene is "unloaded" and ready to be thrown away
 
+	int getUUID();
+	// Effect: Gets unique id of this scene
+	
 private:
+
+	static int 					UUID_COUNTER;
+	int							UUID;
 
 	// std::vector<Actor*>		actors;
 

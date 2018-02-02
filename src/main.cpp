@@ -9,6 +9,8 @@
 #include <stb_image.h>
 
 #include "core/GameWindow.hpp"
+#include "core/SceneManager.hpp"
+#include "core/Scene.hpp"
 #include "graphics/ShaderProgram.hpp"
 #include "core/Files.hpp"
 #include "core/Macros.hpp"
@@ -44,9 +46,9 @@ TODO:
 		- Scene management []
 		- Scene class []
 		- Actor class []
-		- Text rendering
-		- Nanovg ui package perhaps
-		- OpenAL for sound
+		- Text rendering []
+		- Nanovg ui package perhaps []
+		- OpenAL for sound []
 		- Model class implementation [x]
 
 
@@ -189,6 +191,12 @@ int main(int argc, char* argv[])
 	glBindVertexArray(vao_id);
 
 
+	SceneManager manager;
+	
+	
+
+	// @Cleanup anything after this
+
 	//
 	// Shader stuff
 	//
@@ -304,7 +312,10 @@ int main(int argc, char* argv[])
 		SDL_Delay(16); // 16 ms is about 60 fps
 	}
 	
-	model.dispose();
+	model.dispose(); // @cleanup
+
+
+	manager.dispose();
 
 	// Unbind vao
 	glBindVertexArray(0);
