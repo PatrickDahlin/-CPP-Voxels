@@ -7,10 +7,10 @@ class Primitives
 {
 public:
 
-    Model* create_cube();
+    static Model* create_cube();
     // Effect: Creates a new cube primitive and returns a pointer to it
 
-    Model* create_quad(const float w, const float h);
+    static Model* create_quad(const float w, const float h);
 	// Effect: Creates a quad and returns a pointer to the model
 
 };

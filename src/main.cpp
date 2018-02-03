@@ -27,17 +27,21 @@ TODO:
 	Heaps for prioritized jobs
 
 	TODO:
-		- Cleanup main [x]
-		- Scene management [x]
-		- Scene class [x]
-		- Actor class []
-		- Text rendering []
-		- Nanovg ui package perhaps []
-		- OpenAL for sound []
-		- Model class implementation [x]
+		- (H) Actor class []
+		- (H) Text rendering []
+		- (M) Uniform buffer objects []
+			- (M) Material struct uploading to shader []
+		- (M) Debug class for collecting debug info []
+		- (M) Nanovg ui package perhaps []
+		- (M) OpenAL for sound []
+		- (H) Model class implementation [x]
+		- (H) Scene class [x]
+		- (H) Cleanup main [x]
+		- (H) Scene management [x]
+
 
 	Lower prio TODO
-		- (M) GameWindow really needs an openwindow function instead of
+		- (L) GameWindow really needs an openwindow function instead of
 			opening window in constructor []
 
 
@@ -93,7 +97,7 @@ int main(int argc, char* argv[])
 
 
 
-// @Cleanup anything after this
+// @Cleanup anything after this, it's left for reference only atm
 // Old main
 	/*
 	//

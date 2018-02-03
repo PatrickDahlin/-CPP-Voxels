@@ -19,6 +19,9 @@ void Game::load()
 {
 	main_scene = new MainScene(&input, &scene_manager);
 	scene_manager.switch_to_scene(main_scene);
+
+	glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Game::run()
@@ -35,6 +38,8 @@ void Game::run()
 		// @Temporary
 		if(input.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
 			Game::quit();
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		RenderPass* pass = new RenderPass;
 

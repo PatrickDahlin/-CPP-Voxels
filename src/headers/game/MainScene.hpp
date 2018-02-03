@@ -6,6 +6,11 @@
 class RenderPass;
 class Input;
 class SceneManager;
+class Model;
+class Camera;
+class ShaderProgram;
+class Material;
+class GLTexture;
 
 class MainScene : public Scene
 {
@@ -24,6 +29,15 @@ public:
     void render(RenderPass* pass) override;
 
     void dispose() override;
+
+protected:
+
+
+	Model*			tmp;
+	Camera*			cam;
+	ShaderProgram* 	shader;
+	Material*		mat;
+	GLTexture*		tex;
 
 };
 
