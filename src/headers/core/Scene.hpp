@@ -9,14 +9,18 @@ public:
 	Scene();
 	virtual ~Scene();
 
-	virtual void load() = 0;
-	// Effect: Loads resources from file
-	// Postcond: All resources needed at initialization are loaded
-
 	virtual void init() = 0;
 	// Effect: Initializes this scene
 	// Postcond: Scene is initialized
 
+	virtual void load() = 0;
+	// Effect: Loads resources and sets up scene for rendering & updating, can be called multiple times
+	// Postcond: All resources needed at initialization are loaded
+
+	virtual void unload() = 0;
+	// Effect: Unloads data not needed while scene is not in use, can be called multiple times
+	// Postcond: Only vital data for scene to continue is kept in memory
+	
 	virtual void update(const float delta) = 0;
 	// Effect: Updates scene with actors
 	// Postcond: All actors are updated

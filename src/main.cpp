@@ -2,28 +2,13 @@
 #include <GL\glew.h>
 #include <SDL2\SDL.h>
 #include <iostream>
-#include <cstdio>
-#include <fstream>
+
+#include "game/Game.hpp"
+#include "core/Macros.hpp"
+#include "core/GameWindow.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-
-#include "core/GameWindow.hpp"
-#include "core/SceneManager.hpp"
-#include "core/Scene.hpp"
-#include "graphics/ShaderProgram.hpp"
-#include "core/Files.hpp"
-#include "core/Macros.hpp"
-#include "graphics/GLBuffer.hpp"
-#include "core/Input.hpp"
-#include "core/Transform.hpp"
-#include "graphics/Material.hpp"
-#include "graphics/RenderPass.hpp"
-#include "graphics/VertexArray.hpp"
-#include "graphics/Model.hpp"
-#include "graphics/Camera.hpp"
-#include "graphics/GLTexture.hpp"
-
 
 
 /*
@@ -51,152 +36,66 @@ TODO:
 		- OpenAL for sound []
 		- Model class implementation [x]
 
+	Lower prio TODO
+		- (M) GameWindow really needs an openwindow function instead of
+			opening window in constructor []
 
-	main should only 
-		1 - set up scene management
-		2 - load first scene
-		3 - update scene and render it
-		4 - dispose of scene manager and quit
 
+	main should only
+		- Create window
+		- Set up game instance and run it
+		- Clean up window
 */
-
-
-void make_cube(Model& model, glm::vec4 col, glm::vec3 pos, float scale)
-{
-	float n = -0.5f;
-	float p = 0.5f;
-
-	std::vector<glm::vec3> verts;
-	std::vector<glm::vec4> colors;
-	std::vector<glm::vec2> texcoords;
-
-
-	// FRONT
-	verts.emplace_back(pos + glm::vec3(n,n,n) * scale);
-	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,n) * scale);	
-	verts.emplace_back(pos + glm::vec3(n,n,n) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,n) * scale);
-	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
-
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
-
-	// TOP
-	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,n) * scale);
-	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
-	verts.emplace_back(pos + glm::vec3(n,p,p) * scale);
-
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
-
-	// LEFT
-	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
-	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
-	verts.emplace_back(pos + glm::vec3(n,n,n) * scale);
-	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
-	verts.emplace_back(pos + glm::vec3(n,p,n) * scale);
-	verts.emplace_back(pos + glm::vec3(n,p,p) * scale);
-
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
-
-	// RIGHT
-	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
-	verts.emplace_back(pos + glm::vec3(p,n,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,n) * scale);
-	
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
-
-	// BOTTOM
-	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,n,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
-	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,n,n) * scale);
-	verts.emplace_back(pos + glm::vec3(n,n,n) * scale);
-	
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
-
-	// BACK
-	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,n,p) * scale);
-	verts.emplace_back(pos + glm::vec3(n,n,p) * scale);
-	verts.emplace_back(pos + glm::vec3(n,p,p) * scale);
-	verts.emplace_back(pos + glm::vec3(p,p,p) * scale);
-	
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	colors.emplace_back(col); colors.emplace_back(col); colors.emplace_back(col);
-	
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,0); texcoords.emplace_back(1,1);
-	texcoords.emplace_back(0,0); texcoords.emplace_back(1,1); texcoords.emplace_back(0,1);
-
-	model.set_vertices(verts);
-	model.set_colors(colors);
-	model.set_texcoords(texcoords);
-}
 
 
 int main(int argc, char* argv[])
 {
+	//
+	// SDL
+	//
 	SDL_ClearError();
-	if(SDL_Init( SDL_INIT_VIDEO ) < 0)
+	if(SDL_Init( SDL_INIT_EVERYTHING ) < 0)
 	{
 		error("SDL failed to initialize");
+		// @TODO Get sdl error and log it
 		return -1;
 	}
 
-	GameWindow game_window = GameWindow("Game", 1280, 720, SDL_WINDOW_OPENGL);
+	GameWindow* window = new GameWindow("Game", 1280, 720, SDL_WINDOW_OPENGL);
 
-
+	//
+	// GLEW
+	//
 	GLenum res = glewInit();
 	if(res != GLEW_OK)
 	{
 		error("GLEW failed to initialize!");
+		coutln(glewGetErrorString(res));
 		return -1;
 	}
-
-
-
-
-	// GLBuffer needs a Vao bound at all times if you draw it
-	// Should not be used tho.......
-	// this is new in GL 3.3+ ..why?.. Q.Q
-	GLuint vao_id;
-	glGenVertexArrays(1, &vao_id);
-	glBindVertexArray(vao_id);
-
-
-	SceneManager manager;
 	
+	Game game(window);
+
+	game.load();
+	game.run();
 	
+	window->destroy();
+	delete window;
 
-	// @Cleanup anything after this
+	coutln("Closed game, cleaning up window");
+	
+	SDL_Quit();
+	coutln("Bai");
+	return 0;
+}
 
+
+
+
+
+// @Cleanup anything after this
+// Old main
+	/*
 	//
 	// Shader stuff
 	//
@@ -313,15 +212,4 @@ int main(int argc, char* argv[])
 	}
 	
 	model.dispose(); // @cleanup
-
-
-	manager.dispose();
-
-	// Unbind vao
-	glBindVertexArray(0);
-
-	game_window.destroy();
-
-	SDL_Quit();
-	return 0;
-}
+	*/

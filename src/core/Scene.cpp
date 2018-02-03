@@ -6,9 +6,7 @@ int Scene::UUID_COUNTER = 0;
 Scene::Scene() :
 UUID(UUID_COUNTER++)
 {
-	cout("Created new scene (uuid:");
-	cout(UUID);
-	coutln(")");
+	printf("Created new scene \t(uuid:%i)\n", UUID);
 }
 
 Scene::~Scene()
@@ -18,7 +16,7 @@ Scene::~Scene()
 void Scene::dispose()
 {
 	// Dispose actors
-	printf("Disposing scene: %i\n",UUID);
+	printf("Disposing scene \t(uuid:%i)\n",UUID);
 }
 
 int Scene::getUUID()

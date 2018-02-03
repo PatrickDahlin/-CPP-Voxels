@@ -19,10 +19,6 @@ public:
 	// Effect: Switches the currently rendered and updated scene to given scene, NOTE this scene will now be deleted by the manager when manager is disposed
 	// Postcond: current scene is the new given scene and the old one is put into loaded_scenes list
 
-	void init();
-	// Effect: Initializes the scene loaded
-	// Postcond: Current scene is loaded
-
 	void update(const float delta);
 	// Effect: Updates current scene
 	// Postond: Current scene is updated to this frame

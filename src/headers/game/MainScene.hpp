@@ -11,15 +11,17 @@ public:
     MainScene();
     ~MainScene();
 
-    override void load();
+	void init() override;
 
-    override void init();
+    void load() override;
 
-    override void update(const float delta);
+	void unload() override;
 
-    override void render(RenderPass* pass);
+    void update(const float delta) override;
 
-    override void dispose();
+    void render(RenderPass* pass) override;
+
+    void dispose() override;
 
 private:
 
