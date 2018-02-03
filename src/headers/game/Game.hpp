@@ -16,14 +16,12 @@ public:
 
 	void run();
 
-	static void load_scene(Scene* scene);
-
 	static void quit();
 
 protected:
 
 	static bool				running;
-	static SceneManager		scene_manager;
+	SceneManager			scene_manager;
 	GameWindow*				game_window;
 	Input					input;
 	MainScene*				main_scene;

@@ -27,9 +27,9 @@ TODO:
 	Heaps for prioritized jobs
 
 	TODO:
-		- Cleanup main []
-		- Scene management []
-		- Scene class []
+		- Cleanup main [x]
+		- Scene management [x]
+		- Scene class [x]
 		- Actor class []
 		- Text rendering []
 		- Nanovg ui package perhaps []

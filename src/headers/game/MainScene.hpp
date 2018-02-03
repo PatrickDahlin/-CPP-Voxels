@@ -4,11 +4,13 @@
 #include "core/Scene.hpp"
 
 class RenderPass;
+class Input;
+class SceneManager;
 
 class MainScene : public Scene
 {
 public:
-    MainScene();
+    MainScene(Input* input, SceneManager* scene_manager);
     ~MainScene();
 
 	void init() override;
@@ -22,8 +24,6 @@ public:
     void render(RenderPass* pass) override;
 
     void dispose() override;
-
-private:
 
 };
 

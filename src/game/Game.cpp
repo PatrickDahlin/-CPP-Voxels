@@ -2,12 +2,10 @@
 #include "core/Macros.hpp"
 #include "graphics/RenderPass.hpp"
 
-bool Game::running = true;
-SceneManager Game::scene_manager;
+bool 			Game::running = true;
 
 Game::Game(GameWindow* window) :
 game_window(window),
-input(),
 main_scene(nullptr)
 {
 	input.set_lock_mouse(true);
@@ -19,7 +17,7 @@ Game::~Game()
 
 void Game::load()
 {
-	main_scene = new MainScene();
+	main_scene = new MainScene(&input, &scene_manager);
 	scene_manager.switch_to_scene(main_scene);
 }
 
@@ -30,6 +28,8 @@ void Game::run()
 
 	while(running)
 	{
+		last_frame = SDL_GetTicks();
+
 		input.poll_events();
 
 		// @Temporary
@@ -53,20 +53,18 @@ void Game::run()
 		//
 		unsigned int delta_ms = SDL_GetTicks() - last_frame;
 		delta_time = (float)( delta_ms / 1000.0f );
-		last_frame = SDL_GetTicks();
+		
+
+		printf("deltams:%i\n",delta_ms);
 
 		if(delta_ms < 16)
+		{
+			printf("sleep for: %i\n", 16-delta_ms);
 			SDL_Delay(16 - delta_ms);
+		}
 	}
 
-	printf("Quitting\n");
-
 	scene_manager.dispose();
-}
-
-void Game::load_scene(Scene* scene)
-{
-	scene_manager.switch_to_scene(scene);
 }
 
 void Game::quit()
@@ -76,29 +74,3 @@ void Game::quit()
 	coutln("Reqested quit");
 }
 
-
-
-/*
-void Game::crash(const char* msg)
-{
-	coutln("----------------------------------");
-	coutln("Unhandled fatal error!");
-	coutln("----------------------------------");
-	coutln(msg);
-	coutln("----------------------------------");
-
-	exit(0);
-}
-
-void Game::assert(int v, const char* msg)
-{
-	if(!v)
-	{
-		coutln("----------------------------------");
-		coutln("Assertion failed!");
-		coutln("----------------------------------");
-		coutln(msg);
-		coutln("----------------------------------");
-	}
-}
-*/

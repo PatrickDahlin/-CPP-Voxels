@@ -2,11 +2,13 @@
 #define _SCENE_HPP_
 
 class RenderPass;
+class Input;
+class SceneManager;
 
 class Scene
 {
 public:
-	Scene();
+	Scene(Input* input, SceneManager* scene_manager);
 	virtual ~Scene();
 
 	virtual void init() = 0;
@@ -40,6 +42,9 @@ private:
 
 	static int 					UUID_COUNTER;
 	int							UUID;
+
+	Input*			input;
+	SceneManager*	scene_manager;
 
 	// std::vector<Actor*>		actors;
 

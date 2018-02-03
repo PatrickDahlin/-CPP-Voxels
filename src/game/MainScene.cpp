@@ -1,6 +1,7 @@
 #include "game/MainScene.hpp"
 
-MainScene::MainScene()
+
+MainScene::MainScene(Input* input, SceneManager* scene_manager) : Scene(input, scene_manager)
 {}
 
 MainScene::~MainScene()
