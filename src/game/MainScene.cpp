@@ -22,7 +22,7 @@ MainScene::~MainScene()
 
 void MainScene::init()
 {
-	cam = new DebugCamera(3.14f / 4.0f, 1280, 720, 0.1f, 500.0f);
+	cam = new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
 	cam->set_input(input);
 	cam->set_fly_speed(3.0f);
 	cam->set_mouse_sensitivity(0.05f);
