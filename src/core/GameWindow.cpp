@@ -128,3 +128,19 @@ void GameWindow::set_vsync(bool vsync)
 	
 	this->vsync = vsync;
 }
+
+int GameWindow::get_width()
+{
+	return width;
+}
+
+int GameWindow::get_height()
+{
+	return height;
+}
+
+
+void GameWindow::set_mouse_pos(int x, int y)
+{
+	SDL_WarpMouseInWindow(window, x, y);
+}

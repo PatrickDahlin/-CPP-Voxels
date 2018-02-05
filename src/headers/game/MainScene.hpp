@@ -7,7 +7,7 @@ class RenderPass;
 class Input;
 class SceneManager;
 class Model;
-class Camera;
+class DebugCamera;
 class ShaderProgram;
 class Material;
 class GLTexture;
@@ -34,7 +34,7 @@ protected:
 
 
 	Model*			tmp;
-	Camera*			cam;
+	DebugCamera*	cam;
 	ShaderProgram* 	shader;
 	Material*		mat;
 	GLTexture*		tex;

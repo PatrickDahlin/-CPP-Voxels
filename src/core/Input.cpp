@@ -1,13 +1,15 @@
 #include "core/Input.hpp"
 #include "core/Macros.hpp"
+#include "core/GameWindow.hpp"
 #include <SDL2/SDL.h>
 #include <glm/vec2.hpp>
 
-Input::Input() : key_map(),
+Input::Input(GameWindow* window) : key_map(),
 				 mouse_x(0),
 				 mouse_y(0),
 				 mouse_delta_x(0),
 				 mouse_delta_y(0),
+				 window(window),
 				 mouse_btn_state(),
 				 scroll_delta(0)
 {
@@ -23,6 +25,11 @@ void Input::set_lock_mouse(bool lock)
 		SDL_SetRelativeMouseMode(SDL_TRUE);
 	else
 		SDL_SetRelativeMouseMode(SDL_FALSE);
+}
+
+void Input::set_mouse_pos(const int x, const int y)
+{
+	SDL_WarpMouseInWindow(NULL, x, y);
 }
 
 void Input::show_cursor(bool show)
@@ -105,8 +112,12 @@ void Input::poll_events()
 		case SDL_MOUSEMOTION:
 			mouse_x = event.motion.x;
 			mouse_y = event.motion.y;
-			mouse_delta_x = event.motion.xrel;
-			mouse_delta_y = event.motion.yrel;
+			// These values can't be used for camera control
+			// Seems like SDL somehow doesn't update xrel too often
+			// and thusly causes stuttered motion for camera input
+			//mouse_delta_x = event.motion.xrel;
+			//mouse_delta_y = event.motion.yrel;
+			
 			break;
 		case SDL_MOUSEWHEEL:
 			// Scroll
@@ -114,9 +125,16 @@ void Input::poll_events()
 			break;
 		case SDL_WINDOWEVENT:
 			// Window resize
+			// @Nope
 			break;
 		default:
 			break;
 		}
 	}
+
+	mouse_delta_x = mouse_x - window->get_width()/2;
+	mouse_delta_y = mouse_y - window->get_height()/2;
+	
+	window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
+
 }

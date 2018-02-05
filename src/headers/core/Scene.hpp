@@ -38,14 +38,16 @@ public:
 	int getUUID();
 	// Effect: Gets unique id of this scene
 	
-private:
+protected:
 
-	static int 					UUID_COUNTER;
 	int							UUID;
 
 	Input*			input;
 	SceneManager*	scene_manager;
 
+private:
+
+	static int 					UUID_COUNTER;
 	// std::vector<Actor*>		actors;
 
 };

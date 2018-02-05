@@ -23,6 +23,12 @@ public:
 
 	void destroy();
 
+	int get_width();
+
+	int get_height();
+
+	void set_mouse_pos(int x, int y);
+
 protected:
 
 	void create_window();

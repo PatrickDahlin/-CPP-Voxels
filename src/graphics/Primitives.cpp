@@ -93,6 +93,18 @@ Model* Primitives::create_cube()
 			v3(p,n,n),v3(n,n,n),
 			v3(0,-1,0),v4(1,1,1,1));
 
+	// LEFT
+	add_face(pos, norm, cols, tex, 
+			v3(n,n,p),v3(n,n,n),
+			v3(n,p,n),v3(n,p,p),
+			v3(-1,0,0),v4(1,1,1,1));
+	
+	// RIGHT
+	add_face(pos, norm, cols, tex, 
+			v3(p,n,n),v3(p,n,p),
+			v3(p,p,p),v3(p,p,n),
+			v3(1,0,0),v4(1,1,1,1));
+	
 
 	model->set_vertices(pos);
 	model->set_normals(norm);
@@ -106,6 +118,21 @@ Model* Primitives::create_cube()
 Model* Primitives::create_quad(const float w, const float h)
 {
     Model* model = new Model();
+
+	std::vector<v3> pos;
+	std::vector<v3> norm;
+	std::vector<v4> cols;
+	std::vector<v2> tex;
+
+	add_face(pos, norm, cols, tex, 
+			v3( -w/2.0f, -h/2.0f, 0),v3( w/2.0f, h/2.0f, 0),
+			v3(  w/2.0f,  h/2.0f, 0),v3(-w/2.0f, h/2.0f,0),
+			v3(0,0,-1),v4(1,1,1,1));
+
+	model->set_vertices(pos);
+	model->set_normals(norm);
+	model->set_colors(cols);
+	model->set_texcoords(tex);	
 
     return model;
 }

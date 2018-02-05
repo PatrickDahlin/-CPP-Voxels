@@ -5,6 +5,8 @@
 #include <SDL2/SDL.h>
 #include <glm/fwd.hpp>
 
+class GameWindow;
+
 // States for each key
 // PRESSED = the frame the key was pressed
 // REPEAT = each subsequent frame after first one, indicating a key hold
@@ -23,7 +25,7 @@ enum class KeyState
 class Input
 {
   public:
-	Input();
+	Input(GameWindow* window);
 	~Input();
 
 	void poll_events();
@@ -41,6 +43,8 @@ class Input
 	void set_lock_mouse(bool lock);
 
 	void show_cursor(bool show);
+
+	void set_mouse_pos(const int x, const int y);
 	
 	// @TODO SDL supports text input compositions which
 	// make text inputting easier. implement this in the future
@@ -54,6 +58,7 @@ class Input
 	int mouse_y;
 	int mouse_delta_x;
 	int mouse_delta_y;
+	GameWindow* window;
 
 	std::unordered_map<int, KeyState> mouse_btn_state;
 	int scroll_delta;

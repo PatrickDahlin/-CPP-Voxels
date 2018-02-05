@@ -1,14 +1,15 @@
 #include "game/Game.hpp"
 #include "core/Macros.hpp"
 #include "graphics/RenderPass.hpp"
+#include "core/Time.hpp"
 
 bool 			Game::running = true;
 
 Game::Game(GameWindow* window) :
 game_window(window),
+input(window),
 main_scene(nullptr)
 {
-	input.set_lock_mouse(true);
 	input.show_cursor(false);
 }
 
@@ -26,12 +27,15 @@ void Game::load()
 
 void Game::run()
 {
-	unsigned int last_frame = SDL_GetTicks();
+	auto last_frame = Clock::now();
 	float delta_time = 0.0f;
+
+	Time::set_start(); // Only accessible here, sets starting point of application and
+						// is used in Time::time_since_startup_sec();
 
 	while(running)
 	{
-		last_frame = SDL_GetTicks();
+		last_frame = Clock::now();
 
 		input.poll_events();
 
@@ -52,21 +56,24 @@ void Game::run()
 	
 		delete pass;
 
-
+		//printf("delta_time: %.4f\n",delta_time);
+		
 		//
 		// Frametime calculation
 		//
-		unsigned int delta_ms = SDL_GetTicks() - last_frame;
-		delta_time = (float)( delta_ms / 1000.0f );
+		// Calculate how long processing took, we need to calculate how long we need to wait for fps limit
+		auto delta = Clock::now() - last_frame;
+		double delta_ms = std::chrono::duration_cast<std::chrono::nanoseconds>(delta).count() / 1000000.0;
 		
-
-		printf("deltams:%i\n",delta_ms);
-
 		if(delta_ms < 16)
 		{
-			printf("sleep for: %i\n", 16-delta_ms);
-			SDL_Delay(16 - delta_ms);
+			SDL_Delay((int)(16 - delta_ms));
 		}
+
+		// Calculate the deltatime for this frame including the fps-limit time
+		delta = Clock::now() - last_frame;
+		delta_ms = std::chrono::duration_cast<std::chrono::nanoseconds>(delta).count() / 1000000.0;
+		delta_time = (float)(delta_ms / 1000.0);
 	}
 
 	scene_manager.dispose();
@@ -75,7 +82,6 @@ void Game::run()
 void Game::quit()
 {
 	running = false;
-
 	coutln("Reqested quit");
 }
 
