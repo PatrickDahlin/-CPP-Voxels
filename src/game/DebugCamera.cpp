@@ -3,7 +3,7 @@
 #include "core/Macros.hpp"
 
 DebugCamera::DebugCamera(float fov, int width, int height, float near, float far) : 
-Camera(fov, width, height, near, far),
+PerspectiveCamera(fov, width, height, near, far),
 input(nullptr)
 {
 }

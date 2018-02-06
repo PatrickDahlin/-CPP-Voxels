@@ -26,8 +26,8 @@ TODO:
 	Heaps for prioritized jobs
 
 	TODO:
-		- (H) Actor class []
-		- (H) Text rendering []
+		- (M) Actor class []
+		- (M) Text rendering []
 		- (M) Uniform buffer objects []
 			- (M) Material struct uploading to shader []
 		- (M) Debug class for collecting debug info []
@@ -39,6 +39,7 @@ TODO:
 
 
 	Done:
+		- (H) ImGui for debug ui rendering
 		- (H) Texture color format option [x]
 		- (H) Model class implementation [x]
 		- (H) Scene class [x]

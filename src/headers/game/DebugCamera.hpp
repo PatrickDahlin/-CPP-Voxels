@@ -1,11 +1,11 @@
 #ifndef _DebugCamera_HPP_
 #define _DebugCamera_HPP_
 
-#include "graphics/Camera.hpp"
+#include "graphics/PerspectiveCamera.hpp"
 
 class Input;
 
-class DebugCamera : public Camera 
+class DebugCamera : public PerspectiveCamera 
 {
 public:
 	DebugCamera(float fov, int width, int height, float near, float far);

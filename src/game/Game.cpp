@@ -78,7 +78,7 @@ input(window),
 main_scene(nullptr)
 {
 	printf("Setting up Game\n");
-	uicam = new Camera(0, window->get_width(), 0, window->get_height());
+	//uicam = new Camera(0, window->get_width(), 0, window->get_height());
 
 	input.show_cursor(false);
 

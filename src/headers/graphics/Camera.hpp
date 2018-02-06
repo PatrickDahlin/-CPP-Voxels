@@ -7,9 +7,8 @@
 
 class Camera {
 public:
-	Camera(float fov, int width, int height, float near, float far);
-	Camera(int left, int right, int top, int bottom);
-	~Camera();
+	Camera();
+	virtual ~Camera();
 
 	void translate(float x, float y, float z);
 	void translate(glm::vec3 vec);
@@ -20,12 +19,6 @@ public:
 	void set_rotation(float x, float y, float z);
 	void set_rotation(glm::vec3 vec);
 
-	void set_fov(float fov);
-	void resize(int width, int height);
-	void set_near(float near);
-	void set_far(float far);
-
-
 	glm::mat4 get_projection();
 	glm::mat4 get_view();
 
@@ -35,22 +28,13 @@ public:
 
 protected:
 
+	virtual void update_projection() = 0;
+
 	bool			update_proj;
 	glm::mat4		projection_mat;
 
 	bool			update_view;
 	glm::mat4		view_mat;
-
-	bool			is_ortho;
-	float			fov;
-	int				left;
-	int				right;
-	int				bottom;
-	int				top;
-	int				width;
-	int				height;
-	float			near;
-	float 			far;
 
 	glm::vec3		position;
 	float			pitch, yaw, roll;

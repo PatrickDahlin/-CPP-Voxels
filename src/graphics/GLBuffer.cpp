@@ -1,7 +1,6 @@
 #include "graphics/GLBuffer.hpp"
 #include "core/Macros.hpp"
 #include <GL/glew.h>
-#include <iostream> //@cleanup
 
 GLBuffer::GLBuffer(BufferType buf_type, void *data, unsigned int size_bytes,
 				   unsigned int vertex_count) : 

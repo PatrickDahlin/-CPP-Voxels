@@ -2,50 +2,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-Camera::Camera(float fov, int width, int height, float near, float far) :
+Camera::Camera() :
 update_proj(true),
 projection_mat(),
 update_view(true),
 view_mat(),
-is_ortho(false),
-fov(fov),
-left(0),
-right(0),
-bottom(0),
-top(0),
-width(width),
-height(height),
-near(near),
-far(far),
 position(0,0,0),
 pitch(0),
 yaw(0),
 roll(0)
 {
-	printf("Created perspective camera\n");
-}
-
-Camera::Camera(int left, int right, int top, int bottom) :
-update_proj(true),
-projection_mat(),
-update_view(true),
-view_mat(),
-is_ortho(true),
-fov(0),
-left(left),
-right(right),
-bottom(bottom),
-top(top),
-width(right),
-height(bottom),
-near(-1),
-far(1),
-position(0,0,0),
-pitch(0),
-yaw(0),
-roll(0)
-{
-	printf("Created orthographic camera\n");
 }
 
 Camera::~Camera()
@@ -53,11 +19,8 @@ Camera::~Camera()
 
 glm::mat4 Camera::get_projection()
 {
-	if(update_proj && !is_ortho)
-		projection_mat = glm::perspective( 3.1415f * (fov / 180.0f), ((float)width / (float)height), near, far);
-
-	if(update_proj && is_ortho)
-		projection_mat = glm::ortho(left, right, bottom, top);
+	if(update_proj)
+		update_projection();
 
 	update_proj = false;
 	return projection_mat;
@@ -104,31 +67,6 @@ glm::mat4 Camera::get_view()
 	}
 	
 	return view_mat;
-}
-
-void Camera::set_fov(float fov)
-{
-	this->fov = fov;
-	update_proj = true;
-}
-
-void Camera::set_near(float near)
-{
-	this->near = near;
-	update_proj = true;
-}
-
-void Camera::set_far(float far)
-{
-	this->far = far;
-	update_proj = true;
-}
-
-void Camera::resize(int width, int height)
-{
-	this->width = width;
-	this->height = height;
-	update_proj = true;
 }
 
 void Camera::translate(float x, float y, float z)
