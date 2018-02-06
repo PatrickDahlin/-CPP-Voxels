@@ -1,12 +1,15 @@
 #include "graphics/GLBuffer.hpp"
 #include "core/Macros.hpp"
 #include <GL/glew.h>
+#include <iostream> //@cleanup
 
-GLBuffer::GLBuffer(void *data, unsigned int size_bytes,
-				   unsigned int vertex_count) : element_count(vertex_count),
-												size_bytes(size_bytes),
-												vbo_id(0),
-												attribute_count(0)
+GLBuffer::GLBuffer(BufferType buf_type, void *data, unsigned int size_bytes,
+				   unsigned int vertex_count) : 
+type(buf_type),
+element_count(vertex_count),
+size_bytes(size_bytes),
+vbo_id(0),
+attribute_count(0)
 {
 	uploadData(data, size_bytes, vertex_count);
 }
@@ -33,19 +36,29 @@ void GLBuffer::uploadData(void *data, unsigned int size_bytes, unsigned int vert
 
 	clear();
 	
-	glBufferData(GL_ARRAY_BUFFER, size_bytes, data, GL_STATIC_DRAW);
-
+	if(type == BufferType::ELEMENT)
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size_bytes, data, GL_STATIC_DRAW);
+	else
+		glBufferData(GL_ARRAY_BUFFER, size_bytes, data, GL_STATIC_DRAW);
 	
 }
 
 void GLBuffer::clear()
 {
-	glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // We don't care about old data, if any, that driver can discard	
+	if(type == BufferType::ELEMENT)
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // We don't care about old data, if any, that driver can discard	
+	else
+		glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW); // We don't care about old data, if any, that driver can discard	
+		
 }
 
 void GLBuffer::bind()
 {
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
+	if(type == BufferType::ELEMENT)
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_id);
+	else
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
+
 	if(vbo_id == 0) error("bound glbuffer with 0 id");
 }
 
@@ -61,7 +74,8 @@ void GLBuffer::unbind()
 
 void GLBuffer::draw()
 {
-	glDrawArrays(GL_TRIANGLES, 0, element_count);
+	if(type == BufferType::ARRAY)
+		glDrawArrays(GL_TRIANGLES, 0, element_count);
 }
 
 void GLBuffer::data_pointer(int location,
@@ -82,4 +96,9 @@ void GLBuffer::data_pointer(int location,
 	);
 
 	enabled_attributes[attribute_count++] = location;
+}
+
+int GLBuffer::get_size()
+{
+	return element_count;
 }

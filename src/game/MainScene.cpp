@@ -39,7 +39,7 @@ void MainScene::init()
 	width = 0;
 	height = 0;
 	unsigned char* data = stbi_load("data/textures/grass.jpg", &width, &height, &channelnr, 0);
-	GLTexture* myTexture = new GLTexture(data, width, height);
+	GLTexture* myTexture = new GLTexture(ColorFormat::RGB, data, width, height);
 	mat->texture = myTexture;
 	stbi_image_free(data);
 

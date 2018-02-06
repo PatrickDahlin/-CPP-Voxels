@@ -4,10 +4,12 @@
 
 #include <GL\glew.h>
 
+enum class ColorFormat { RGB, RGBA };
+
 class GLTexture 
 {
 public:
-    GLTexture(unsigned char* data, int width, int height);
+    GLTexture(ColorFormat format, unsigned char* data, int width, int height);
     ~GLTexture();
 
     void bind();
@@ -20,6 +22,8 @@ protected:
 
     int         width, height;
     GLuint      tex_id;
+
+    ColorFormat color_format;
 
 };
 

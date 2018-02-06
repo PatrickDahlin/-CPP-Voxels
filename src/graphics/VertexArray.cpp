@@ -10,7 +10,8 @@ normals(),
 colors(),
 texcoords(),
 vao(0),
-glbuffers()
+glbuffers(),
+element_buffer(nullptr)
 {
 
 	glGenVertexArrays(1, &vao);
@@ -44,7 +45,7 @@ void VertexArray::upload_data()
 	//
 	if(vertices.size() > 0)
 	{
-		GLBuffer verts = GLBuffer(vertices.data(), vertices.size() * 3 * sizeof(float), vertices.size());
+		GLBuffer verts = GLBuffer(BufferType::ARRAY, vertices.data(), vertices.size() * 3 * sizeof(float), vertices.size());
 		verts.data_pointer(SHADER_POSITION_LOCATION, 3, GL_FLOAT, 3 * sizeof(float), false, BUFFER_OFFSET(0));
 		glbuffers.emplace_back(verts);
 	}
@@ -63,7 +64,7 @@ void VertexArray::upload_data()
 			error("VertexArray: Normal and Vertex count mismatch!");
 			return;
 		}
-		GLBuffer norms = GLBuffer(normals.data(), normals.size() * 3 * sizeof(float), normals.size());
+		GLBuffer norms = GLBuffer(BufferType::ARRAY, normals.data(), normals.size() * 3 * sizeof(float), normals.size());
 		norms.data_pointer(SHADER_NORMAL_LOCATION, 3, GL_FLOAT, 3 * sizeof(float), false, BUFFER_OFFSET(0));
 		glbuffers.emplace_back(norms);
 	}
@@ -78,7 +79,7 @@ void VertexArray::upload_data()
 			error("VertexArray: Color and Vertex count mismatch!");
 			return;
 		}
-		GLBuffer cols = GLBuffer(colors.data(), colors.size() * 4 * sizeof(float), colors.size());
+		GLBuffer cols = GLBuffer(BufferType::ARRAY, colors.data(), colors.size() * 4 * sizeof(float), colors.size());
 		cols.data_pointer(SHADER_COLOR_LOCATION, 4, GL_FLOAT, 4 * sizeof(float), true, BUFFER_OFFSET(0));
 		glbuffers.emplace_back(cols);
 	}
@@ -93,12 +94,22 @@ void VertexArray::upload_data()
 			error("VertexArray: UV and Vertex count mismatch!");
 			return;
 		}
-		GLBuffer tex = GLBuffer(texcoords.data(), texcoords.size() * 2 * sizeof(float), texcoords.size());
+		GLBuffer tex = GLBuffer(BufferType::ARRAY, texcoords.data(), texcoords.size() * 2 * sizeof(float), texcoords.size());
 		tex.data_pointer(SHADER_UV_LOCATION, 2, GL_FLOAT, 2 * sizeof(float), false, BUFFER_OFFSET(0));
 		glbuffers.emplace_back(tex);
 	}
 
 
+}
+
+void VertexArray::add_element_buffer(GLBuffer* buf)
+{
+	if(element_buffer != nullptr)
+	{
+		element_buffer->dispose();
+		delete element_buffer;
+	}
+	element_buffer = buf;
 }
 
 void VertexArray::clear()
@@ -114,6 +125,13 @@ void VertexArray::clear()
 		it.clear(); // Frees/releases the underlying data for this buffer
 	}
 
+	if(element_buffer != nullptr)
+	{
+		element_buffer->dispose();
+		delete element_buffer;
+		element_buffer = nullptr;
+	}
+
 	glbuffers.clear();
 }
 
@@ -125,7 +143,10 @@ void VertexArray::draw()
 
 	CHECK_GL_ERROR();
 
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	if(element_buffer != nullptr)
+		glDrawElements(GL_TRIANGLES, element_buffer->get_size(), GL_INT, (void*)0);
+	else
+		glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
 	CHECK_GL_ERROR();
 

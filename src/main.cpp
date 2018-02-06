@@ -31,14 +31,15 @@ TODO:
 		- (M) Uniform buffer objects []
 			- (M) Material struct uploading to shader []
 		- (M) Debug class for collecting debug info []
-		- (H) Camera class needs perspective/ortho switch
-		- (H) Element buffer for vertexarray
-		- (H) Texture color format option
+		- (H) Camera class needs perspective/ortho switch []
+			- Camera abstract class with Orthographic and Perspective camera subclass []
+		- (H) Element buffer for vertexarray [x] @Untested @TODO
 		- (H) Multi-camera rendering (Renderpass->RenderBatch) []
 		- (M) OpenAL for sound []
 
 
 	Done:
+		- (H) Texture color format option [x]
 		- (H) Model class implementation [x]
 		- (H) Scene class [x]
 		- (H) Cleanup main [x]

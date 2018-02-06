@@ -36,6 +36,8 @@ public:
 	void add_texcoord(vec2 coord);
 	void add_texcoord(float u, float v);
 
+	void add_element_buffer(GLBuffer* buf);
+
 	void upload_data();
 
 	void draw();
@@ -55,6 +57,7 @@ private:
 
 	unsigned int 			vao;
 	vector<GLBuffer>		glbuffers;
+	GLBuffer*				element_buffer;
 
 };
 
