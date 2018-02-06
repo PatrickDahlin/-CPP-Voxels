@@ -31,7 +31,9 @@ TODO:
 		- (M) Uniform buffer objects []
 			- (M) Material struct uploading to shader []
 		- (M) Debug class for collecting debug info []
-		- (M) Nanovg ui package perhaps []
+		- (H) Camera class needs perspective/ortho switch
+		- (H) Element buffer for vertexarray
+		- (H) Texture color format option
 		- (H) Multi-camera rendering (Renderpass->RenderBatch) []
 		- (M) OpenAL for sound []
 
