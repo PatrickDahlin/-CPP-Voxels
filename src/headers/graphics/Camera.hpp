@@ -8,6 +8,7 @@
 class Camera {
 public:
 	Camera(float fov, int width, int height, float near, float far);
+	Camera(int left, int right, int top, int bottom);
 	~Camera();
 
 	void translate(float x, float y, float z);
@@ -40,7 +41,12 @@ protected:
 	bool			update_view;
 	glm::mat4		view_mat;
 
+	bool			is_ortho;
 	float			fov;
+	int				left;
+	int				right;
+	int				bottom;
+	int				top;
 	int				width;
 	int				height;
 	float			near;

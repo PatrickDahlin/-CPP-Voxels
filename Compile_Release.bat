@@ -13,7 +13,9 @@ set libs=-lopengl32 -lglew32 -lmingw32 -lsdl2main -lsdl2
 
 for /f %%A in ('forfiles /s /m *.cpp /p src /c "cmd /c echo @relpath"') do set var=!var! .\src\%%~A
 
-set total=-std=c++11 -Wall %var% %include_dir% %lib_dir% %libs% -o %output% -O3 -mwindows
+set lib_cpp=.\include\imgui\imgui.cpp .\include\imgui\imgui_draw.cpp .\include\imgui\imgui_demo.cpp
+
+set total=-std=c++11 -Wall %var% %lib_cpp% %include_dir% %lib_dir% %libs% -o %output% -O3 -mwindows
 
 echo Compile options:
 echo %total%

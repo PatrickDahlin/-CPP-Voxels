@@ -7,6 +7,15 @@ class Camera;
 
 #include <vector>
 
+/*
+
+	This class should really be renamed to RenderBatch
+
+	Also camera should only be passed in to do_render since
+	we want to be able to render the world with multiple cameras
+
+*/
+
 class RenderPass {
 public:
 	RenderPass();

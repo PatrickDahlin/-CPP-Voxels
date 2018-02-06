@@ -6,6 +6,9 @@
 #include "core/SceneManager.hpp"
 #include "game/MainScene.hpp"
 
+class Camera;
+class ShaderProgram;
+
 class Game
 {
 public:
@@ -25,6 +28,10 @@ protected:
 	GameWindow*				game_window;
 	Input					input;
 	MainScene*				main_scene;
+
+
+	Camera*					uicam;
+	ShaderProgram*			imgui_shader;
 
 };
 

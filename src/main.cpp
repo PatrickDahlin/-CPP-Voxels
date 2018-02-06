@@ -10,7 +10,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-
 /*
 
 
@@ -33,7 +32,11 @@ TODO:
 			- (M) Material struct uploading to shader []
 		- (M) Debug class for collecting debug info []
 		- (M) Nanovg ui package perhaps []
+		- (H) Multi-camera rendering (Renderpass->RenderBatch) []
 		- (M) OpenAL for sound []
+
+
+	Done:
 		- (H) Model class implementation [x]
 		- (H) Scene class [x]
 		- (H) Cleanup main [x]
@@ -45,10 +48,8 @@ TODO:
 			opening window in constructor []
 
 
-	main should only
-		- Create window
-		- Set up game instance and run it
-		- Clean up window
+	Licensing : stb source has 2 licenses to choose from
+
 */
 
 
@@ -92,128 +93,3 @@ int main(int argc, char* argv[])
 	coutln("Bai");
 	return 0;
 }
-
-
-
-
-
-// @Cleanup anything after this, it's left for reference only atm
-// Old main
-	/*
-	//
-	// Shader stuff
-	//
-
-	std::string vert = read_file("data/shaders/Basic-vert.glsl");
-	std::string frag = read_file("data/shaders/Basic-frag.glsl");
-	std::string header = read_file("data/shaders/Shader_Header.glsl");
-	ShaderProgram shader = ShaderProgram(vert.data(), frag.data(), header.data());
-
-	CHECK_GL_ERROR();
-
-	Material mat;
-	mat.tint = Color(127,127,127,255);
-
-	Camera cam(3.14f/4.0f, 1280, 720, 0.1f, 5000.0f);
-
-	Input myInput;
-	myInput.set_lock_mouse(true);
-	myInput.show_cursor(false);
-
-	//
-	// Main loop
-	//
-
-	//make_cube(myVertArr, glm::vec4(0,1,0,1), glm::vec3(0,0,0), 40);
-
-	//myVertArr.upload_data();
-
-	
-	int width, height, channelnr;
-	width = 0;
-	height = 0;
-	unsigned char* data = stbi_load("data/textures/grass.jpg", &width, &height, &channelnr, 0);
-	
-	GLTexture* myTexture = new GLTexture(data, width, height);
-	
-	mat.texture = myTexture;
-
-	Model model;
-	model.set_material(&mat);
-
-	make_cube(model, glm::vec4(0,1,0,1), glm::vec3(0,0,0), 40);
-
-	// Free the data when no longer needed
-	stbi_image_free(data);
-
-	glEnable(GL_DEPTH_TEST);
-
-	CHECK_GL_ERROR();
-
-	bool run = true;
-	while(run)
-	{
-		myInput.poll_events();
-
-		if(myInput.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
-			exit(0);
-		if(myInput.get_key(SDLK_w) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_w) == KeyState::PRESSED)
-			cam.translate( cam.get_forward() * -10.0f);
-	
-		if(myInput.get_key(SDLK_s) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_s) == KeyState::PRESSED)
-			cam.translate( cam.get_forward() * 10.0f);
-
-		if(myInput.get_key(SDLK_a) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_a) == KeyState::PRESSED)
-			cam.translate( cam.get_right() * -10.0f);
-	
-		if(myInput.get_key(SDLK_d) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_d) == KeyState::PRESSED)
-			cam.translate( cam.get_right() * 10.0f);
-		
-		if(myInput.get_key(SDLK_LEFT) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_LEFT) == KeyState::PRESSED)
-			cam.rotate( 0, 0.03f, 0 );
-		
-		if(myInput.get_key(SDLK_RIGHT) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_RIGHT) == KeyState::PRESSED)
-			cam.rotate( 0, -0.03f, 0 );
-
-		if(myInput.get_key(SDLK_UP) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_UP) == KeyState::PRESSED)
-			cam.rotate( 0.03f, 0, 0 );
-
-		if(myInput.get_key(SDLK_DOWN) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_DOWN) == KeyState::PRESSED)
-			cam.rotate( -0.03f, 0, 0 );
-
-		if(myInput.get_key(SDLK_e) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_e) == KeyState::PRESSED)
-			cam.translate( cam.get_up() * 10.0f);
-
-		if(myInput.get_key(SDLK_q) == KeyState::REPEAT || 
-			myInput.get_key(SDLK_q) == KeyState::PRESSED)
-			cam.translate( cam.get_up() * -10.0f);
-		
-		cam.rotate( -myInput.get_mouse_pos_delta().y * 0.01f ,
-					-myInput.get_mouse_pos_delta().x * 0.01f, 0);
-
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-		RenderPass myPass;
-		
-		myPass.draw_model(&model, &shader, &cam);
-
-		myPass.do_render();
-
-
-
-		game_window.swap_buffers();
-		SDL_Delay(16); // 16 ms is about 60 fps
-	}
-	
-	model.dispose(); // @cleanup
-	*/
