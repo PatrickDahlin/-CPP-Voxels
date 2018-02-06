@@ -25,16 +25,15 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::load_shaders(std::string v_src, std::string f_src, std::string header)
 {
-	//std::string header = read_file(header);
 
 	v_src = header + v_src;
 	f_src = header + f_src;
 
-	coutln("---- Vertex Shader code: ----");
-	coutln(v_src);
-	coutln("---- Fragment Shader code: ----");
-	coutln(f_src);
-	coutln("-------------------------------");
+	//coutln("---- Vertex Shader code: ----");
+	//coutln(v_src);
+	//coutln("---- Fragment Shader code: ----");
+	//coutln(f_src);
+	//coutln("-------------------------------");
 
 
 	GLuint vert_shader_id = glCreateShader(GL_VERTEX_SHADER);
