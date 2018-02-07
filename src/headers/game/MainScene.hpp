@@ -35,7 +35,7 @@ protected:
 
 
 	Model*			tmp;
-		Camera*	cam;
+    DebugCamera*	cam;
 	ShaderProgram* 	shader;
 	Material*		mat;
 	GLTexture*		tex;

@@ -153,6 +153,9 @@ void Input::poll_events()
 		last_mouse_y = mouse_y;
 	}
 	else
+	{
 		window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
-
+		last_mouse_x = window->get_width()/2;
+		last_mouse_y = window->get_height()/2;
+	}
 }

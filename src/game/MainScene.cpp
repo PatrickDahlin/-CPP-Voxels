@@ -25,10 +25,10 @@ MainScene::~MainScene()
 
 void MainScene::init()
 {
-	cam = new OrthographicCamera(0, 1280, 720, 0);//new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
-	//cam->set_input(input);
-	//cam->set_fly_speed(3.0f);
-	//cam->set_mouse_sensitivity(0.05f);
+	cam = new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
+	cam->set_input(input);
+	cam->set_fly_speed(3.0f);
+	cam->set_mouse_sensitivity(0.05f);
 
 	std::string vert = read_file("data/shaders/Basic-vert.glsl");
 	std::string frag = read_file("data/shaders/Basic-frag.glsl");
@@ -57,7 +57,7 @@ void MainScene::unload()
 
 void MainScene::update(const float delta)
 {
-	//cam->update(delta);
+	cam->update(delta);
 }
 
 void MainScene::render(RenderPass* pass)

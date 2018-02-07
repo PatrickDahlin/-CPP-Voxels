@@ -22,7 +22,7 @@ main_scene(nullptr)
 	printf("Setting up Game\n");
 	uicam = new OrthographicCamera(0, window->get_width(), 0, window->get_height());
 
-	input.show_cursor(false);
+	input.show_cursor(true);
 	input.set_lock_mouse(false);
 	
 	ImGuiIO& io = ImGui::GetIO();
@@ -138,7 +138,7 @@ void Game::run()
 		
 		if(delta_ms < 16)
 		{
-			SDL_Delay((int)(16 - delta_ms));
+			//SDL_Delay((int)(16 - delta_ms));
 		}
 
 		// Calculate the deltatime for this frame including the fps-limit time
