@@ -56,6 +56,9 @@ class Input
 	std::unordered_map<SDL_Keycode, KeyState> key_map;
 	int mouse_x;
 	int mouse_y;
+	int last_mouse_x;
+	int last_mouse_y;
+	bool lock_mouse;
 	int mouse_delta_x;
 	int mouse_delta_y;
 	GameWindow* window;

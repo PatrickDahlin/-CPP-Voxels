@@ -22,6 +22,7 @@ TODO:
 		core
 		graphics
 		physics @future
+		voxels
 
 	Heaps for prioritized jobs
 

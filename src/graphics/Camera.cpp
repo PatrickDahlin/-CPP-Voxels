@@ -1,6 +1,7 @@
 #include "graphics/Camera.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include <math.h>
 
 Camera::Camera() :
 update_proj(true),
@@ -62,7 +63,7 @@ glm::mat4 Camera::get_view()
 
 		// lastly get the matrix with inverse
 		view_mat = glm::inverse(view_mat);
-
+		
 		update_view = false;
 	}
 	
@@ -86,6 +87,12 @@ void Camera::rotate(float x, float y, float z)
 	pitch += x;
 	yaw += y;
 	roll += z;
+	
+	const float two_pi = 2 * 3.1415f;
+	pitch = fmod(pitch, two_pi);
+	yaw = fmod(yaw, two_pi);
+	roll = fmod(roll, two_pi);
+
 	update_view = true;
 }
 
@@ -97,8 +104,7 @@ void Camera::set_position(float x, float y, float z)
 
 void Camera::set_position(glm::vec3 amount)
 {
-	position = amount;
-	update_view = true;
+	set_position(amount.x, amount.y, amount.z);
 }
 
 void Camera::set_rotation(float x, float y, float z)
@@ -106,13 +112,16 @@ void Camera::set_rotation(float x, float y, float z)
 	pitch = x;
 	yaw = y;
 	roll = z;
+
+	const float two_pi = 2 * 3.1415f;
+	pitch = fmod(pitch, two_pi);
+	yaw = fmod(yaw, two_pi);
+	roll = fmod(roll, two_pi);
+
 	update_view = true;
 }
 
 void Camera::set_rotation(glm::vec3 amount)
 {
-	pitch = amount.x;
-	yaw = amount.y;
-	roll = amount.z;
-	update_view = true;
+	set_rotation(amount.x, amount.y, amount.z);
 }

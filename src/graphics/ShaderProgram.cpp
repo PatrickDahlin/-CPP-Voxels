@@ -97,6 +97,9 @@ void ShaderProgram::load_shaders(std::string v_src, std::string f_src, std::stri
 		glGetProgramInfoLog(shader_program, info_log_length, NULL, &ProgramErrorMessage[0]);
 		error(ProgramErrorMessage.data());
 		glDeleteProgram(shader_program);
+		glDeleteShader(vert_shader_id);
+		glDeleteShader(frag_shader_id);
+		return;
 	}
 	else
 		std::cout << "Successfully linked program" << std::endl;

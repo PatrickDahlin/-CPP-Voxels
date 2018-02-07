@@ -7,6 +7,9 @@
 #include "graphics/Material.hpp"
 #include "core/Macros.hpp"
 
+#include "graphics/OrthographicCamera.hpp"
+
+#include <imgui/imgui.h>
 #include <stb_image.h>
 
 
@@ -22,10 +25,10 @@ MainScene::~MainScene()
 
 void MainScene::init()
 {
-	cam = new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
-	cam->set_input(input);
-	cam->set_fly_speed(3.0f);
-	cam->set_mouse_sensitivity(0.05f);
+	cam = new OrthographicCamera(0, 1280, 720, 0);//new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
+	//cam->set_input(input);
+	//cam->set_fly_speed(3.0f);
+	//cam->set_mouse_sensitivity(0.05f);
 
 	std::string vert = read_file("data/shaders/Basic-vert.glsl");
 	std::string frag = read_file("data/shaders/Basic-frag.glsl");
@@ -54,12 +57,17 @@ void MainScene::unload()
 
 void MainScene::update(const float delta)
 {
-	cam->update(delta);
+	//cam->update(delta);
 }
 
 void MainScene::render(RenderPass* pass)
 {
 	pass->draw_model(tmp, shader, cam);
+
+	bool val = true;
+	
+	ImGui::ShowDemoWindow(&val);
+
 }
 
 void MainScene::dispose()

@@ -30,7 +30,8 @@
 *.exe
 *.out
 *.app
-bin/.vs/build/v15/.suo
-bin/gliConfig.ini
-bin/gliInterceptLog.txt
-bin/gliLog.txt
+
+.vs
+gliConfig.ini
+gliInterceptLog.txt
+gliLog.txt

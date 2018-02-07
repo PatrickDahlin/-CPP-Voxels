@@ -112,6 +112,11 @@ void VertexArray::add_element_buffer(GLBuffer* buf)
 	element_buffer = buf;
 }
 
+void VertexArray::add_buffer(GLBuffer buf)
+{
+	glbuffers.emplace_back(buf);
+}
+
 void VertexArray::clear()
 {
 	vertices.clear();

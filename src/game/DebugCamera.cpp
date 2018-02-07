@@ -4,7 +4,13 @@
 
 DebugCamera::DebugCamera(float fov, int width, int height, float near, float far) : 
 PerspectiveCamera(fov, width, height, near, far),
-input(nullptr)
+input(nullptr),
+mouse_sensitivity(0.1),
+fly_speed(5),
+mouse_x_smoothing(0),
+mouse_y_smoothing(0),
+vertical(0),
+horizontal(0)
 {
 }
 
@@ -49,10 +55,10 @@ void DebugCamera::update(const float delta)
 	mouse_y_smoothing -= vertical;
 	mouse_x_smoothing -= horizontal;
 
-	rotate(-vertical * delta * mouse_sensitivity, -horizontal * delta * mouse_sensitivity, 0);
+	float v = -vertical * delta * mouse_sensitivity;
+	float h = -horizontal * delta * mouse_sensitivity;
 
-
-
+	rotate(v, h, 0);
 
 }
 
@@ -60,7 +66,6 @@ void DebugCamera::update(const float delta)
 void DebugCamera::set_input(Input* input)
 {
 	this->input = input;
-	coutln("Input set in DebugCamera");
 }
 
 void DebugCamera::set_mouse_sensitivity(const float val)

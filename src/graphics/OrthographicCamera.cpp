@@ -18,7 +18,7 @@ OrthographicCamera::~OrthographicCamera()
 
 void OrthographicCamera::update_projection()
 {
-	projection_mat = glm::ortho(left, right, top, bottom);
+	projection_mat = glm::ortho(left, right, bottom, top, -1000,1000);
 }
 
 

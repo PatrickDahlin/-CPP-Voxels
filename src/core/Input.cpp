@@ -5,14 +5,18 @@
 #include <glm/vec2.hpp>
 
 Input::Input(GameWindow* window) : key_map(),
-				 mouse_x(0),
-				 mouse_y(0),
+				 mouse_x(window->get_width()/2),
+				 mouse_y(window->get_height()/2),
+				 last_mouse_x(mouse_x),
+				 last_mouse_y(mouse_y),
+				 lock_mouse(true),
 				 mouse_delta_x(0),
 				 mouse_delta_y(0),
 				 window(window),
 				 mouse_btn_state(),
 				 scroll_delta(0)
 {
+	window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
 }
 
 Input::~Input()
@@ -21,10 +25,11 @@ Input::~Input()
 
 void Input::set_lock_mouse(bool lock)
 {
-	if(lock)
-		SDL_SetRelativeMouseMode(SDL_TRUE);
-	else
-		SDL_SetRelativeMouseMode(SDL_FALSE);
+	lock_mouse = lock;
+	//if(lock)
+	//	SDL_SetRelativeMouseMode(SDL_TRUE);
+	//else
+	//	SDL_SetRelativeMouseMode(SDL_FALSE);
 }
 
 void Input::set_mouse_pos(const int x, const int y)
@@ -47,7 +52,14 @@ KeyState Input::get_key(SDL_Keycode key)
 
 KeyState Input::get_mouse_btn(unsigned short button)
 {
-	return mouse_btn_state[button];
+	if(button == 0)
+		return mouse_btn_state[SDL_BUTTON_LEFT];
+	else if(button == 1)
+		return mouse_btn_state[SDL_BUTTON_RIGHT];
+	else if(button == 2)
+		return mouse_btn_state[SDL_BUTTON_MIDDLE];
+	else
+		return mouse_btn_state[button];
 }
 
 glm::ivec2 Input::get_mouse_pos() const
@@ -132,9 +144,15 @@ void Input::poll_events()
 		}
 	}
 
-	mouse_delta_x = mouse_x - window->get_width()/2;
-	mouse_delta_y = mouse_y - window->get_height()/2;
+	mouse_delta_x = mouse_x - last_mouse_x;//window->get_width()/2;
+	mouse_delta_y = mouse_y - last_mouse_y;//window->get_height()/2;
 	
-	window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
+	if(!lock_mouse)
+	{
+		last_mouse_x = mouse_x;
+		last_mouse_y = mouse_y;
+	}
+	else
+		window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
 
 }

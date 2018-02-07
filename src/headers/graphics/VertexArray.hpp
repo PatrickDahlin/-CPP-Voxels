@@ -38,6 +38,8 @@ public:
 
 	void add_element_buffer(GLBuffer* buf);
 
+	void add_buffer(GLBuffer buf);
+
 	void upload_data();
 
 	void draw();

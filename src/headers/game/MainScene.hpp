@@ -11,6 +11,7 @@ class DebugCamera;
 class ShaderProgram;
 class Material;
 class GLTexture;
+class Camera;
 
 class MainScene : public Scene
 {
@@ -34,7 +35,7 @@ protected:
 
 
 	Model*			tmp;
-	DebugCamera*	cam;
+		Camera*	cam;
 	ShaderProgram* 	shader;
 	Material*		mat;
 	GLTexture*		tex;
