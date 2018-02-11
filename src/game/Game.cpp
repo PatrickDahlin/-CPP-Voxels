@@ -43,7 +43,6 @@ main_scene(nullptr)
 	std::string header = read_file("data/shaders/Shader_Header.glsl");
 	imgui_shader = new ShaderProgram(vert.c_str(), frag.c_str(), header.c_str());
 
-	//glScissor(0,0,window->get_width(), window->get_height());
 }
 
 Game::~Game()
@@ -86,9 +85,11 @@ void Game::run()
 		io.MouseDown[1] = input.get_mouse_btn(1) == KeyState::PRESSED ||
 							input.get_mouse_btn(1) == KeyState::REPEAT;
 		
-		ImGui::NewFrame();
-
 		
+		ImGui::NewFrame();
+		
+
+
 		// @Temporary
 		if(input.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
 			Game::quit();

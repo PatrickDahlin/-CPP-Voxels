@@ -40,11 +40,15 @@ class Input
 
 	int get_scroll_delta() const;
 
+	bool is_enabled() const;
+
 	void set_lock_mouse(bool lock);
 
 	void show_cursor(bool show);
 
 	void set_mouse_pos(const int x, const int y);
+
+	void set_input_enabled(bool enabled);
 	
 	// @TODO SDL supports text input compositions which
 	// make text inputting easier. implement this in the future
@@ -61,7 +65,10 @@ class Input
 	bool lock_mouse;
 	int mouse_delta_x;
 	int mouse_delta_y;
+	int mouse_last_enabled_x;
+	int mouse_last_enabled_y;
 	GameWindow* window;
+	bool enabled;
 
 	std::unordered_map<int, KeyState> mouse_btn_state;
 	int scroll_delta;

@@ -37,6 +37,7 @@ TODO:
 		- (H) Element buffer for vertexarray [x] @Untested @TODO
 		- (H) Multi-camera rendering (Renderpass->RenderBatch) []
 		- (M) OpenAL for sound []
+		- (L) Smoothed Input axes (Think mouse/controller axis in Unity)
 
 
 	Done:

@@ -58,6 +58,8 @@ void MainScene::unload()
 void MainScene::update(const float delta)
 {
 	cam->update(delta);
+
+	ImGui::Text("Deltatime %.4d", delta);
 }
 
 void MainScene::render(RenderPass* pass)

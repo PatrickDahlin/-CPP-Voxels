@@ -12,9 +12,12 @@ Input::Input(GameWindow* window) : key_map(),
 				 lock_mouse(true),
 				 mouse_delta_x(0),
 				 mouse_delta_y(0),
+				 mouse_last_enabled_x(mouse_x),
+				 mouse_last_enabled_y(mouse_y),
 				 window(window),
 				 mouse_btn_state(),
-				 scroll_delta(0)
+				 scroll_delta(0),
+				 enabled(true)
 {
 	window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
 }
@@ -26,15 +29,14 @@ Input::~Input()
 void Input::set_lock_mouse(bool lock)
 {
 	lock_mouse = lock;
-	//if(lock)
-	//	SDL_SetRelativeMouseMode(SDL_TRUE);
-	//else
-	//	SDL_SetRelativeMouseMode(SDL_FALSE);
 }
 
 void Input::set_mouse_pos(const int x, const int y)
 {
-	SDL_WarpMouseInWindow(NULL, x, y);
+	if(!lock_mouse)
+		window->set_mouse_pos(x,y);
+	else
+		coutln("Tried moving mouse while it's locked");
 }
 
 void Input::show_cursor(bool show)
@@ -47,11 +49,14 @@ void Input::show_cursor(bool show)
 
 KeyState Input::get_key(SDL_Keycode key)
 {
+	if(!enabled) return KeyState::NONE;
 	return key_map[key];
 }
 
 KeyState Input::get_mouse_btn(unsigned short button)
 {
+	if(!enabled) return KeyState::NONE;
+
 	if(button == 0)
 		return mouse_btn_state[SDL_BUTTON_LEFT];
 	else if(button == 1)
@@ -64,17 +69,32 @@ KeyState Input::get_mouse_btn(unsigned short button)
 
 glm::ivec2 Input::get_mouse_pos() const
 {
+	if(!enabled) return glm::ivec2(mouse_last_enabled_x,mouse_last_enabled_y);
 	return glm::ivec2(mouse_x,mouse_y);
 }
 
 glm::ivec2 Input::get_mouse_pos_delta() const
 {
+	if(!enabled) return glm::ivec2(0,0);
 	return glm::ivec2(mouse_delta_x, mouse_delta_y);
 }
 
 int Input::get_scroll_delta() const
 {
+	if(!enabled) return 0;
 	return scroll_delta;
+}
+
+bool Input::is_enabled() const
+{
+	return enabled;
+}
+
+void Input::set_input_enabled(bool enabled)
+{
+	this->enabled = enabled;
+	mouse_last_enabled_x = mouse_x;
+	mouse_last_enabled_y = mouse_y;
 }
 
 void Input::poll_events()
