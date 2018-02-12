@@ -1,6 +1,17 @@
 #include "graphics/GLTexture.hpp"
 #include "core/Macros.hpp"
+#include <stb_image.h>
 
+GLTexture* load_image(const char* path)
+{
+	int width, height, channelnr;
+	width = height = 0;
+	channelnr = 0;
+	unsigned char* data = stbi_load(path, &width, &height, &channelnr, 0);
+	GLTexture* myTex = new GLTexture(ColorFormat::RGB, data, width, height); //@TODO
+	stbi_image_free(data);
+	return myTex;
+}
 
 GLTexture::GLTexture(ColorFormat format, unsigned char* data, int width, int height) :
 width(width),

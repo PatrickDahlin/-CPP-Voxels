@@ -1,8 +1,8 @@
 #ifndef _GLTEXTURE_HPP_
 #define _GLTEXTURE_HPP_
 
-
 #include <GL\glew.h>
+
 
 enum class ColorFormat { RGB, RGBA };
 
@@ -26,5 +26,8 @@ protected:
     ColorFormat color_format;
 
 };
+
+extern GLTexture* load_image(const char* path);
+
 
 #endif

@@ -15,9 +15,9 @@ Input::Input(GameWindow* window) : key_map(),
 				 mouse_last_enabled_x(mouse_x),
 				 mouse_last_enabled_y(mouse_y),
 				 window(window),
+				 enabled(true),
 				 mouse_btn_state(),
-				 scroll_delta(0),
-				 enabled(true)
+				 scroll_delta(0)
 {
 	window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
 }

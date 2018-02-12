@@ -46,6 +46,8 @@ void MainScene::init()
 	mat->texture = myTexture;
 	stbi_image_free(data);
 
+	printf("Image loaded has %i channels\n", channelnr);
+
 	tmp->set_material(mat);
 }
 
@@ -59,7 +61,10 @@ void MainScene::update(const float delta)
 {
 	cam->update(delta);
 
-	ImGui::Text("Deltatime %.4d", delta);
+	ImGui::Begin("MainScene info");
+	ImGui::Text("Deltatime %.4f", delta);
+	ImGui::Text("FPS: %.0f",(1.0f / delta));
+	ImGui::End();
 }
 
 void MainScene::render(RenderPass* pass)
