@@ -4,6 +4,9 @@
 #include <SDL2/SDL.h>
 #include <glm/vec2.hpp>
 
+#include <iostream>
+#include <imgui/imgui.h> // Not really liking the use of imgui here
+
 Input::Input(GameWindow* window) : key_map(),
 				 mouse_x(window->get_width()/2),
 				 mouse_y(window->get_height()/2),
@@ -90,11 +93,20 @@ bool Input::is_enabled() const
 	return enabled;
 }
 
-void Input::set_input_enabled(bool enabled)
+void Input::set_input_enabled(bool ena)
 {
-	this->enabled = enabled;
+	enabled = ena;
 	mouse_last_enabled_x = mouse_x;
 	mouse_last_enabled_y = mouse_y;
+}
+
+bool Input::get_key_down(SDL_Keycode code)
+{
+	if(get_key(code) == KeyState::PRESSED ||
+		get_key(code) == KeyState::REPEAT)
+		return true;
+
+	return false;
 }
 
 void Input::poll_events()
@@ -121,15 +133,30 @@ void Input::poll_events()
 	}
 
 	SDL_Event event;
+	ImGuiIO& io = ImGui::GetIO();
 	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
 			key_map[event.key.keysym.sym] = KeyState::PRESSED;
+			
+			assert(event.key.keysym.scancode >= 0 && event.key.keysym.scancode < IM_ARRAYSIZE(io.KeysDown));
+			io.KeysDown[event.key.keysym.scancode] = true;
+			io.KeyShift = (SDL_GetModState() & KMOD_SHIFT) != 0;
+			io.KeyCtrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+			io.KeyAlt = (SDL_GetModState() & KMOD_ALT) != 0;
+			io.KeySuper = (SDL_GetModState() & KMOD_GUI) != 0;
 			break;
 		case SDL_KEYUP:
 			key_map[event.key.keysym.sym] = KeyState::RELEASED;
+			
+			assert(event.key.keysym.scancode >= 0 && event.key.keysym.scancode < IM_ARRAYSIZE(io.KeysDown));
+			io.KeysDown[event.key.keysym.scancode] = false;
+			io.KeyShift = (SDL_GetModState() & KMOD_SHIFT) != 0;
+			io.KeyCtrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+			io.KeyAlt = (SDL_GetModState() & KMOD_ALT) != 0;
+			io.KeySuper = (SDL_GetModState() & KMOD_GUI) != 0;
 			break;
 		case SDL_QUIT:
 			// @TODO OMG do stuff here
@@ -137,13 +164,22 @@ void Input::poll_events()
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			mouse_btn_state[event.button.button] = KeyState::PRESSED;
+			
+			if(event.button.button == SDL_BUTTON_LEFT) io.MouseDown[0] = true;
+			if(event.button.button == SDL_BUTTON_RIGHT) io.MouseDown[1] = true;
+			if(event.button.button == SDL_BUTTON_MIDDLE) io.MouseDown[2] = true;
 			break;
 		case SDL_MOUSEBUTTONUP:
 			mouse_btn_state[event.button.button] = KeyState::RELEASED;
+			
+			if(event.button.button == SDL_BUTTON_LEFT) io.MouseDown[0] = false;
+			if(event.button.button == SDL_BUTTON_RIGHT) io.MouseDown[1] = false;
+			if(event.button.button == SDL_BUTTON_MIDDLE) io.MouseDown[2] = false;
 			break;
 		case SDL_MOUSEMOTION:
 			mouse_x = event.motion.x;
 			mouse_y = event.motion.y;
+			io.MousePos = ImVec2(mouse_x, mouse_y);
 			// These values can't be used for camera control
 			// Seems like SDL somehow doesn't update xrel too often
 			// and thusly causes stuttered motion for camera input
@@ -154,18 +190,27 @@ void Input::poll_events()
 		case SDL_MOUSEWHEEL:
 			// Scroll
 			scroll_delta = event.wheel.y;
+			
+			if(event.wheel.x > 0) io.MouseWheelH +=1;
+			if(event.wheel.x < 0) io.MouseWheelH -=1;
+			if(event.wheel.y > 0) io.MouseWheel +=1;
+			if(event.wheel.y < 0) io.MouseWheel -=1;
+			
 			break;
 		case SDL_WINDOWEVENT:
 			// Window resize
 			// @Nope
+			break;
+		case SDL_TEXTINPUT:
+			io.AddInputCharactersUTF8(event.text.text);
 			break;
 		default:
 			break;
 		}
 	}
 
-	mouse_delta_x = mouse_x - last_mouse_x;//window->get_width()/2;
-	mouse_delta_y = mouse_y - last_mouse_y;//window->get_height()/2;
+	mouse_delta_x = mouse_x - last_mouse_x;
+	mouse_delta_y = mouse_y - last_mouse_y;
 	
 	if(!lock_mouse)
 	{

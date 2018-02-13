@@ -2,7 +2,7 @@
 #include "core/Macros.hpp"
 #include <stb_image.h>
 
-GLTexture* load_image(const char* path)
+GLTexture* load_image(const char* path, ColorFormat format)
 {
 	int width, height, channelnr;
 	width = height = 0;

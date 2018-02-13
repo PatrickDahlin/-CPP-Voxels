@@ -18,7 +18,8 @@ OrthographicCamera::~OrthographicCamera()
 
 void OrthographicCamera::update_projection()
 {
-	projection_mat = glm::ortho(left, right, bottom, top, -1000,1000);
+	// Be careful of using ints as it can create a matrix of integers, which won't work for projection matrix
+	projection_mat = glm::ortho((float)left, (float)right, (float)bottom, (float)top, -1000.0f,1000.0f);
 }
 
 

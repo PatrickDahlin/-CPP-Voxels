@@ -2,6 +2,7 @@
 #define _TIME_HPP_
 
 #include <chrono>
+#include <thread>
 typedef std::chrono::high_resolution_clock Clock;
 
 

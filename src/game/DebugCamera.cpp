@@ -19,7 +19,7 @@ DebugCamera::~DebugCamera()
 
 void DebugCamera::update(const float delta)
 {
-	if(input == nullptr) return;
+	if(input == nullptr || !input->is_enabled()) return;
 
 	if(input->get_key(SDLK_w) == KeyState::PRESSED ||
 		input->get_key(SDLK_w) == KeyState::REPEAT)
@@ -49,14 +49,14 @@ void DebugCamera::update(const float delta)
 	mouse_x_smoothing += input->get_mouse_pos_delta().x;
 	mouse_y_smoothing += input->get_mouse_pos_delta().y;
 
-	vertical = mouse_y_smoothing * 0.45f;
-	horizontal = mouse_x_smoothing * 0.45f;
+	vertical = mouse_y_smoothing * 100.0f * delta;
+	horizontal = mouse_x_smoothing * 100.0f * delta;
 
 	mouse_y_smoothing -= vertical;
 	mouse_x_smoothing -= horizontal;
 
-	float v = -vertical * delta * mouse_sensitivity;
-	float h = -horizontal * delta * mouse_sensitivity;
+	float v = -vertical * mouse_sensitivity * 0.001f;
+	float h = -horizontal * mouse_sensitivity * 0.001f;
 
 	rotate(v, h, 0);
 

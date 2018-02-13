@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Errors.hpp"
 #include <GL\glew.h>
+#include <assert.h>
 
 #define cout(x) std::cout << x;
 #define coutln(x) std::cout << x << std::endl;

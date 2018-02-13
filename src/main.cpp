@@ -26,6 +26,9 @@ TODO:
 
 	Heaps for prioritized jobs
 
+	Bugs:
+		- DebugCamera freaks out at low framerates
+
 	TODO:
 		- (M) Actor class []
 		- (M) Text rendering []

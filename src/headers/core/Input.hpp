@@ -32,6 +32,8 @@ class Input
 
 	KeyState get_key(SDL_Keycode code);
 
+	bool get_key_down(SDL_Keycode code);
+
 	KeyState get_mouse_btn(unsigned short button);
 
 	glm::ivec2 get_mouse_pos() const;

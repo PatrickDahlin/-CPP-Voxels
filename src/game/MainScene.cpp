@@ -28,7 +28,7 @@ void MainScene::init()
 	cam = new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
 	cam->set_input(input);
 	cam->set_fly_speed(3.0f);
-	cam->set_mouse_sensitivity(0.05f);
+	cam->set_mouse_sensitivity(0.5f);
 
 	std::string vert = read_file("data/shaders/Basic-vert.glsl");
 	std::string frag = read_file("data/shaders/Basic-frag.glsl");
@@ -38,16 +38,8 @@ void MainScene::init()
 	tmp = Primitives::create_cube();
 
 	mat = new Material();
-	int width, height, channelnr;
-	width = 0;
-	height = 0;
-	unsigned char* data = stbi_load("data/textures/grass.jpg", &width, &height, &channelnr, 0);
-	GLTexture* myTexture = new GLTexture(ColorFormat::RGB, data, width, height);
-	mat->texture = myTexture;
-	stbi_image_free(data);
-
-	printf("Image loaded has %i channels\n", channelnr);
-
+	mat->texture = load_image("data/textures/grass.jpg");
+	
 	tmp->set_material(mat);
 }
 

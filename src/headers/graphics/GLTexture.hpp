@@ -27,7 +27,7 @@ protected:
 
 };
 
-extern GLTexture* load_image(const char* path);
+extern GLTexture* load_image(const char* path, ColorFormat format = ColorFormat::RGB);
 
 
 #endif

@@ -11,8 +11,19 @@
 #include "graphics/ImGuiRenderer.hpp"
 
 #include <imgui/imgui.h>
+#include <iostream>
 
 bool 			Game::running = true;
+
+static const char* ImGui_GetClipboardText(void*)
+{
+    return SDL_GetClipboardText();
+}
+
+static void ImGui_SetClipboardText(void*, const char* text)
+{
+    SDL_SetClipboardText(text);
+}
 
 Game::Game(GameWindow* window) :
 game_window(window),
@@ -22,26 +33,47 @@ main_scene(nullptr)
 	printf("Setting up Game\n");
 	uicam = new OrthographicCamera(0, window->get_width(), 0, window->get_height());
 
-	input.show_cursor(true);
-	input.set_lock_mouse(false);
+	input.show_cursor(false);
+	input.set_lock_mouse(true);
 	
 	ImGuiIO& io = ImGui::GetIO();
 	io.DisplaySize = ImVec2(window->get_width(), window->get_height());
 	io.RenderDrawListsFn = render_imgui; 
-
+	io.SetClipboardTextFn = ImGui_SetClipboardText;
+	io.GetClipboardTextFn = ImGui_GetClipboardText;
+	io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = SDL_SCANCODE_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = SDL_SCANCODE_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = SDL_SCANCODE_PAGEUP;
+    io.KeyMap[ImGuiKey_PageDown] = SDL_SCANCODE_PAGEDOWN;
+    io.KeyMap[ImGuiKey_Home] = SDL_SCANCODE_HOME;
+    io.KeyMap[ImGuiKey_End] = SDL_SCANCODE_END;
+    io.KeyMap[ImGuiKey_Insert] = SDL_SCANCODE_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = SDL_SCANCODE_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = SDL_SCANCODE_BACKSPACE;
+    io.KeyMap[ImGuiKey_Enter] = SDL_SCANCODE_RETURN;
+    io.KeyMap[ImGuiKey_Escape] = SDL_SCANCODE_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = SDL_SCANCODE_A;
+    io.KeyMap[ImGuiKey_C] = SDL_SCANCODE_C;
+    io.KeyMap[ImGuiKey_V] = SDL_SCANCODE_V;
+    io.KeyMap[ImGuiKey_X] = SDL_SCANCODE_X;
+    io.KeyMap[ImGuiKey_Y] = SDL_SCANCODE_Y;
+	io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 
 	unsigned char* pixels;
 	int width, height;
 	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-	// TODO: At this points you've got the texture data and you need to upload that your your graphic system:
 	GLTexture* myTex = new GLTexture(ColorFormat::RGBA, pixels, width, height);
-	// TODO: Store your texture pointer/identifier (whatever your engine uses) in 'io.Fonts->TexID'. This will be passed back to your via the renderer.
 	io.Fonts->TexID = (void*)myTex;
+	// TODO clean up this texture
 
 	std::string vert = read_file("data/shaders/ImGui-vert.glsl");
 	std::string frag = read_file("data/shaders/ImGui-frag.glsl");
 	std::string header = read_file("data/shaders/Shader_Header.glsl");
 	imgui_shader = new ShaderProgram(vert.c_str(), frag.c_str(), header.c_str());
+
 
 }
 
@@ -55,9 +87,10 @@ void Game::load()
 
 	glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_SCISSOR_TEST);
+		glDisable(GL_SCISSOR_TEST);
 	glViewport(0,0,game_window->get_width(),game_window->get_height());
 }
+
 
 void Game::run()
 {
@@ -70,7 +103,8 @@ void Game::run()
 	while(running)
 	{
 		last_frame = Clock::now();
-
+		
+		
 		input.poll_events();
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -79,16 +113,8 @@ void Game::run()
 
 		ImGuiIO& io = ImGui::GetIO();
 		io.DeltaTime = delta_time;
-		io.MousePos = ImVec2(input.get_mouse_pos().x, input.get_mouse_pos().y);
-		io.MouseDown[0] = input.get_mouse_btn(0) == KeyState::PRESSED ||
-							input.get_mouse_btn(0) == KeyState::REPEAT;
-		io.MouseDown[1] = input.get_mouse_btn(1) == KeyState::PRESSED ||
-							input.get_mouse_btn(1) == KeyState::REPEAT;
-		
-		
-		ImGui::NewFrame();
-		
 
+		ImGui::NewFrame();
 
 		// @Temporary
 		if(input.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
@@ -101,7 +127,15 @@ void Game::run()
 			input.set_lock_mouse(locked);
 			input.show_cursor(!locked);
 		}
-
+		
+		
+		if(io.WantCaptureKeyboard || io.WantCaptureMouse)
+		{
+			input.set_input_enabled(false);
+		}
+		else if(!input.is_enabled())
+			input.set_input_enabled(true);
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		RenderPass* pass = new RenderPass;
@@ -114,15 +148,18 @@ void Game::run()
 		
 		imgui_shader->use();
 
-		const glm::mat4 ortho_proj =
-		glm::mat4(
-			glm::vec4( 2.0f/io.DisplaySize.x, 0.0f,                   0.0f, 0.0f ),
-			glm::vec4( 0.0f,                  2.0f/-io.DisplaySize.y, 0.0f, 0.0f ),
-			glm::vec4( 0.0f,                  0.0f,                  -1.0f, 0.0f ),
-			glm::vec4(-1.0f,                  1.0f,                   0.0f, 1.0f )
-		);
 
-		imgui_shader->upload_projection(ortho_proj);//uicam->get_projection());
+		//
+		//	Set fps limit
+		//
+		static float target_fps = 60.0f;
+		ImGui::Begin("Game info");
+		ImGui::Text("Deltatime: %.4f",delta_time);
+		ImGui::Text("Target FPS: %.1f",target_fps);
+		ImGui::InputFloat("", &target_fps, 1.0f, 10.0f, 1);
+		ImGui::End();
+
+		imgui_shader->upload_projection(uicam->get_projection());
 		imgui_shader->upload_view(uicam->get_view());
 		imgui_shader->upload_model(glm::mat4(1.0f));
 		ImGui::Render(); 
@@ -137,9 +174,10 @@ void Game::run()
 		auto delta = Clock::now() - last_frame;
 		double delta_ms = std::chrono::duration_cast<std::chrono::nanoseconds>(delta).count() / 1000000.0;
 		
-		if(delta_ms < 16)
+
+		if(target_fps > 10.0f && target_fps < 9999.0f && delta_ms < (1.0f / target_fps)*1000.0f)
 		{
-			//SDL_Delay((int)(16 - delta_ms));
+			SDL_Delay((int)((1.0f / target_fps)*1000.0f - delta_ms));
 		}
 
 		// Calculate the deltatime for this frame including the fps-limit time
