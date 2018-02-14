@@ -1,6 +1,7 @@
 #include "game/DebugCamera.hpp"
 #include "core/Input.hpp"
 #include "core/Macros.hpp"
+#include <algorithm>
 
 DebugCamera::DebugCamera(float fov, int width, int height, float near, float far) : 
 PerspectiveCamera(fov, width, height, near, far),
@@ -10,16 +11,26 @@ fly_speed(5),
 mouse_x_smoothing(0),
 mouse_y_smoothing(0),
 vertical(0),
-horizontal(0)
+horizontal(0),
+mouse_input_active(true)
 {
 }
 
 DebugCamera::~DebugCamera()
 {}
 
+void DebugCamera::set_mouse_input_active(const bool active)
+{
+	mouse_input_active = active;
+}
+
+bool DebugCamera::is_mouse_input_active() const {
+	return mouse_input_active;
+}
+
 void DebugCamera::update(const float delta)
 {
-	if(input == nullptr || !input->is_enabled()) return;
+	if(input == nullptr || !input->is_enabled() || !mouse_input_active) return;
 
 	if(input->get_key(SDLK_w) == KeyState::PRESSED ||
 		input->get_key(SDLK_w) == KeyState::REPEAT)
@@ -49,8 +60,10 @@ void DebugCamera::update(const float delta)
 	mouse_x_smoothing += input->get_mouse_pos_delta().x;
 	mouse_y_smoothing += input->get_mouse_pos_delta().y;
 
-	vertical = mouse_y_smoothing * 100.0f * delta;
-	horizontal = mouse_x_smoothing * 100.0f * delta;
+	float newdelta = std::max(0.001f, delta); // Limit the delta so we aren't going too low
+
+	vertical = mouse_y_smoothing * 10.0f * newdelta;
+	horizontal = mouse_x_smoothing * 10.0f * newdelta;
 
 	mouse_y_smoothing -= vertical;
 	mouse_x_smoothing -= horizontal;

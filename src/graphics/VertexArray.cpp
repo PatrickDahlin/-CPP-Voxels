@@ -1,7 +1,7 @@
 #include "graphics/VertexArray.hpp"
 #include "graphics/GLBuffer.hpp"
 #include "core/Macros.hpp"
-#include <GL\glew.h>
+#include <GL/glew.h>
 
 
 VertexArray::VertexArray() :
@@ -140,7 +140,7 @@ void VertexArray::clear()
 	glbuffers.clear();
 }
 
-void VertexArray::draw()
+void VertexArray::draw(RenderMode mode)
 {
 	if(vertices.size() <= 0) return;
 
@@ -148,10 +148,32 @@ void VertexArray::draw()
 
 	CHECK_GL_ERROR();
 
+	GLenum gl_mode = GL_TRIANGLES;
+	switch(mode)
+	{
+		case RenderMode::LINE:
+			gl_mode = GL_LINE;
+			break;
+		case RenderMode::POINT:
+			gl_mode = GL_POINT;
+			break;
+		case RenderMode::TRIANGLE_STRIP:
+			gl_mode = GL_TRIANGLE_STRIP;
+			break;
+		case RenderMode::TRIANGLE_FAN:
+			gl_mode = GL_TRIANGLE_FAN;
+			break;
+		case RenderMode::TRIANGLE:
+		default:
+			gl_mode = GL_TRIANGLES;
+			break;
+	}
+	
+
 	if(element_buffer != nullptr)
-		glDrawElements(GL_TRIANGLES, element_buffer->get_size(), GL_INT, (void*)0);
+		glDrawElements(gl_mode, element_buffer->get_size(), GL_INT, (void*)0);
 	else
-		glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+		glDrawArrays(gl_mode, 0, vertices.size());
 
 	CHECK_GL_ERROR();
 

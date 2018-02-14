@@ -8,11 +8,14 @@
 #include <glm/vec2.hpp>
 #include "Shader_vars.hpp"
 
+
 using namespace glm;
 using namespace std;
 
 
 class GLBuffer;
+
+enum class RenderMode { TRIANGLE, TRIANGLE_FAN, TRIANGLE_STRIP, LINE, POINT };
 
 class VertexArray
 {
@@ -42,7 +45,7 @@ public:
 
 	void upload_data();
 
-	void draw();
+	void draw(RenderMode mode);
 
 	void bind();
 

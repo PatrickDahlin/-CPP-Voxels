@@ -1,6 +1,6 @@
 #define GL3_PROTOTYPES 1
-#include <GL\glew.h>
-#include <SDL2\SDL.h>
+#include <GL/glew.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 
 #include "game/Game.hpp"
@@ -16,7 +16,6 @@
 TODO:
 
 	Materials aren't usable yet, need a way to upload the data, !Uniform buffer objects!
-		Same thing for uploading/binding camera matrices to shaders
 
 	"packages"
 		core
@@ -27,23 +26,26 @@ TODO:
 	Heaps for prioritized jobs
 
 	Bugs:
-		- DebugCamera freaks out at low framerates
+		- DebugCamera freaks out at low framerates - Fixed
 
 	TODO:
+		- Wireframe mode for rendering
+		- Octree data-structure for later voxel use
+		- Perlin noise implementation
+		- Marching cubes implementation
 		- (M) Actor class []
 		- (M) Text rendering []
 		- (M) Uniform buffer objects []
-			- (M) Material struct uploading to shader []
-		- (M) Debug class for collecting debug info []
-		- (H) Camera class needs perspective/ortho switch []
-			- Camera abstract class with Orthographic and Perspective camera subclass []
-		- (H) Element buffer for vertexarray [x] @Untested @TODO
+		- (M) Material struct uploading to shader []
+		- (L) Debug class for collecting debug info []
 		- (H) Multi-camera rendering (Renderpass->RenderBatch) []
 		- (M) OpenAL for sound []
 		- (L) Smoothed Input axes (Think mouse/controller axis in Unity)
 
 
 	Done:
+		- (H) Element buffer for vertexarray [x] @Untested @TODO
+		- (M) Camera abstract class with Orthographic and Perspective camera subclass [x]
 		- (H) ImGui for debug ui rendering
 		- (H) Texture color format option [x]
 		- (H) Model class implementation [x]

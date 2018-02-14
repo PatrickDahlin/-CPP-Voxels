@@ -1,7 +1,7 @@
 #ifndef _GLTEXTURE_HPP_
 #define _GLTEXTURE_HPP_
 
-#include <GL\glew.h>
+#include <GL/glew.h>
 
 
 enum class ColorFormat { RGB, RGBA };

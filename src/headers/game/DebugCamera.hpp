@@ -19,6 +19,10 @@ public:
 
 	void set_fly_speed(const float speed);
 
+	void set_mouse_input_active(const bool active);
+
+	bool is_mouse_input_active() const;
+
 protected:
 
 	Input*			input;
@@ -30,6 +34,8 @@ protected:
 
 	float			vertical;
 	float			horizontal;
+
+	bool			mouse_input_active;
 };
 
 #endif

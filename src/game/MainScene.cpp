@@ -6,9 +6,11 @@
 #include "core/Files.hpp"
 #include "graphics/Material.hpp"
 #include "core/Macros.hpp"
+#include "core/Input.hpp"
 
 #include "graphics/OrthographicCamera.hpp"
 
+#include <SDL2/SDL.h>
 #include <imgui/imgui.h>
 #include <stb_image.h>
 
@@ -51,6 +53,9 @@ void MainScene::unload()
 
 void MainScene::update(const float delta)
 {
+	if(input->is_mouse_locked() != cam->is_mouse_input_active())
+		cam->set_mouse_input_active(input->is_mouse_locked());
+
 	cam->update(delta);
 
 	ImGui::Begin("MainScene info");
@@ -61,11 +66,24 @@ void MainScene::update(const float delta)
 
 void MainScene::render(RenderPass* pass)
 {
+	static bool wire = false;
+	
+	ImGui::Begin("MainScene info");
+	if(ImGui::Checkbox("Wireframe", &wire)) 
+	{
+		if(wire)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	ImGui::End();
+
+
 	pass->draw_model(tmp, shader, cam);
 
-	bool val = true;
-	
-	ImGui::ShowDemoWindow(&val);
+
+	//bool val = true;
+	//ImGui::ShowDemoWindow(&val);
 
 }
 

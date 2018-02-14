@@ -2,7 +2,7 @@
 #define _MACROS_HPP_
 #include <iostream>
 #include "Errors.hpp"
-#include <GL\glew.h>
+#include <GL/glew.h>
 #include <assert.h>
 
 #define cout(x) std::cout << x;

@@ -32,6 +32,15 @@ Input::~Input()
 void Input::set_lock_mouse(bool lock)
 {
 	lock_mouse = lock;
+	if(!lock_mouse)
+	{
+		last_mouse_x = mouse_x;
+		last_mouse_y = mouse_y;
+	}
+}
+
+bool Input::is_mouse_locked() const{
+	return lock_mouse;
 }
 
 void Input::set_mouse_pos(const int x, const int y)
@@ -139,6 +148,7 @@ void Input::poll_events()
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
+			if(!enabled) break;
 			key_map[event.key.keysym.sym] = KeyState::PRESSED;
 			
 			assert(event.key.keysym.scancode >= 0 && event.key.keysym.scancode < IM_ARRAYSIZE(io.KeysDown));
@@ -149,6 +159,7 @@ void Input::poll_events()
 			io.KeySuper = (SDL_GetModState() & KMOD_GUI) != 0;
 			break;
 		case SDL_KEYUP:
+			if(!enabled) break;
 			key_map[event.key.keysym.sym] = KeyState::RELEASED;
 			
 			assert(event.key.keysym.scancode >= 0 && event.key.keysym.scancode < IM_ARRAYSIZE(io.KeysDown));
@@ -163,6 +174,7 @@ void Input::poll_events()
 			exit(0); // this is NOT ok in the future, just temporarily here
 			break;
 		case SDL_MOUSEBUTTONDOWN:
+			if(!enabled) break;
 			mouse_btn_state[event.button.button] = KeyState::PRESSED;
 			
 			if(event.button.button == SDL_BUTTON_LEFT) io.MouseDown[0] = true;
@@ -170,6 +182,7 @@ void Input::poll_events()
 			if(event.button.button == SDL_BUTTON_MIDDLE) io.MouseDown[2] = true;
 			break;
 		case SDL_MOUSEBUTTONUP:
+			if(!enabled) break;
 			mouse_btn_state[event.button.button] = KeyState::RELEASED;
 			
 			if(event.button.button == SDL_BUTTON_LEFT) io.MouseDown[0] = false;
@@ -177,6 +190,7 @@ void Input::poll_events()
 			if(event.button.button == SDL_BUTTON_MIDDLE) io.MouseDown[2] = false;
 			break;
 		case SDL_MOUSEMOTION:
+			if(!enabled) break;
 			mouse_x = event.motion.x;
 			mouse_y = event.motion.y;
 			io.MousePos = ImVec2(mouse_x, mouse_y);
@@ -188,6 +202,7 @@ void Input::poll_events()
 			
 			break;
 		case SDL_MOUSEWHEEL:
+			if(!enabled) break;
 			// Scroll
 			scroll_delta = event.wheel.y;
 			
@@ -198,15 +213,32 @@ void Input::poll_events()
 			
 			break;
 		case SDL_WINDOWEVENT:
-			// Window resize
-			// @Nope
+			
+			switch(event.window.event)
+			{
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					set_input_enabled(false);
+					break;
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+					set_input_enabled(true);
+					break;
+				default:
+					break;
+			}
+			
 			break;
 		case SDL_TEXTINPUT:
+			if(!enabled) break;
 			io.AddInputCharactersUTF8(event.text.text);
 			break;
 		default:
 			break;
 		}
+	}
+
+	// We don't want to cage the mouse while application is not in focus
+	if(!enabled) {
+		return;
 	}
 
 	mouse_delta_x = mouse_x - last_mouse_x;

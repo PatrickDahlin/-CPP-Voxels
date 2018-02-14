@@ -129,12 +129,17 @@ void Game::run()
 		}
 		
 		
+		static bool imgui_captured = false;
 		if(io.WantCaptureKeyboard || io.WantCaptureMouse)
 		{
+			imgui_captured = true;
 			input.set_input_enabled(false);
 		}
-		else if(!input.is_enabled())
+		else if(!input.is_enabled() && imgui_captured)
+		{
 			input.set_input_enabled(true);
+			imgui_captured = false;
+		}
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -156,7 +161,7 @@ void Game::run()
 		ImGui::Begin("Game info");
 		ImGui::Text("Deltatime: %.4f",delta_time);
 		ImGui::Text("Target FPS: %.1f",target_fps);
-		ImGui::InputFloat("", &target_fps, 1.0f, 10.0f, 1);
+		ImGui::SliderFloat("",&target_fps, 10.0f, 1000.0f, "%.1f");
 		ImGui::End();
 
 		imgui_shader->upload_projection(uicam->get_projection());
@@ -175,7 +180,7 @@ void Game::run()
 		double delta_ms = std::chrono::duration_cast<std::chrono::nanoseconds>(delta).count() / 1000000.0;
 		
 
-		if(target_fps > 10.0f && target_fps < 9999.0f && delta_ms < (1.0f / target_fps)*1000.0f)
+		if(target_fps >= 10.0f && target_fps < 9999.0f && delta_ms < (1.0f / target_fps)*1000.0f)
 		{
 			SDL_Delay((int)((1.0f / target_fps)*1000.0f - delta_ms));
 		}

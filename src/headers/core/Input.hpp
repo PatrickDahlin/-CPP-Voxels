@@ -44,6 +44,8 @@ class Input
 
 	bool is_enabled() const;
 
+	bool is_mouse_locked() const;
+
 	void set_lock_mouse(bool lock);
 
 	void show_cursor(bool show);

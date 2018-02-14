@@ -58,6 +58,7 @@ void Model::draw()
 	if(needs_upload)
 		vert_arr->upload_data();
 
-	vert_arr->draw();
+	vert_arr->draw(RenderMode::TRIANGLE);
+	
 	needs_upload = false;
 }
