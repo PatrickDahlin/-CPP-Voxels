@@ -22,6 +22,11 @@ void Model::dispose()
 	delete vert_arr;
 }
 
+VertexArray* Model::get_vertex_array() const
+{
+	return vert_arr;
+}
+
 void Model::set_material(Material* mat)
 {
 	material = mat;

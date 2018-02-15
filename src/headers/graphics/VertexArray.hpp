@@ -9,6 +9,7 @@
 #include "Shader_vars.hpp"
 
 
+// @Cleanup use Vector.hpp and get rid of std using
 using namespace glm;
 using namespace std;
 

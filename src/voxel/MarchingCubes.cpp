@@ -1,14 +1,16 @@
 #include "voxel/MarchingCubes.hpp"
 #include "voxel/VoxelData.hpp"
 #include "graphics/VertexArray.hpp"
+#include <glm/glm.hpp>
 
 MarchingCubes::MarchingCubes(){}
 MarchingCubes::~MarchingCubes(){}
 
-int MarchingCubes::Evaluate(VoxelData* data, byte iso, std::vector<glm::vec3>* verts)
+MCMesh* MarchingCubes::Evaluate(VoxelData* data, byte iso)
 {
 	int ntriang = 0;
-	v3 current;
+	vec3 current;
+	MCMesh* mesh = new MCMesh();
 	// i is z
 	for(int i = data->get_width()-2; i >= 0; i--)
 	{
@@ -36,7 +38,7 @@ int MarchingCubes::Evaluate(VoxelData* data, byte iso, std::vector<glm::vec3>* v
 					continue; // No geometry in this cube, either completely within or outside surface
 				
 
-				v3 vertlist[12];
+				vec3 vertlist[12];
 
 				if (edgeTable[cubeindex] & 1)
 					vertlist[0] =
@@ -77,22 +79,34 @@ int MarchingCubes::Evaluate(VoxelData* data, byte iso, std::vector<glm::vec3>* v
 
 				for(int l = 0; triTable[cubeindex][l] != -1; l+= 3)
 				{
-					v3 vert1 = vertlist[triTable[cubeindex][l]];
-					v3 vert2 = vertlist[triTable[cubeindex][l+1]];
-					v3 vert3 = vertlist[triTable[cubeindex][l+2]];
-					verts->emplace_back((vert1 + current));
-					verts->emplace_back((vert2 + current));
-					verts->emplace_back((vert3 + current));
+					vec3 vert1 = vertlist[triTable[cubeindex][l]];
+					vec3 vert2 = vertlist[triTable[cubeindex][l+1]];
+					vec3 vert3 = vertlist[triTable[cubeindex][l+2]];
+					
+					mesh->vertices.emplace_back((vert1 + current));
+					mesh->vertices.emplace_back((vert2 + current));
+					mesh->vertices.emplace_back((vert3 + current));
+					
+					vec3 normal = glm::cross((vert2 - vert1),(vert3 - vert1));
+
+					mesh->normals.emplace_back(normal);
+					mesh->normals.emplace_back(normal);
+					mesh->normals.emplace_back(normal);
+					
+					mesh->texcoords.emplace_back(vec2(0,0));
+					mesh->texcoords.emplace_back(vec2(1,0));
+					mesh->texcoords.emplace_back(vec2(1,1));
+
 					ntriang++;
 				}
 			}
 		}
 	}
-
-	return ntriang;
+	mesh->tri_count = ntriang;
+	return mesh;
 }
 
-v3 MarchingCubes::interp(byte iso, v3 p1, v3 p2, byte val1, byte val2)
+vec3 MarchingCubes::interp(byte iso, vec3 p1, vec3 p2, byte val1, byte val2)
 {
 	if(abs(iso-val1) <= 0)
 		return p1;
@@ -103,7 +117,7 @@ v3 MarchingCubes::interp(byte iso, v3 p1, v3 p2, byte val1, byte val2)
 
 	double mu = ((double)iso - (double)val1) / ((double)val2 - (double)val1);
 
-	return v3(
+	return vec3(
 		p1.x + mu * (p2.x - p1.x),
 		p1.y + mu * (p2.y - p1.y),
 		p1.z + mu * (p2.z - p1.z)

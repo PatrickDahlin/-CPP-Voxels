@@ -29,6 +29,8 @@ public:
 	void dispose();
 
 	Material* get_material() const;
+
+	VertexArray* get_vertex_array() const;
 	
 	Transform		transform;
 	

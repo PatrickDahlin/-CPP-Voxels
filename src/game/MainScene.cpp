@@ -13,10 +13,12 @@
 #include <SDL2/SDL.h>
 #include <imgui/imgui.h>
 #include <stb_image.h>
+#include <algorithm>
 
 #include "voxel/VoxelData.hpp"
 #include "voxel/MarchingCubes.hpp"
 #include "graphics/VertexArray.hpp"
+#include "graphics/GLBuffer.hpp"
 
 
 
@@ -55,7 +57,7 @@ void MainScene::init()
 	
 	tmp->set_material(mat);
 
-	myvoxels = new VoxelData(16,16);
+	myvoxels = new VoxelData(8,8);
 	
 	
 	for(int i=0; i < myvoxels->get_width(); i++)
@@ -64,38 +66,35 @@ void MainScene::init()
 		{
 			for(int k=0; k < myvoxels->get_width(); k++)
 			{
-				glm::vec3 diff = glm::vec3(i,j,k) - glm::vec3(myvoxels->get_width(), myvoxels->get_height(), myvoxels->get_width())*0.5f;
+				glm::vec3 diff = glm::vec3((float)i,(float)j,(float)k) - glm::vec3(myvoxels->get_width()*0.5f, myvoxels->get_height()*0.5f, myvoxels->get_width()*0.5f);
 				
-				//if(diff.length() < 4.5f)// || j % 2 == 0 || i % 2 == 0)
-				//	myvoxels->set_value_at_index(k,j,i, 250);
-				//else
+				
 				float len = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
 				len = sqrt(len);
-				float tmp = len / myvoxels->get_width();
-				myvoxels->set_value_at_index(i,j,k, (unsigned char)(tmp*225));
+				float tmp = len / ((myvoxels->get_width()-1));
+				tmp = std::min(1.0f,std::max(0.0f,tmp));
+				myvoxels->set_value_at_index(i,j,k, (unsigned char)(tmp*255));
 				
 			}
 		}
 	}//*/
 
-	//myvoxels->set_value_at_index(2,2,2, 250);
-	//myvoxels->set_value_at_index(3,3,3, 250);
 
-	std::vector<glm::vec3> vertices;
 	MarchingCubes* myCubes = new MarchingCubes();
-	int tris = myCubes->Evaluate(myvoxels, 128, &vertices);
+	MCMesh* mesh = myCubes->Evaluate(myvoxels, 127);
+
 	cout("Evaluated Marching cubes and got ");
-	cout(tris);
+	cout(mesh->tri_count);
 	coutln(" triangles in resulting mesh");
 
-	//for(int i=0; i < vertices.size(); i++)
-	//	printf("V:(%.1f,%.1f,%.1f)\n",vertices[i].x,vertices[i].y,vertices[i].z);
-
 	voxel_model = new Model();
-	voxel_model->set_vertices(vertices);
+	voxel_model->set_vertices(mesh->vertices);
+	voxel_model->set_texcoords(mesh->texcoords);
+	voxel_model->set_normals(mesh->normals);	
 	voxel_model->set_material(mat);
 	voxel_model->transform.translate(-5,0,0);
 
+	delete mesh; // You need to clean up mesh after it's created
 	delete myCubes;
 }
 

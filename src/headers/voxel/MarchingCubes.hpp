@@ -1,16 +1,23 @@
 #ifndef _MARCHINGCUBES_HPP_
 #define _MARCHINGCUBES_HPP_
 
-#include <glm/vec3.hpp>
+#include "core/Vector.hpp"
 #include <vector>
 
 class VoxelData;
 class VertexArray;
 
-#define v3 glm::vec3
-#define byte unsigned char
+typedef unsigned char byte;
 
-class MarchingCubes{
+struct MCMesh {
+	std::vector<vec3> vertices;
+	std::vector<vec3> normals;
+	std::vector<vec2> texcoords;
+	int tri_count;
+};
+
+
+class MarchingCubes {
 public:
 	MarchingCubes();
 	~MarchingCubes();
@@ -18,23 +25,23 @@ public:
 	// Evaluates voxeldata and puts it in vertexarray as geometry
 	//int Evaluate(VoxelData* data, byte iso, VertexArray* varr);
 
-	int Evaluate(VoxelData* data, byte iso, std::vector<glm::vec3>* verts);
+	MCMesh* Evaluate(VoxelData* data, byte iso);
 	
 
 private:
 	
 
 	// Interpolates two vector3s depending on their values and an iso value
-	v3 interp(byte iso, v3 p1, v3 p2, byte val1, byte val2);
+	vec3 interp(byte iso, vec3 p1, vec3 p2, byte val1, byte val2);
 
-	v3 p0 = v3(0.0f, 0, 1.0f);
-	v3 p1 = v3(1.0f, 0, 1.0f);
-	v3 p2 = v3(1.0f, 0, 0.0f);
-	v3 p3 = v3(0.0f, 0, 0.0f);
-	v3 p4 = v3(0.0f, 1.0f, 1.0f);
-	v3 p5 = v3(1.0f, 1.0f, 1.0f);
-	v3 p6 = v3(1.0f, 1.0f, 0.0f);
-	v3 p7 = v3(0.0f, 1.0f, 0.0f);
+	vec3 p0 = vec3(0.0f, 0, 1.0f);
+	vec3 p1 = vec3(1.0f, 0, 1.0f);
+	vec3 p2 = vec3(1.0f, 0, 0.0f);
+	vec3 p3 = vec3(0.0f, 0, 0.0f);
+	vec3 p4 = vec3(0.0f, 1.0f, 1.0f);
+	vec3 p5 = vec3(1.0f, 1.0f, 1.0f);
+	vec3 p6 = vec3(1.0f, 1.0f, 0.0f);
+	vec3 p7 = vec3(0.0f, 1.0f, 0.0f);
 	
 
 	// Just the data after this point
