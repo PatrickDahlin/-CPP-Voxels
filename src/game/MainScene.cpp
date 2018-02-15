@@ -35,7 +35,7 @@ void MainScene::init()
 	cam = new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
 	cam->set_input(input);
 	cam->set_fly_speed(3.0f);
-	cam->set_mouse_sensitivity(0.5f);
+	cam->set_mouse_sensitivity(1.5f);
 
 	// Basic shader
 	std::string vert = read_file("data/shaders/Basic-vert.glsl");
@@ -55,7 +55,8 @@ void MainScene::init()
 	
 	tmp->set_material(mat);
 
-	myvoxels = new VoxelData(7,7);
+	myvoxels = new VoxelData(16,16);
+	
 	
 	for(int i=0; i < myvoxels->get_width(); i++)
 	{
@@ -63,21 +64,22 @@ void MainScene::init()
 		{
 			for(int k=0; k < myvoxels->get_width(); k++)
 			{
-				//v3 diff = v3((float)k,(float)j,(float)i) - v3((float)myvoxels->get_width(), (float)myvoxels->get_height(), (float)myvoxels->get_width())*0.5f;
+				glm::vec3 diff = glm::vec3(i,j,k) - glm::vec3(myvoxels->get_width(), myvoxels->get_height(), myvoxels->get_width())*0.5f;
 				
-				//if(diff.length() < 1.0f)
-				//{
-				//	myvoxels->set_value_at_index(k,j,i, 255);
-				//}
+				//if(diff.length() < 4.5f)// || j % 2 == 0 || i % 2 == 0)
+				//	myvoxels->set_value_at_index(k,j,i, 250);
 				//else
-				if(k % 2 == 0)
-					myvoxels->set_value_at_index(k,j,i, 0);
-				else
-					myvoxels->set_value_at_index(k,j,i, 255);
-					
+				float len = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+				len = sqrt(len);
+				float tmp = len / myvoxels->get_width();
+				myvoxels->set_value_at_index(i,j,k, (unsigned char)(tmp*225));
+				
 			}
 		}
-	}
+	}//*/
+
+	//myvoxels->set_value_at_index(2,2,2, 250);
+	//myvoxels->set_value_at_index(3,3,3, 250);
 
 	std::vector<glm::vec3> vertices;
 	MarchingCubes* myCubes = new MarchingCubes();
@@ -86,10 +88,13 @@ void MainScene::init()
 	cout(tris);
 	coutln(" triangles in resulting mesh");
 
+	//for(int i=0; i < vertices.size(); i++)
+	//	printf("V:(%.1f,%.1f,%.1f)\n",vertices[i].x,vertices[i].y,vertices[i].z);
+
 	voxel_model = new Model();
 	voxel_model->set_vertices(vertices);
 	voxel_model->set_material(mat);
-	voxel_model->transform.translate(10,0,0);
+	voxel_model->transform.translate(-5,0,0);
 
 	delete myCubes;
 }

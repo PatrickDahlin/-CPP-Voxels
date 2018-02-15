@@ -136,14 +136,12 @@ void Game::run()
 			{
 				imgui_captured = true;
 				input.set_input_enabled(false);
-				printf("Mouse let loose\n");
 			}
 		}
 		else if(!input.is_enabled() && imgui_captured)
 		{
 			input.set_input_enabled(true);
 			imgui_captured = false;
-			printf("Mouse was captured again\n");
 		}
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

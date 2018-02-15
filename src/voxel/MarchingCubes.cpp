@@ -10,13 +10,13 @@ int MarchingCubes::Evaluate(VoxelData* data, byte iso, std::vector<glm::vec3>* v
 	int ntriang = 0;
 	v3 current;
 	// i is z
-	for(int k = data->get_width()-2; k >= 0; k--)
+	for(int i = data->get_width()-2; i >= 0; i--)
 	{
 		// j is y
 		for(int j = data->get_height()-2; j >= 0; j--)
 		{
 			// k is x
-			for(int i = data->get_width()-2; i >= 0; i--)
+			for(int k = data->get_width()-2; k >= 0; k--)
 			{
 				current.x = i; current.y = j; current.z = k;
 
@@ -80,9 +80,9 @@ int MarchingCubes::Evaluate(VoxelData* data, byte iso, std::vector<glm::vec3>* v
 					v3 vert1 = vertlist[triTable[cubeindex][l]];
 					v3 vert2 = vertlist[triTable[cubeindex][l+1]];
 					v3 vert3 = vertlist[triTable[cubeindex][l+2]];
-					verts->emplace_back(vert1);
-					verts->emplace_back(vert2);
-					verts->emplace_back(vert3);
+					verts->emplace_back((vert1 + current));
+					verts->emplace_back((vert2 + current));
+					verts->emplace_back((vert3 + current));
 					ntriang++;
 				}
 			}

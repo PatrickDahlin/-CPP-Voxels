@@ -1,7 +1,7 @@
 #ifndef _MARCHINGCUBES_HPP_
 #define _MARCHINGCUBES_HPP_
 
-#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
 #include <vector>
 
 class VoxelData;
@@ -27,14 +27,15 @@ private:
 	// Interpolates two vector3s depending on their values and an iso value
 	v3 interp(byte iso, v3 p1, v3 p2, byte val1, byte val2);
 
-	v3 p0 = v3(0.5f, 0, 1.0f);
-	v3 p1 = v3(1.0f, 0, 0.5f);
-	v3 p2 = v3(0.5f, 0, 0.0f);
-	v3 p3 = v3(0.0f, 0, 0.5f);
-	v3 p4 = v3(0.5f, 1.0f, 1.0f);
-	v3 p5 = v3(1.0f, 1.0f, 0.5f);
-	v3 p6 = v3(0.5f, 1.0f, 0.0f);
-	v3 p7 = v3(0.0f, 1.0f, 0.5f);
+	v3 p0 = v3(0.0f, 0, 1.0f);
+	v3 p1 = v3(1.0f, 0, 1.0f);
+	v3 p2 = v3(1.0f, 0, 0.0f);
+	v3 p3 = v3(0.0f, 0, 0.0f);
+	v3 p4 = v3(0.0f, 1.0f, 1.0f);
+	v3 p5 = v3(1.0f, 1.0f, 1.0f);
+	v3 p6 = v3(1.0f, 1.0f, 0.0f);
+	v3 p7 = v3(0.0f, 1.0f, 0.0f);
+	
 
 	// Just the data after this point
 
