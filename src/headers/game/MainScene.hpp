@@ -12,6 +12,7 @@ class ShaderProgram;
 class Material;
 class GLTexture;
 class Camera;
+class Octree;
 
 class MainScene : public Scene
 {
@@ -39,7 +40,7 @@ protected:
 	ShaderProgram* 	shader;
 	Material*		mat;
 	GLTexture*		tex;
-
+	Octree*			my_octree;
 };
 
 

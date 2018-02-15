@@ -29,8 +29,7 @@ TODO:
 		- DebugCamera freaks out at low framerates - Fixed
 
 	TODO:
-		- Wireframe mode for rendering
-		- Octree data-structure for later voxel use
+		- Octree data-structure for later voxel use (Later optimization)
 		- Perlin noise implementation
 		- Marching cubes implementation
 		- (M) Actor class []
@@ -44,6 +43,7 @@ TODO:
 
 
 	Done:
+		- Wireframe mode for rendering
 		- (H) Element buffer for vertexarray [x] @Untested @TODO
 		- (M) Camera abstract class with Orthographic and Perspective camera subclass [x]
 		- (H) ImGui for debug ui rendering

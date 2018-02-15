@@ -43,6 +43,7 @@ void MainScene::init()
 	mat->texture = load_image("data/textures/grass.jpg");
 	
 	tmp->set_material(mat);
+
 }
 
 void MainScene::load()
