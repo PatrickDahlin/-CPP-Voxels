@@ -12,7 +12,9 @@ class ShaderProgram;
 class Material;
 class GLTexture;
 class Camera;
-class Octree;
+
+class VoxelData;
+class VertexArray;
 
 class MainScene : public Scene
 {
@@ -40,7 +42,11 @@ protected:
 	ShaderProgram* 	shader;
 	Material*		mat;
 	GLTexture*		tex;
-	Octree*			my_octree;
+	
+	VoxelData*		myvoxels;
+	Model*			voxel_model;
+	ShaderProgram*	voxel_shader;
+
 };
 
 

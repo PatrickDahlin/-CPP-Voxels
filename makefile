@@ -21,7 +21,7 @@ link: $(OBJ)
 
 $(OBJDIR)/%.o: %.cpp %.hpp
 	@echo -- Generating $@ --
-	-mkdir $(subst /,\,./$(dir $(OBJDIR)/$@)) >nul 2>&1
+	-mkdir $(subst /,\,./$(dir $@)) >nul 2>&1
 	@$(GXX) $(SFLAGS) -c $(subst $(OBJDIR)/,,$<) -o $@
 
 # - before command ignores errors
@@ -30,7 +30,7 @@ $(OBJDIR)/%.o: %.cpp %.hpp
 # ">nul 2>&1" after a command just redirects stderr to nul so we don't get output
 $(OBJDIR)/%.o: %.cpp
 	@echo -- Generating $@ --
-	-mkdir $(subst /,\,./$(dir $(OBJDIR)/$@)) >nul 2>&1
+	-mkdir $(subst /,\,./$(dir $@)) >nul 2>&1
 	@$(GXX) $(SFLAGS) -c $(subst $(OBJDIR)/,,$<) -o $@
 
 run: build

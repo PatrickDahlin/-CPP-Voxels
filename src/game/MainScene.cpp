@@ -14,6 +14,11 @@
 #include <imgui/imgui.h>
 #include <stb_image.h>
 
+#include "voxel/VoxelData.hpp"
+#include "voxel/MarchingCubes.hpp"
+#include "graphics/VertexArray.hpp"
+
+
 
 MainScene::MainScene(Input* input, SceneManager* scene_manager) : Scene(input, scene_manager),
 cam(nullptr),
@@ -32,10 +37,16 @@ void MainScene::init()
 	cam->set_fly_speed(3.0f);
 	cam->set_mouse_sensitivity(0.5f);
 
+	// Basic shader
 	std::string vert = read_file("data/shaders/Basic-vert.glsl");
 	std::string frag = read_file("data/shaders/Basic-frag.glsl");
 	std::string header = read_file("data/shaders/Shader_Header.glsl");
 	shader = new ShaderProgram(vert.c_str(), frag.c_str(), header.c_str());
+
+	// Voxel shader
+	vert = read_file("data/shaders/Voxel-vert.glsl");
+	frag = read_file("data/shaders/Voxel-frag.glsl");
+	voxel_shader = new ShaderProgram(vert.c_str(), frag.c_str(), header.c_str());
 
 	tmp = Primitives::create_cube();
 
@@ -44,6 +55,43 @@ void MainScene::init()
 	
 	tmp->set_material(mat);
 
+	myvoxels = new VoxelData(7,7);
+	
+	for(int i=0; i < myvoxels->get_width(); i++)
+	{
+		for(int j=0; j < myvoxels->get_height(); j++)
+		{
+			for(int k=0; k < myvoxels->get_width(); k++)
+			{
+				//v3 diff = v3((float)k,(float)j,(float)i) - v3((float)myvoxels->get_width(), (float)myvoxels->get_height(), (float)myvoxels->get_width())*0.5f;
+				
+				//if(diff.length() < 1.0f)
+				//{
+				//	myvoxels->set_value_at_index(k,j,i, 255);
+				//}
+				//else
+				if(k % 2 == 0)
+					myvoxels->set_value_at_index(k,j,i, 0);
+				else
+					myvoxels->set_value_at_index(k,j,i, 255);
+					
+			}
+		}
+	}
+
+	std::vector<glm::vec3> vertices;
+	MarchingCubes* myCubes = new MarchingCubes();
+	int tris = myCubes->Evaluate(myvoxels, 128, &vertices);
+	cout("Evaluated Marching cubes and got ");
+	cout(tris);
+	coutln(" triangles in resulting mesh");
+
+	voxel_model = new Model();
+	voxel_model->set_vertices(vertices);
+	voxel_model->set_material(mat);
+	voxel_model->transform.translate(10,0,0);
+
+	delete myCubes;
 }
 
 void MainScene::load()
@@ -81,6 +129,8 @@ void MainScene::render(RenderPass* pass)
 
 
 	pass->draw_model(tmp, shader, cam);
+
+	pass->draw_model(voxel_model, voxel_shader, cam);
 
 
 	//bool val = true;

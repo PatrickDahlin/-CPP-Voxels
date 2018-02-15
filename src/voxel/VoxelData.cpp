@@ -36,7 +36,7 @@ void VoxelData::init_data()
 		delete[] data;
 	
 	data_length = width * width * height;
-	data = new unsigned char[width * width * height];	
+	data = new unsigned char[data_length];	
 }
 
 unsigned char VoxelData::get_value_at_index(int x, int y, int z) 

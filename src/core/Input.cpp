@@ -148,7 +148,7 @@ void Input::poll_events()
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			if(!enabled) break;
+			//if(!enabled) break;
 			key_map[event.key.keysym.sym] = KeyState::PRESSED;
 			
 			assert(event.key.keysym.scancode >= 0 && event.key.keysym.scancode < IM_ARRAYSIZE(io.KeysDown));
@@ -159,7 +159,7 @@ void Input::poll_events()
 			io.KeySuper = (SDL_GetModState() & KMOD_GUI) != 0;
 			break;
 		case SDL_KEYUP:
-			if(!enabled) break;
+			//if(!enabled) break;
 			key_map[event.key.keysym.sym] = KeyState::RELEASED;
 			
 			assert(event.key.keysym.scancode >= 0 && event.key.keysym.scancode < IM_ARRAYSIZE(io.KeysDown));
@@ -174,7 +174,7 @@ void Input::poll_events()
 			exit(0); // this is NOT ok in the future, just temporarily here
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			if(!enabled) break;
+			//if(!enabled) break;
 			mouse_btn_state[event.button.button] = KeyState::PRESSED;
 			
 			if(event.button.button == SDL_BUTTON_LEFT) io.MouseDown[0] = true;
@@ -182,7 +182,7 @@ void Input::poll_events()
 			if(event.button.button == SDL_BUTTON_MIDDLE) io.MouseDown[2] = true;
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if(!enabled) break;
+			//if(!enabled) break;
 			mouse_btn_state[event.button.button] = KeyState::RELEASED;
 			
 			if(event.button.button == SDL_BUTTON_LEFT) io.MouseDown[0] = false;
@@ -190,7 +190,7 @@ void Input::poll_events()
 			if(event.button.button == SDL_BUTTON_MIDDLE) io.MouseDown[2] = false;
 			break;
 		case SDL_MOUSEMOTION:
-			if(!enabled) break;
+			//if(!enabled) break;
 			mouse_x = event.motion.x;
 			mouse_y = event.motion.y;
 			io.MousePos = ImVec2(mouse_x, mouse_y);
@@ -202,7 +202,7 @@ void Input::poll_events()
 			
 			break;
 		case SDL_MOUSEWHEEL:
-			if(!enabled) break;
+			//if(!enabled) break;
 			// Scroll
 			scroll_delta = event.wheel.y;
 			
@@ -228,7 +228,7 @@ void Input::poll_events()
 			
 			break;
 		case SDL_TEXTINPUT:
-			if(!enabled) break;
+			//if(!enabled) break;
 			io.AddInputCharactersUTF8(event.text.text);
 			break;
 		default:

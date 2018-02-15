@@ -21,6 +21,8 @@ void RenderPass::draw_model(Model* model, ShaderProgram* shader, Camera* c)
 {
 	DrawCall d;
 
+	assert(model->get_material() != nullptr);
+	
 	d.model = model;
 	d.shader = shader;
 	d.cam = c;
@@ -41,6 +43,8 @@ void RenderPass::do_render()
 		
 		it.shader->upload_model(it.model->transform.get_combined());
 		
+		assert(it.model->get_material() != nullptr);
+		assert(it.model->get_material()->texture != nullptr);
 		it.model->get_material()->texture->bind();
 
 		it.model->draw();

@@ -2,8 +2,11 @@
 #include "graphics/VertexArray.hpp"
 #include "graphics/Material.hpp"
 
+#include <stdio.h>
+
 Model::Model() :
-needs_upload(false)
+needs_upload(false),
+material(nullptr)
 {
 	vert_arr = new VertexArray();
 }
@@ -31,6 +34,7 @@ Material* Model::get_material() const
 
 void Model::set_vertices(vector<vec3> verts)
 {
+	printf("model setverts size: %i\n",verts.size());
 	vert_arr->set_vertices(verts);
 	needs_upload = true;
 }

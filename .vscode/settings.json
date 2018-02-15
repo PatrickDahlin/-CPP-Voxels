@@ -55,6 +55,7 @@
 		"xloctime": "cpp",
 		"xtree": "cpp",
 		"chrono": "cpp",
-		"ratio": "cpp"
+		"ratio": "cpp",
+		"thread": "cpp"
 	}
 }
