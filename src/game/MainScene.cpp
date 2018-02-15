@@ -57,7 +57,7 @@ void MainScene::init()
 	
 	tmp->set_material(mat);
 
-	myvoxels = new VoxelData(8,8);
+	myvoxels = new VoxelData(32,32);
 	
 	
 	for(int i=0; i < myvoxels->get_width(); i++)
@@ -66,7 +66,7 @@ void MainScene::init()
 		{
 			for(int k=0; k < myvoxels->get_width(); k++)
 			{
-				glm::vec3 diff = glm::vec3((float)i,(float)j,(float)k) - glm::vec3(myvoxels->get_width()*0.5f, myvoxels->get_height()*0.5f, myvoxels->get_width()*0.5f);
+				glm::vec3 diff = glm::vec3((float)i,(float)j,(float)k) - glm::vec3((myvoxels->get_width()-1)*0.5f, (myvoxels->get_height()-1)*0.5f, (myvoxels->get_width()-1)*0.5f);
 				
 				
 				float len = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;

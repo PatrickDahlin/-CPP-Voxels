@@ -89,6 +89,9 @@ int main(int argc, char* argv[])
 		coutln(glewGetErrorString(res));
 		return -1;
 	}
+
+	// Flip images right side up since opengl has y axis flipped
+	stbi_set_flip_vertically_on_load(true);
 	
 	Game game(window);
 
