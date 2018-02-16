@@ -19,6 +19,39 @@ enum class KeyState
 	RELEASED
 };
 
+enum class GamePadAxis 
+{
+	LEFTX,
+	LEFTY,
+	RIGHTX,
+	RIGHTY,
+	TRIGGERLEFT,
+	TRIGGERRIGHT,
+	MAX,
+	INVALID
+};
+
+enum class GamePadBtn
+{
+	A,
+	B,
+	X,
+	Y,
+	BACK,
+	GUIDE,
+	START,
+	LEFTSTICK,
+	RIGHTSTICK,
+	LEFTSHOULDER,
+	RIGHTSHOULDER,
+	DPAD_UP,
+	DPAD_DOWN,
+	DPAD_LEFT,
+	DPAD_RIGHT,
+	MAX,
+	INVALID
+};
+
 /*
 	This class will handle inputs
 */
@@ -41,6 +74,15 @@ class Input
 	glm::ivec2 get_mouse_pos_delta() const;
 
 	int get_scroll_delta() const;
+
+	// Gamecontroller stuff
+
+	// Returns a value between -1.0 to 1.0
+	float get_controller_axis(int controller, GamePadAxis axis);
+
+	bool get_controller_button(int controller, GamePadBtn button);
+
+	// end gamecontroller
 
 	bool is_enabled() const;
 
@@ -73,9 +115,12 @@ class Input
 	int mouse_last_enabled_y;
 	GameWindow* window;
 	bool enabled;
+	bool window_focused;
 
 	std::unordered_map<int, KeyState> mouse_btn_state;
 	int scroll_delta;
+
+	SDL_GameController*	controller;
 };
 
 #endif

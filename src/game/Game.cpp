@@ -27,14 +27,15 @@ static void ImGui_SetClipboardText(void*, const char* text)
 
 Game::Game(GameWindow* window) :
 game_window(window),
-input(window),
+input(nullptr),
 main_scene(nullptr)
 {
 	printf("Setting up Game\n");
 	uicam = new OrthographicCamera(0, window->get_width(), 0, window->get_height());
 
-	input.show_cursor(false);
-	input.set_lock_mouse(true);
+	input = new Input(game_window);
+	input->show_cursor(false);
+	input->set_lock_mouse(true);
 	
 	ImGuiIO& io = ImGui::GetIO();
 	io.DisplaySize = ImVec2(window->get_width(), window->get_height());
@@ -82,7 +83,7 @@ Game::~Game()
 
 void Game::load()
 {
-	main_scene = new MainScene(&input, &scene_manager);
+	main_scene = new MainScene(input, &scene_manager);
 	scene_manager.switch_to_scene(main_scene);
 
 	glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
@@ -105,7 +106,7 @@ void Game::run()
 		last_frame = Clock::now();
 		
 		
-		input.poll_events();
+		input->poll_events();
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -117,15 +118,15 @@ void Game::run()
 		ImGui::NewFrame();
 
 		// @Temporary
-		if(input.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
+		if(input->get_key(SDLK_ESCAPE) == KeyState::PRESSED)
 			Game::quit();
 
-		if(input.get_key(SDLK_l) == KeyState::PRESSED)
+		if(input->get_key(SDLK_l) == KeyState::PRESSED)
 		{
 			static bool locked = true;
 			locked = !locked;
-			input.set_lock_mouse(locked);
-			input.show_cursor(!locked);
+			input->set_lock_mouse(locked);
+			input->show_cursor(!locked);
 		}
 		
 		
@@ -135,12 +136,12 @@ void Game::run()
 			if(!imgui_captured)
 			{
 				imgui_captured = true;
-				input.set_input_enabled(false);
+				input->set_input_enabled(false);
 			}
 		}
-		else if(!input.is_enabled() && imgui_captured)
+		else if(!input->is_enabled() && imgui_captured)
 		{
-			input.set_input_enabled(true);
+			input->set_input_enabled(true);
 			imgui_captured = false;
 		}
 		

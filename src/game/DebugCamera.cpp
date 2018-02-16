@@ -32,31 +32,108 @@ void DebugCamera::update(const float delta)
 {
 	if(input == nullptr || !input->is_enabled() || !mouse_input_active) return;
 
-	if(input->get_key(SDLK_w) == KeyState::PRESSED ||
-		input->get_key(SDLK_w) == KeyState::REPEAT)
+	if(input->get_key_down(SDLK_w))
 	{
 		translate(-get_forward() * fly_speed * delta);
 	}
-	else if(input->get_key(SDLK_s) == KeyState::PRESSED ||
-			input->get_key(SDLK_s) == KeyState::REPEAT)
+	else if(input->get_key_down(SDLK_s))
 	{
 		translate(get_forward() * fly_speed * delta);
 	}
 
-	if(input->get_key(SDLK_a) == KeyState::PRESSED ||
-		input->get_key(SDLK_a) == KeyState::REPEAT)
+	if(input->get_key_down(SDLK_a))
 	{
 		translate(-get_right() * fly_speed * delta);
 	}
-	else if(input->get_key(SDLK_d) == KeyState::PRESSED ||
-			input->get_key(SDLK_d) == KeyState::REPEAT)
+	else if(input->get_key_down(SDLK_d))
 	{
 		translate(get_right() * fly_speed * delta);
 	}
 
-	// Smooth out mouse movements
+	if(input->get_key_down(SDLK_e))
+	{
+		translate(get_up() * fly_speed * delta);
+	}
+	else if(input->get_key_down(SDLK_q))
+	{
+		translate(-get_up() * fly_speed * delta);
+	}
+
+	// Gamepad support
+	// @TODO add separate gamepad sensitivity values
+	// 0.2f is used as a dead-space before stick does anything
+
+	//
+	// Rotation
+	//
+	float gpad_v = input->get_controller_axis(0, GamePadAxis::RIGHTY);
+	float gpad_h = input->get_controller_axis(0, GamePadAxis::RIGHTX);
+
+	if(abs(gpad_v) < 0.2f) 
+	{
+		gpad_v = 0;
+	}	
+	else
+	{
+		if(gpad_v < 0.0f)
+			gpad_v = (gpad_v + 0.2f) / 0.8f;
+		else
+			gpad_v = (gpad_v - 0.2f) / 0.8f;
+	}
+	if(abs(gpad_h) < 0.2f)
+	{
+		gpad_h = 0;
+	}
+	else
+	{
+		if(gpad_h < 0.0f)
+			gpad_h = (gpad_h + 0.2f) / 0.8f;
+		else
+			gpad_h = (gpad_h + 0.2f) / 0.8f;
+	}
+
 	
-	
+	gpad_v *= mouse_sensitivity * delta;
+	gpad_h *= mouse_sensitivity * delta;
+
+	rotate(-gpad_v, -gpad_h, 0);
+
+	//
+	// Movement
+	//
+	float gpad_f = input->get_controller_axis(0, GamePadAxis::LEFTY);
+	float gpad_r = input->get_controller_axis(0, GamePadAxis::LEFTX);
+
+	if(abs(gpad_f) < 0.2f) 
+	{
+		gpad_f = 0;
+	}	
+	else
+	{
+		if(gpad_f < 0.0f)
+			gpad_f = (gpad_f + 0.2f) / 0.8f;
+		else
+			gpad_f = (gpad_f - 0.2f) / 0.8f;
+	}
+	if(abs(gpad_r) < 0.2f)
+	{
+		gpad_r = 0;
+	}
+	else
+	{
+		if(gpad_r < 0.0f)
+			gpad_r = (gpad_r + 0.2f) / 0.8f;
+		else
+			gpad_r = (gpad_r + 0.2f) / 0.8f;
+	}
+
+	translate(get_right() * gpad_r * fly_speed * delta * 2.0f);
+	translate(get_forward() * gpad_f * fly_speed * delta * 2.0f);
+
+
+	//
+	// Mouse control
+	//
 	mouse_x_smoothing += input->get_mouse_pos_delta().x;
 	mouse_y_smoothing += input->get_mouse_pos_delta().y;
 

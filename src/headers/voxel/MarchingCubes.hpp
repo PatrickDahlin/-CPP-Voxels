@@ -22,9 +22,7 @@ public:
 	MarchingCubes();
 	~MarchingCubes();
 
-	// Evaluates voxeldata and puts it in vertexarray as geometry
-	//int Evaluate(VoxelData* data, byte iso, VertexArray* varr);
-
+	// Evaluates voxeldata and puts it in MCMesh as geometry
 	MCMesh* Evaluate(VoxelData* data, byte iso);
 	
 

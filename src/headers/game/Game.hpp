@@ -26,7 +26,7 @@ protected:
 	static bool				running;
 	SceneManager			scene_manager;
 	GameWindow*				game_window;
-	Input					input;
+	Input*					input;
 	MainScene*				main_scene;
 
 

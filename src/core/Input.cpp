@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <imgui/imgui.h> // Not really liking the use of imgui here
+#include <algorithm>
 
 Input::Input(GameWindow* window) : key_map(),
 				 mouse_x(window->get_width()/2),
@@ -19,10 +20,32 @@ Input::Input(GameWindow* window) : key_map(),
 				 mouse_last_enabled_y(mouse_y),
 				 window(window),
 				 enabled(true),
+				 window_focused(true),
 				 mouse_btn_state(),
-				 scroll_delta(0)
+				 scroll_delta(0),
+				 controller(nullptr)
 {
 	window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
+	
+	SDL_GetError();
+	coutln("Looking for a gamepad");
+	// Look for a gamepad
+	for(int i = 0; i < SDL_NumJoysticks(); ++i)
+	{
+		if(SDL_IsGameController(i)){
+			controller = SDL_GameControllerOpen(i);
+			coutln(SDL_GetError());
+			if(controller != nullptr) break;
+		}
+	}
+	
+	if(controller != nullptr){
+		coutln(SDL_GameControllerName(controller));
+		cout("controller ptr: ");
+		coutln(controller);
+	}else{
+		coutln("No controller connected");
+	}
 }
 
 Input::~Input()
@@ -118,6 +141,53 @@ bool Input::get_key_down(SDL_Keycode code)
 	return false;
 }
 
+float Input::get_controller_axis(int contrlr, GamePadAxis axis)
+{
+	if(!enabled || controller == nullptr) return 0;//if(!enabled || controller == nullptr || !SDL_GameControllerGetAttached(controller)) return 0;
+	if(SDL_GameControllerGetAttached(controller) == SDL_FALSE) return 0;
+	
+	SDL_GameControllerAxis ctrl_axis;
+	switch(axis)
+	{
+		case GamePadAxis::LEFTX: ctrl_axis = SDL_CONTROLLER_AXIS_LEFTX; break;
+		case GamePadAxis::LEFTY: ctrl_axis = SDL_CONTROLLER_AXIS_LEFTY; break;
+		case GamePadAxis::RIGHTX: ctrl_axis = SDL_CONTROLLER_AXIS_RIGHTX; break;
+		case GamePadAxis::RIGHTY: ctrl_axis = SDL_CONTROLLER_AXIS_RIGHTY; break;
+		case GamePadAxis::TRIGGERLEFT: ctrl_axis = SDL_CONTROLLER_AXIS_TRIGGERLEFT; break;
+		case GamePadAxis::TRIGGERRIGHT: ctrl_axis = SDL_CONTROLLER_AXIS_TRIGGERRIGHT; break;
+		case GamePadAxis::MAX: ctrl_axis = SDL_CONTROLLER_AXIS_MAX; break;
+		default: ctrl_axis = SDL_CONTROLLER_AXIS_INVALID; return 0;
+	}
+	return (float)SDL_GameControllerGetAxis(controller, ctrl_axis) / 32768.0f;
+}
+
+bool Input::get_controller_button(int contrlr, GamePadBtn button)
+{
+	if(!enabled || controller == nullptr || !SDL_GameControllerGetAttached(controller)) return false;
+	SDL_GameControllerButton btn;
+	switch(button)
+	{
+		case GamePadBtn::A: btn = SDL_CONTROLLER_BUTTON_A; break;
+		case GamePadBtn::B: btn = SDL_CONTROLLER_BUTTON_B; break;
+		case GamePadBtn::X: btn = SDL_CONTROLLER_BUTTON_X; break;
+		case GamePadBtn::Y: btn = SDL_CONTROLLER_BUTTON_Y; break;
+		case GamePadBtn::BACK: btn = SDL_CONTROLLER_BUTTON_BACK; break;
+		case GamePadBtn::GUIDE: btn = SDL_CONTROLLER_BUTTON_GUIDE; break;
+		case GamePadBtn::START: btn = SDL_CONTROLLER_BUTTON_START; break;
+		case GamePadBtn::LEFTSTICK: btn = SDL_CONTROLLER_BUTTON_LEFTSTICK; break;
+		case GamePadBtn::RIGHTSTICK: btn = SDL_CONTROLLER_BUTTON_RIGHTSTICK; break;
+		case GamePadBtn::LEFTSHOULDER: btn = SDL_CONTROLLER_BUTTON_LEFTSHOULDER; break;
+		case GamePadBtn::RIGHTSHOULDER: btn = SDL_CONTROLLER_BUTTON_RIGHTSHOULDER; break;
+		case GamePadBtn::DPAD_UP: btn = SDL_CONTROLLER_BUTTON_DPAD_UP; break;
+		case GamePadBtn::DPAD_DOWN: btn = SDL_CONTROLLER_BUTTON_DPAD_DOWN; break;
+		case GamePadBtn::DPAD_LEFT: btn = SDL_CONTROLLER_BUTTON_DPAD_LEFT; break;
+		case GamePadBtn::DPAD_RIGHT: btn = SDL_CONTROLLER_BUTTON_DPAD_RIGHT; break;
+		case GamePadBtn::MAX: btn = SDL_CONTROLLER_BUTTON_MAX; break;
+		default: btn = SDL_CONTROLLER_BUTTON_INVALID; break;
+	}
+	return SDL_GameControllerGetButton(controller, btn) == 1;
+}
+
 void Input::poll_events()
 {
 
@@ -148,7 +218,7 @@ void Input::poll_events()
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			//if(!enabled) break;
+			if(!window_focused) break;
 			key_map[event.key.keysym.sym] = KeyState::PRESSED;
 			
 			assert(event.key.keysym.scancode >= 0 && event.key.keysym.scancode < IM_ARRAYSIZE(io.KeysDown));
@@ -159,7 +229,7 @@ void Input::poll_events()
 			io.KeySuper = (SDL_GetModState() & KMOD_GUI) != 0;
 			break;
 		case SDL_KEYUP:
-			//if(!enabled) break;
+			if(!window_focused) break;
 			key_map[event.key.keysym.sym] = KeyState::RELEASED;
 			
 			assert(event.key.keysym.scancode >= 0 && event.key.keysym.scancode < IM_ARRAYSIZE(io.KeysDown));
@@ -174,7 +244,7 @@ void Input::poll_events()
 			exit(0); // this is NOT ok in the future, just temporarily here
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			//if(!enabled) break;
+			if(!window_focused) break;
 			mouse_btn_state[event.button.button] = KeyState::PRESSED;
 			
 			if(event.button.button == SDL_BUTTON_LEFT) io.MouseDown[0] = true;
@@ -182,15 +252,40 @@ void Input::poll_events()
 			if(event.button.button == SDL_BUTTON_MIDDLE) io.MouseDown[2] = true;
 			break;
 		case SDL_MOUSEBUTTONUP:
-			//if(!enabled) break;
+			if(!window_focused) break;
 			mouse_btn_state[event.button.button] = KeyState::RELEASED;
 			
 			if(event.button.button == SDL_BUTTON_LEFT) io.MouseDown[0] = false;
 			if(event.button.button == SDL_BUTTON_RIGHT) io.MouseDown[1] = false;
 			if(event.button.button == SDL_BUTTON_MIDDLE) io.MouseDown[2] = false;
 			break;
+		case SDL_JOYDEVICEADDED:
+			coutln("Controller add event");
+			if(controller != nullptr) break;
+			// Look for first avaliable game controller
+			for(int i = 0; i < SDL_NumJoysticks(); ++i)
+			{
+				if(SDL_IsGameController(i)){
+					controller = SDL_GameControllerOpen(i);
+					if(controller) break;
+				}
+			}
+			break;
+		case SDL_JOYDEVICEREMOVED:
+			coutln("Controller remove event");
+			if(controller == nullptr) break;
+			// If we disconnected this joystick, find another one if avaliable
+			controller = nullptr;
+			for(int i = 0; i < SDL_NumJoysticks(); ++i)
+			{
+				if(SDL_IsGameController(i)){
+					controller = SDL_GameControllerOpen(i);
+					if(controller) break;
+				}
+			}
+			break;
 		case SDL_MOUSEMOTION:
-			//if(!enabled) break;
+			if(!window_focused) break;
 			mouse_x = event.motion.x;
 			mouse_y = event.motion.y;
 			io.MousePos = ImVec2(mouse_x, mouse_y);
@@ -202,7 +297,7 @@ void Input::poll_events()
 			
 			break;
 		case SDL_MOUSEWHEEL:
-			//if(!enabled) break;
+			if(!window_focused) break;
 			// Scroll
 			scroll_delta = event.wheel.y;
 			
@@ -216,11 +311,42 @@ void Input::poll_events()
 			
 			switch(event.window.event)
 			{
+				case SDL_WINDOWEVENT_ENTER:
+					//coutln("Windowevent enter");
+					break;
+				case SDL_WINDOWEVENT_LEAVE:
+					//coutln("Windowevent leave");
+					break;
+				case SDL_WINDOWEVENT_EXPOSED:
+					//coutln("Windowevent exposed");
+					break;
+				case SDL_WINDOWEVENT_HIDDEN:
+					//coutln("Windowevent hidden");
+					break;
+				case SDL_WINDOWEVENT_MAXIMIZED:
+					//coutln("Windowevent maximized");
+					break;
+				case SDL_WINDOWEVENT_MINIMIZED:
+					//coutln("Windowevent minimized");
+					break;
+				case SDL_WINDOWEVENT_RESTORED:
+					//coutln("Windowevent restored");
+					break;
+				case SDL_WINDOWEVENT_SHOWN:
+					//coutln("Windowevent shown");
+					break;
+				case SDL_WINDOWEVENT_TAKE_FOCUS:
+					//coutln("Windowevent take focus");
+					break;
 				case SDL_WINDOWEVENT_FOCUS_LOST:
-					set_input_enabled(false);
+					//coutln("Windowevent focus lost");
+					window_focused = false;
 					break;
 				case SDL_WINDOWEVENT_FOCUS_GAINED:
-					set_input_enabled(true);
+					//coutln("Windowevent focus gained");					
+					window_focused = true;
+					last_mouse_x = mouse_x;
+					last_mouse_y = mouse_y;
 					break;
 				default:
 					break;
@@ -228,7 +354,7 @@ void Input::poll_events()
 			
 			break;
 		case SDL_TEXTINPUT:
-			//if(!enabled) break;
+			if(!window_focused) break;
 			io.AddInputCharactersUTF8(event.text.text);
 			break;
 		default:
@@ -237,7 +363,7 @@ void Input::poll_events()
 	}
 
 	// We don't want to cage the mouse while application is not in focus
-	if(!enabled) {
+	if(!enabled || !window_focused) {
 		return;
 	}
 
