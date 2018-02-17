@@ -5,6 +5,7 @@
 #include "core/Input.hpp"
 #include "core/SceneManager.hpp"
 #include "game/MainScene.hpp"
+#include "graphics/ShaderManager.hpp"
 
 class Camera;
 class ShaderProgram;
@@ -34,6 +35,8 @@ protected:
 	Camera*					uicam;
 	ShaderProgram*			imgui_shader;
 	GLTexture*				myTex;
+
+	ShaderManager*			shader_manager;
 
 };
 

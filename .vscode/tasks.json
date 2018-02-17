@@ -44,6 +44,14 @@
 			]
 		},
 		{
+			"label": "(Debug) Clean Build",
+			"type": "shell",
+			"command": "@del bin\\build.exe & mingw32-make clean & mingw32-make build",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
 			"label": "Run Game",
 			"type": "shell",
 			"command": "cd bin && build.exe",

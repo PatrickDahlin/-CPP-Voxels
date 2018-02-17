@@ -33,6 +33,8 @@ main_scene(nullptr)
 	printf("Setting up Game\n");
 	uicam = new OrthographicCamera(0, window->get_width(), 0, window->get_height());
 
+	shader_manager = new ShaderManager();
+
 	input.show_cursor(false);
 	input.set_lock_mouse(true);
 	
@@ -68,19 +70,17 @@ main_scene(nullptr)
 	myTex = new GLTexture(ColorFormat::RGBA, pixels, width, height);
 	io.Fonts->TexID = (void*)myTex;
 
-	std::string vert = read_file("data/shaders/ImGui-vert.glsl");
-	std::string frag = read_file("data/shaders/ImGui-frag.glsl");
-	std::string header = read_file("data/shaders/Shader_Header.glsl");
-	imgui_shader = new ShaderProgram(vert.c_str(), frag.c_str(), header.c_str());
-
+	imgui_shader = shader_manager->get_shader("data/shaders/ImGui-vert.glsl", 
+											"data/shaders/ImGui-frag.glsl");
 
 }
 
 Game::~Game()
 {
-	delete uicam;
-	delete myTex;
-	delete imgui_shader;
+	if(uicam)
+		delete uicam;
+	if(myTex)
+		delete myTex;
 }
 
 void Game::load()
@@ -199,6 +199,8 @@ void Game::run()
 	}
 
 	scene_manager.dispose();
+	if(shader_manager)
+		shader_manager->dispose();
 }
 
 void Game::quit()

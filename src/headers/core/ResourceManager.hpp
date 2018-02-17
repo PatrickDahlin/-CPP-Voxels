@@ -3,21 +3,25 @@
 
 #include "core/Disposable.hpp"
 
+#include "core/Macros.hpp"
 #include <unordered_map>
+
 
 template<class U, class T>
 class ResourceManager {
 	static_assert(std::is_base_of<Disposable, T>::value, "Template parameter of ResourceManager must derive from Disposable");
 public:
-	ResourceManager() {}
+	ResourceManager() : resources() {}
 	virtual ~ResourceManager() {}
 
 	void dispose() {
 		for(auto it : resources)
-			it->second->dispose();
+			it.second->dispose();
 	
 		resources.clear();
 	}
+
+protected:
 
 	T* get_resource(U key) const {
 		auto found = resources.find(key);
@@ -27,17 +31,19 @@ public:
 			return nullptr;
 	}
 
-protected:
-
 	bool has_resource(U key) {
 		if(resources.find(key) != resources.end()) return true;
 		return false;
 	}
 
 	void add_resource(U key, T* value) {
-		if(resources.find(key) != resources.end())
-			resources[key] = value;
+		resources[key] = value;
 	}
+
+
+
+//dfasf s 
+
 
 private:
 

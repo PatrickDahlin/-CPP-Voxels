@@ -38,13 +38,7 @@ public:
 	ShaderManager();
 	~ShaderManager();
 	
-	static ShaderProgram* get_shader(std::string vert, std::string frag);
-
-	static void dispose();
-
-private:
-
-	static ShaderManager* instance;
+	ShaderProgram* get_shader(std::string vert, std::string frag);
 
 };
 
