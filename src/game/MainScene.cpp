@@ -8,6 +8,7 @@
 #include "core/Macros.hpp"
 #include "core/Input.hpp"
 
+
 #include "graphics/OrthographicCamera.hpp"
 
 #include <SDL2/SDL.h>
@@ -15,6 +16,7 @@
 #include <stb_image.h>
 #include <algorithm>
 
+#include "graphics/ShaderManager.hpp"
 #include "voxel/VoxelData.hpp"
 #include "voxel/MarchingCubes.hpp"
 #include "graphics/VertexArray.hpp"
@@ -44,11 +46,14 @@ void MainScene::init()
 	std::string frag = read_file("data/shaders/Basic-frag.glsl");
 	std::string header = read_file("data/shaders/Shader_Header.glsl");
 	shader = new ShaderProgram(vert.c_str(), frag.c_str(), header.c_str());
+	//shader = ShaderManager::get_shader("data/shaders/Basic-vert.glsl", "data/shaders/Basic-frag.glsl");
 
 	// Voxel shader
 	vert = read_file("data/shaders/Voxel-vert.glsl");
 	frag = read_file("data/shaders/Voxel-frag.glsl");
+	//header = read_file("data/shaders/Shader_Header.glsl");
 	voxel_shader = new ShaderProgram(vert.c_str(), frag.c_str(), header.c_str());
+	//voxel_shader = ShaderManager::get_shader("data/shaders/Voxel-vert.glsl", "data/shaders/Voxel-frag.glsl");
 
 	tmp = Primitives::create_cube();
 
@@ -73,8 +78,10 @@ void MainScene::init()
 				len = sqrt(len);
 				float tmp = len / ((myvoxels->get_width()-1));
 				tmp = std::min(1.0f,std::max(0.0f,tmp));
+				tmp = 1.0f - tmp;
 				myvoxels->set_value_at_index(i,j,k, (unsigned char)(tmp*255));
 				
+				if( i % 4 == 0 || k % 4 == 0 ) myvoxels->set_value_at_index(i,j,k, 0);
 			}
 		}
 	}//*/
@@ -146,10 +153,8 @@ void MainScene::dispose()
 {
 	Scene::dispose();
 	tmp->dispose();
-	mat->dispose();
 	delete tmp;
 	delete mat;
-	delete shader;
 	delete cam;
 }
 

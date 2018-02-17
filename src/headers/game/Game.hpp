@@ -8,6 +8,7 @@
 
 class Camera;
 class ShaderProgram;
+class GLTexture;
 
 class Game
 {
@@ -26,12 +27,13 @@ protected:
 	static bool				running;
 	SceneManager			scene_manager;
 	GameWindow*				game_window;
-	Input*					input;
+	Input					input;
 	MainScene*				main_scene;
 
 
 	Camera*					uicam;
 	ShaderProgram*			imgui_shader;
+	GLTexture*				myTex;
 
 };
 

@@ -42,6 +42,14 @@
 			"problemMatcher": [
 				"$gcc"
 			]
+		},
+		{
+			"label": "Run Game",
+			"type": "shell",
+			"command": "cd bin && build.exe",
+			"problemMatcher": [
+				"$gcc"
+			]
 		}
 	]
 }

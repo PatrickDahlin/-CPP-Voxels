@@ -14,13 +14,13 @@ GameWindow::~GameWindow()
 
 void GameWindow::destroy()
 {
-	if(context)
-		SDL_GL_DeleteContext(context);
 	if(window)
+	{
+		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(window);
+	}
 
-	context = NULL;
-	window = NULL;
+	window = nullptr;
 }
 
 void GameWindow::set_window_flags(SDL_WindowFlags flags)

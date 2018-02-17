@@ -1,17 +1,18 @@
 #ifndef _SHADERPGROGRAM_HPP_
 #define _SHADERPGROGRAM_HPP_
 
+#include "core/Disposable.hpp"
 #include <string>
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 
 
 
-class ShaderProgram
+class ShaderProgram : public Disposable
 {
 public:
 	ShaderProgram(std::string vert_src, std::string frag_src, std::string header);
-	~ShaderProgram();
+	virtual ~ShaderProgram();
 
 	void use();
 
@@ -22,6 +23,8 @@ public:
 	void set_bool(const std::string& name, bool val) const;
 	void set_int(const std::string& name, int val) const;
 	void set_float(const std::string& name, float val) const;
+
+	void dispose() override;
 
 protected:
 

@@ -89,7 +89,7 @@ void DebugCamera::update(const float delta)
 		if(gpad_h < 0.0f)
 			gpad_h = (gpad_h + 0.2f) / 0.8f;
 		else
-			gpad_h = (gpad_h + 0.2f) / 0.8f;
+			gpad_h = (gpad_h - 0.2f) / 0.8f;
 	}
 
 	

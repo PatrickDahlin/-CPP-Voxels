@@ -25,7 +25,14 @@ TODO:
 
 	Heaps for prioritized jobs
 
+	ResourceManager handling
+		Texture-loading
+		Shader-loading
+		3d-model-loading
+		soundfile-loading
+
 	Bugs:
+		- ShaderManager and TextureManager have some resource problems, segfaults are happening...
 		- DebugCamera freaks out at low framerates - Fixed
 
 	TODO:
@@ -93,11 +100,13 @@ int main(int argc, char* argv[])
 	// Flip images right side up since opengl has y axis flipped
 	stbi_set_flip_vertically_on_load(true);
 	
-	Game game(window);
+	Game* game = new Game(window);
 
-	game.load();
-	game.run();
+	game->load();
+	game->run();
 	
+	delete game;
+
 	window->destroy();
 	delete window;
 

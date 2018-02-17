@@ -2,19 +2,19 @@
 #define _GLTEXTURE_HPP_
 
 #include <GL/glew.h>
-
+#include "core/Disposable.hpp"
 
 enum class ColorFormat { RGB, RGBA };
 
-class GLTexture 
+class GLTexture : public Disposable
 {
 public:
     GLTexture(ColorFormat format, unsigned char* data, int width, int height);
-    ~GLTexture();
+    virtual ~GLTexture();
 
     void bind();
 
-    void dispose();
+    void dispose() override;
 
 protected:
 

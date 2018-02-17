@@ -27,29 +27,16 @@ Input::Input(GameWindow* window) : key_map(),
 {
 	window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
 	
-	SDL_GetError();
-	coutln("Looking for a gamepad");
-	// Look for a gamepad
-	for(int i = 0; i < SDL_NumJoysticks(); ++i)
-	{
-		if(SDL_IsGameController(i)){
-			controller = SDL_GameControllerOpen(i);
-			coutln(SDL_GetError());
-			if(controller != nullptr) break;
-		}
-	}
-	
-	if(controller != nullptr){
-		coutln(SDL_GameControllerName(controller));
-		cout("controller ptr: ");
-		coutln(controller);
-	}else{
-		coutln("No controller connected");
-	}
 }
 
 Input::~Input()
 {
+	//if(controller != nullptr)
+	//	SDL_GameControllerClose(controller);
+	
+	controller = nullptr;
+	window = nullptr;
+	enabled = false;
 }
 
 void Input::set_lock_mouse(bool lock)
@@ -262,6 +249,7 @@ void Input::poll_events()
 		case SDL_JOYDEVICEADDED:
 			coutln("Controller add event");
 			if(controller != nullptr) break;
+			coutln("Has no controller connected so we aquire one");
 			// Look for first avaliable game controller
 			for(int i = 0; i < SDL_NumJoysticks(); ++i)
 			{
@@ -274,6 +262,7 @@ void Input::poll_events()
 		case SDL_JOYDEVICEREMOVED:
 			coutln("Controller remove event");
 			if(controller == nullptr) break;
+			coutln("Has no controller connected so we aquire one");
 			// If we disconnected this joystick, find another one if avaliable
 			controller = nullptr;
 			for(int i = 0; i < SDL_NumJoysticks(); ++i)

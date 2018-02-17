@@ -19,8 +19,6 @@ public:
 	Color tint;
 	GLTexture* texture;
 
-	void dispose() { delete texture; }
-
 };
 
 #endif

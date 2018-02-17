@@ -3,7 +3,7 @@ SFLAGS+= -I.
 SFLAGS = -I./src
 SFLAGS+= -I./src/headers
 SFLAGS+= -I./include
-SFLAGS+= -std=c++11 -Wall -Og -ggdb3
+SFLAGS+= -std=c++11 -Wall -Wextra -Werror=return-type -Og -ggdb3
 LFLAGS = -Og -ggdb3
 LFLAGS+= -L./lib
 LFLAGS+= -lglew32 -lopengl32 -lmingw32 -lsdl2main -lsdl2

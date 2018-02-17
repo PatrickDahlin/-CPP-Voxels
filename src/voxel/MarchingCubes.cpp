@@ -25,14 +25,14 @@ MCMesh* MarchingCubes::Evaluate(VoxelData* data, byte iso)
 				#define d(x,y,z) data->get_value_at_index(x,y,z)
 
 				unsigned char cubeindex = 0;
-				if (data->get_value_at_index(i,j,k+1) < iso) 	cubeindex |= 1; // 0
-				if (data->get_value_at_index(i+1,j,k+1) < iso) 	cubeindex |= 2; // 1
-				if (data->get_value_at_index(i+1,j,k) < iso) 	cubeindex |= 4; // 2
-				if (data->get_value_at_index(i,j,k) < iso) 		cubeindex |= 8; // 3
-				if (data->get_value_at_index(i,j+1,k+1) < iso) 	cubeindex |= 16; //4
-				if (data->get_value_at_index(i+1,j+1,k+1) < iso)cubeindex |= 32; //5
-				if (data->get_value_at_index(i+1,j+1,k) < iso)	cubeindex |= 64; //6
-				if (data->get_value_at_index(i,j+1,k) < iso) 	cubeindex |= 128;//7
+				if (data->get_value_at_index(i,j,k+1) > iso) 	cubeindex |= 1; // 0
+				if (data->get_value_at_index(i+1,j,k+1) > iso) 	cubeindex |= 2; // 1
+				if (data->get_value_at_index(i+1,j,k) > iso) 	cubeindex |= 4; // 2
+				if (data->get_value_at_index(i,j,k) > iso) 		cubeindex |= 8; // 3
+				if (data->get_value_at_index(i,j+1,k+1) > iso) 	cubeindex |= 16; //4
+				if (data->get_value_at_index(i+1,j+1,k+1) > iso)cubeindex |= 32; //5
+				if (data->get_value_at_index(i+1,j+1,k) > iso)	cubeindex |= 64; //6
+				if (data->get_value_at_index(i,j+1,k) > iso) 	cubeindex |= 128;//7
 
 				if(edgeTable[cubeindex] == 0)
 					continue; // No geometry in this cube, either completely within or outside surface

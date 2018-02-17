@@ -27,15 +27,14 @@ static void ImGui_SetClipboardText(void*, const char* text)
 
 Game::Game(GameWindow* window) :
 game_window(window),
-input(nullptr),
+input(window),
 main_scene(nullptr)
 {
 	printf("Setting up Game\n");
 	uicam = new OrthographicCamera(0, window->get_width(), 0, window->get_height());
 
-	input = new Input(game_window);
-	input->show_cursor(false);
-	input->set_lock_mouse(true);
+	input.show_cursor(false);
+	input.set_lock_mouse(true);
 	
 	ImGuiIO& io = ImGui::GetIO();
 	io.DisplaySize = ImVec2(window->get_width(), window->get_height());
@@ -66,9 +65,8 @@ main_scene(nullptr)
 	unsigned char* pixels;
 	int width, height;
 	io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-	GLTexture* myTex = new GLTexture(ColorFormat::RGBA, pixels, width, height);
+	myTex = new GLTexture(ColorFormat::RGBA, pixels, width, height);
 	io.Fonts->TexID = (void*)myTex;
-	// TODO clean up this texture
 
 	std::string vert = read_file("data/shaders/ImGui-vert.glsl");
 	std::string frag = read_file("data/shaders/ImGui-frag.glsl");
@@ -79,16 +77,21 @@ main_scene(nullptr)
 }
 
 Game::~Game()
-{}
+{
+	delete uicam;
+	delete myTex;
+	delete imgui_shader;
+}
 
 void Game::load()
 {
-	main_scene = new MainScene(input, &scene_manager);
+	// No need to delete this scene, it's deleted in scenemanager
+	main_scene = new MainScene(&input, &scene_manager);
 	scene_manager.switch_to_scene(main_scene);
 
 	glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-		glDisable(GL_SCISSOR_TEST);
+	glDisable(GL_SCISSOR_TEST);
 	glViewport(0,0,game_window->get_width(),game_window->get_height());
 }
 
@@ -106,7 +109,7 @@ void Game::run()
 		last_frame = Clock::now();
 		
 		
-		input->poll_events();
+		input.poll_events();
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -118,15 +121,15 @@ void Game::run()
 		ImGui::NewFrame();
 
 		// @Temporary
-		if(input->get_key(SDLK_ESCAPE) == KeyState::PRESSED)
+		if(input.get_key(SDLK_ESCAPE) == KeyState::PRESSED)
 			Game::quit();
 
-		if(input->get_key(SDLK_l) == KeyState::PRESSED)
+		if(input.get_key(SDLK_l) == KeyState::PRESSED)
 		{
 			static bool locked = true;
 			locked = !locked;
-			input->set_lock_mouse(locked);
-			input->show_cursor(!locked);
+			input.set_lock_mouse(locked);
+			input.show_cursor(!locked);
 		}
 		
 		
@@ -136,12 +139,12 @@ void Game::run()
 			if(!imgui_captured)
 			{
 				imgui_captured = true;
-				input->set_input_enabled(false);
+				input.set_input_enabled(false);
 			}
 		}
-		else if(!input->is_enabled() && imgui_captured)
+		else if(!input.is_enabled() && imgui_captured)
 		{
-			input->set_input_enabled(true);
+			input.set_input_enabled(true);
 			imgui_captured = false;
 		}
 		

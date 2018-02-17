@@ -8,7 +8,7 @@ GLTexture* load_image(const char* path, ColorFormat format)
 	width = height = 0;
 	channelnr = 0;
 	unsigned char* data = stbi_load(path, &width, &height, &channelnr, 0);
-	GLTexture* myTex = new GLTexture(ColorFormat::RGB, data, width, height); //@TODO
+	GLTexture* myTex = new GLTexture(format, data, width, height);
 	stbi_image_free(data);
 	return myTex;
 }

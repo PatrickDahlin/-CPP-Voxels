@@ -17,6 +17,10 @@ mat4_model_loc(0)
 
 ShaderProgram::~ShaderProgram()
 {
+}
+
+void ShaderProgram::dispose()
+{
 	if(shader_program)
 	{
 		glDeleteProgram(shader_program);
