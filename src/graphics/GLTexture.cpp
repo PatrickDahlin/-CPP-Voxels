@@ -33,6 +33,11 @@ void GLTexture::bind()
     glBindTexture(GL_TEXTURE_2D, tex_id);
 }
 
+ColorFormat GLTexture::get_format() const
+{
+	return color_format;
+}
+
 void GLTexture::dispose()
 {
 	glDeleteTextures(1, &tex_id);

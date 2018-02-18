@@ -1,10 +1,14 @@
 #include "core/SceneManager.hpp"
 #include "core/Scene.hpp"
+#include "graphics/ShaderManager.hpp"
+#include "graphics/TextureManager.hpp"
 
 SceneManager::SceneManager() : 
 cur_scene(nullptr),
 loaded_scenes()
 {
+	shader_manager = new ShaderManager();
+	texture_manager = new TextureManager();
 }
 
 SceneManager::~SceneManager()
@@ -29,7 +33,7 @@ void SceneManager::switch_to_scene(Scene* s)
 	}
 
 	cur_scene = s;
-	cur_scene->load();
+	cur_scene->load(shader_manager, texture_manager);
 
 	// Initialize and add to list only if it hasn't been initialized before
 	if(!is_init)
@@ -62,4 +66,6 @@ void SceneManager::dispose()
 	}
 	
 	cur_scene = nullptr;
+	shader_manager->dispose();
+	texture_manager->dispose();
 }

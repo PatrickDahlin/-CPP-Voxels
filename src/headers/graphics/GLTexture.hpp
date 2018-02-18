@@ -16,6 +16,8 @@ public:
 
     void dispose() override;
 
+	ColorFormat get_format() const;
+
 protected:
 
     void upload_data(unsigned char* data);

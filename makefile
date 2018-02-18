@@ -13,7 +13,7 @@ OBJ=$(addprefix $(OBJDIR)/,$(SRC:%.cpp=%.o))
 
 build:
 	@echo -- Starting build --
-	@mingw32-make link -j1 --silent
+	@mingw32-make link -j8 --silent
 
 link: $(OBJ)
 	@echo -- Linking --

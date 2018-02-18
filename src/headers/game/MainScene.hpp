@@ -3,9 +3,15 @@
 
 #include "core/Scene.hpp"
 
+
+// Required for Scene
+class ShaderManager;
+class TextureManager;
 class RenderPass;
 class Input;
 class SceneManager;
+// ------------------
+
 class Model;
 class DebugCamera;
 class ShaderProgram;
@@ -24,7 +30,7 @@ public:
 
 	void init() override;
 
-    void load() override;
+    void load(ShaderManager* sha_man, TextureManager* tex_man) override;
 
 	void unload() override;
 

@@ -1,22 +1,21 @@
 #include "game/MainScene.hpp"
-#include "graphics/Primitives.hpp"
-#include "graphics/RenderPass.hpp"
-#include "graphics/ShaderProgram.hpp"
-#include "game/DebugCamera.hpp"
-#include "core/Files.hpp"
 #include "graphics/Material.hpp"
 #include "core/Macros.hpp"
 #include "core/Input.hpp"
-
+#include "graphics/RenderPass.hpp"
+#include "graphics/ShaderManager.hpp"
+#include "graphics/TextureManager.hpp"
 
 #include "graphics/OrthographicCamera.hpp"
+#include "graphics/ShaderProgram.hpp"
+#include "game/DebugCamera.hpp"
+#include "graphics/Primitives.hpp"
 
 #include <SDL2/SDL.h>
 #include <imgui/imgui.h>
 #include <stb_image.h>
 #include <algorithm>
 
-#include "graphics/ShaderManager.hpp"
 #include "voxel/VoxelData.hpp"
 #include "voxel/MarchingCubes.hpp"
 #include "graphics/VertexArray.hpp"
@@ -34,6 +33,18 @@ mat(nullptr)
 MainScene::~MainScene()
 {}
 
+void MainScene::load(ShaderManager* sha_man, TextureManager* tex_man)
+{
+	// Voxel shader
+	voxel_shader = sha_man->get_shader("data/shaders/Voxel-vert.glsl", "data/shaders/Voxel-frag.glsl");
+
+	// Basic shader
+	shader = sha_man->get_shader("data/shaders/Basic-vert.glsl", "data/shaders/Basic-frag.glsl");
+
+	mat = new Material();
+	mat->texture = tex_man->get_texture("data/textures/grass.jpg", ColorFormat::RGB);
+}
+
 void MainScene::init()
 {
 	cam = new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
@@ -41,25 +52,10 @@ void MainScene::init()
 	cam->set_fly_speed(3.0f);
 	cam->set_mouse_sensitivity(1.5f);
 
-	// Basic shader
-	std::string vert = read_file("data/shaders/Basic-vert.glsl");
-	std::string frag = read_file("data/shaders/Basic-frag.glsl");
-	std::string header = read_file("data/shaders/Shader_Header.glsl");
-	shader = new ShaderProgram(vert.c_str(), frag.c_str(), header.c_str());
-	//shader = ShaderManager::get_shader("data/shaders/Basic-vert.glsl", "data/shaders/Basic-frag.glsl");
-
-	// Voxel shader
-	vert = read_file("data/shaders/Voxel-vert.glsl");
-	frag = read_file("data/shaders/Voxel-frag.glsl");
-	//header = read_file("data/shaders/Shader_Header.glsl");
-	voxel_shader = new ShaderProgram(vert.c_str(), frag.c_str(), header.c_str());
-	//voxel_shader = ShaderManager::get_shader("data/shaders/Voxel-vert.glsl", "data/shaders/Voxel-frag.glsl");
-
+	
+	
 	tmp = Primitives::create_cube();
 
-	mat = new Material();
-	mat->texture = load_image("data/textures/grass.jpg");
-	
 	tmp->set_material(mat);
 
 	myvoxels = new VoxelData(32,32);
@@ -105,9 +101,6 @@ void MainScene::init()
 	delete myCubes;
 }
 
-void MainScene::load()
-{}
-
 void MainScene::unload()
 {}
 
@@ -126,6 +119,7 @@ void MainScene::update(const float delta)
 
 void MainScene::render(RenderPass* pass)
 {
+	assert(mat->texture);
 	static bool wire = false;
 	
 	ImGui::Begin("MainScene info");

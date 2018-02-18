@@ -12,12 +12,6 @@ public:
 
 	GLTexture* get_texture(std::string path, ColorFormat format);
 
-	static TextureManager* get_instance();
-
-private:
-
-	static TextureManager* instance;
-
 };
 
 #endif

@@ -92,7 +92,6 @@ void DebugCamera::update(const float delta)
 			gpad_h = (gpad_h - 0.2f) / 0.8f;
 	}
 
-	
 	gpad_v *= mouse_sensitivity * delta;
 	gpad_h *= mouse_sensitivity * delta;
 
@@ -124,7 +123,7 @@ void DebugCamera::update(const float delta)
 		if(gpad_r < 0.0f)
 			gpad_r = (gpad_r + 0.2f) / 0.8f;
 		else
-			gpad_r = (gpad_r + 0.2f) / 0.8f;
+			gpad_r = (gpad_r - 0.2f) / 0.8f;
 	}
 
 	translate(get_right() * gpad_r * fly_speed * delta * 2.0f);

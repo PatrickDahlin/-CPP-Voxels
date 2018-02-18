@@ -4,6 +4,8 @@
 class RenderPass;
 class Input;
 class SceneManager;
+class ShaderManager;
+class TextureManager;
 
 class Scene
 {
@@ -15,7 +17,7 @@ public:
 	// Effect: Initializes this scene
 	// Postcond: Scene is initialized
 
-	virtual void load() = 0;
+	virtual void load(ShaderManager* sha_man, TextureManager* tex_man) = 0;
 	// Effect: Loads resources and sets up scene for rendering & updating, can be called multiple times
 	// Postcond: All resources needed at initialization are loaded
 

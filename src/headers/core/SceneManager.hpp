@@ -9,6 +9,8 @@
 
 class Scene;
 class RenderPass;
+class ShaderManager;
+class TextureManager;
 
 class SceneManager {
 public:
@@ -35,6 +37,9 @@ private:
 
 	Scene*					cur_scene;
 	std::vector<Scene*>		loaded_scenes;
+
+	ShaderManager*			shader_manager;
+	TextureManager*			texture_manager;
 
 };
 
