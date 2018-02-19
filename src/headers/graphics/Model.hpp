@@ -7,6 +7,8 @@
 #include <vector>
 #include "core/Transform.hpp"
 
+#include <string>
+
 using namespace glm;
 using namespace std;
 class VertexArray;
@@ -15,7 +17,7 @@ class Material;
 class Model {
 public:
     Model();
-    ~Model();
+    virtual ~Model();
 
 	void set_vertices(vector<vec3> verts);
 	void set_normals(vector<vec3> norms);
@@ -26,7 +28,7 @@ public:
 
 	void draw();
 
-	void dispose();
+	virtual void dispose();
 
 	Material* get_material() const;
 
@@ -42,5 +44,7 @@ protected:
 	Material*		material;
 
 };
+
+extern Model* load_obj_from_file(std::string path);
 
 #endif

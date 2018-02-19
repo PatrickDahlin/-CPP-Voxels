@@ -18,6 +18,7 @@ class ShaderProgram;
 class Material;
 class GLTexture;
 class Camera;
+class Skybox;
 
 class VoxelData;
 class VertexArray;
@@ -52,6 +53,8 @@ protected:
 	VoxelData*		myvoxels;
 	Model*			voxel_model;
 	ShaderProgram*	voxel_shader;
+	Skybox*			skybox;
+	Model*			test_loaded_model;
 
 };
 

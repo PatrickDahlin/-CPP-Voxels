@@ -38,7 +38,7 @@ PerlinScene::~PerlinScene()
 	if(perlin_tex) delete perlin_tex;
 }
 
-int perlin_val(int x, int y)
+int perlin_val(float x, float y)
 {
 	float scale = 0.04f;
 
@@ -123,8 +123,8 @@ void PerlinScene::render(RenderPass* pass)
 		{
 			int index = i * 3 + j * height * 3;
 
-			int x = i + (int)(Time::time_since_startup_sec()* 100.0f);
-			int y = j;
+			float x = i + (Time::time_since_startup_sec()* 100.0f);
+			float y = j;
 
 			int tex_val = perlin_val(x,y);
 

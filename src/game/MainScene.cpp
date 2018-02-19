@@ -22,12 +22,14 @@
 #include "graphics/VertexArray.hpp"
 #include "graphics/GLBuffer.hpp"
 #include "core/Time.hpp"
+#include "game/Skybox.hpp"
 
 
 MainScene::MainScene(Input* input, SceneManager* scene_manager) : Scene(input, scene_manager),
 cam(nullptr),
 shader(nullptr),
-mat(nullptr)
+mat(nullptr),
+test_loaded_model(nullptr)
 {
 }
 
@@ -43,7 +45,12 @@ void MainScene::load(ShaderManager* sha_man, TextureManager* tex_man)
 	shader = sha_man->get_shader("data/shaders/Basic-vert.glsl", "data/shaders/Basic-frag.glsl");
 
 	mat = new Material();
-	mat->texture = tex_man->get_texture("data/textures/nikke.jpg", ColorFormat::RGB);
+	mat->texture = tex_man->get_texture("data/textures/grass.jpg", ColorFormat::RGB);
+
+	//skybox = new Skybox();
+	//skybox->set_skybox("data/textures/grass.jpg",tex_man);
+	test_loaded_model = load_obj_from_file("data/models/Seeker_3.obj");
+	assert(test_loaded_model);
 }
 
 void MainScene::init()
@@ -59,7 +66,7 @@ void MainScene::init()
 
 	tmp->set_material(mat);
 
-	myvoxels = new VoxelData(16,16);
+	myvoxels = new VoxelData(32,32);
 	
 	
 	for(int i=0; i < myvoxels->get_width(); i++)
@@ -102,6 +109,7 @@ void MainScene::init()
 	voxel_model->set_material(mat);
 	voxel_model->transform.translate(-5,0,0);
 
+	
 	delete mesh; // You need to clean up mesh after it's created
 	delete myCubes;
 }
@@ -124,7 +132,8 @@ void MainScene::update(const float delta)
 
 void MainScene::render(RenderPass* pass)
 {
-	
+	voxel_model->dispose();
+	delete voxel_model;
 	MarchingCubes* myCubes = new MarchingCubes();
 	MCMesh* mesh = myCubes->Evaluate(myvoxels, 127);
 
@@ -135,9 +144,9 @@ void MainScene::render(RenderPass* pass)
 			for(int k=0; k < myvoxels->get_width(); k++)
 			{
 				//glm::vec3 diff = glm::vec3((float)i,(float)j,(float)k) - glm::vec3((myvoxels->get_width()-1)*0.5f, (myvoxels->get_height()-1)*0.5f, (myvoxels->get_width()-1)*0.5f);
-				int time = (int)((float)Time::time_since_startup_sec() * 10.0f);
+				float time = ((float)Time::time_since_startup_sec() * 10.0f);
 				//int time = 0;
-				int x = i + time;
+				float x = i + time;
 				//float len = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
 				//len = sqrt(len);
 				//float tmp = len / ((myvoxels->get_width()-1));
@@ -154,8 +163,13 @@ void MainScene::render(RenderPass* pass)
 		}
 	}//*/
 	
+	voxel_model = new Model();
 	voxel_model->set_vertices(mesh->vertices);
-	
+	voxel_model->set_texcoords(mesh->texcoords);
+	voxel_model->set_normals(mesh->normals);	
+	voxel_model->set_material(mat);
+	voxel_model->transform.translate(-5,0,0);
+
 	delete mesh;
 	delete myCubes;
 
@@ -178,6 +192,8 @@ void MainScene::render(RenderPass* pass)
 
 	pass->draw_model(voxel_model, voxel_shader, cam);
 
+	if(test_loaded_model)
+		pass->draw_model(test_loaded_model, shader, cam);
 
 	//bool val = true;
 	//ImGui::ShowDemoWindow(&val);
