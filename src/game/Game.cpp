@@ -89,8 +89,8 @@ void Game::load()
 {
 	// No need to delete this scene, it's deleted in scenemanager
 	//main_scene = new MainScene(&input, &scene_manager);
-	//scene_manager.switch_to_scene(main_scene);
-	scene_manager.switch_to_scene(new PerlinScene(&input, &scene_manager));
+	scene_manager.switch_to_scene(new MainScene(&input, &scene_manager));
+	//scene_manager.switch_to_scene(new PerlinScene(&input, &scene_manager));
 
 	glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
 	glEnable(GL_DEPTH_TEST);

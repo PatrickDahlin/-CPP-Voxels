@@ -26,8 +26,8 @@ TODO:
 	Heaps for prioritized jobs
 
 	ResourceManager handling
-		Texture-loading
-		Shader-loading
+		[Done] Texture-loading
+		[Done] Shader-loading
 		3d-model-loading
 		soundfile-loading
 
@@ -37,19 +37,18 @@ TODO:
 
 	TODO:
 		- Octree data-structure for later voxel use (Later optimization)
-		- Perlin noise implementation
-		- Marching cubes implementation
 		- (M) Actor class []
 		- (M) Text rendering []
 		- (M) Uniform buffer objects []
 		- (M) Material struct uploading to shader []
 		- (L) Debug class for collecting debug info []
 		- (H) Multi-camera rendering (Renderpass->RenderBatch) []
-		- (M) OpenAL for sound []
+		- (L) OpenAL for sound []
 		- (L) Smoothed Input axes (Think mouse/controller axis in Unity)
 
-
 	Done:
+		- Marching cubes implementation
+		- Perlin noise implementation
 		- Wireframe mode for rendering
 		- (H) Element buffer for vertexarray [x] @Untested @TODO
 		- (M) Camera abstract class with Orthographic and Perspective camera subclass [x]

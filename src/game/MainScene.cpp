@@ -16,11 +16,12 @@
 #include <stb_image.h>
 #include <algorithm>
 
+#include "core/PerlinNoise.hpp"
 #include "voxel/VoxelData.hpp"
 #include "voxel/MarchingCubes.hpp"
 #include "graphics/VertexArray.hpp"
 #include "graphics/GLBuffer.hpp"
-
+#include "core/Time.hpp"
 
 
 MainScene::MainScene(Input* input, SceneManager* scene_manager) : Scene(input, scene_manager),
@@ -42,7 +43,7 @@ void MainScene::load(ShaderManager* sha_man, TextureManager* tex_man)
 	shader = sha_man->get_shader("data/shaders/Basic-vert.glsl", "data/shaders/Basic-frag.glsl");
 
 	mat = new Material();
-	mat->texture = tex_man->get_texture("data/textures/grass.jpg", ColorFormat::RGB);
+	mat->texture = tex_man->get_texture("data/textures/nikke.jpg", ColorFormat::RGB);
 }
 
 void MainScene::init()
@@ -58,7 +59,7 @@ void MainScene::init()
 
 	tmp->set_material(mat);
 
-	myvoxels = new VoxelData(32,32);
+	myvoxels = new VoxelData(16,16);
 	
 	
 	for(int i=0; i < myvoxels->get_width(); i++)
@@ -67,17 +68,21 @@ void MainScene::init()
 		{
 			for(int k=0; k < myvoxels->get_width(); k++)
 			{
-				glm::vec3 diff = glm::vec3((float)i,(float)j,(float)k) - glm::vec3((myvoxels->get_width()-1)*0.5f, (myvoxels->get_height()-1)*0.5f, (myvoxels->get_width()-1)*0.5f);
+				//glm::vec3 diff = glm::vec3((float)i,(float)j,(float)k) - glm::vec3((myvoxels->get_width()-1)*0.5f, (myvoxels->get_height()-1)*0.5f, (myvoxels->get_width()-1)*0.5f);
 				
 				
-				float len = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
-				len = sqrt(len);
-				float tmp = len / ((myvoxels->get_width()-1));
-				tmp = std::min(1.0f,std::max(0.0f,tmp));
-				tmp = 1.0f - tmp;
+				//float len = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+				//len = sqrt(len);
+				//float tmp = len / ((myvoxels->get_width()-1));
+				float tmp = fperlin_fractal(i * 0.13f,j * 0.13f,k * 0.13f, 2, 0.5f);
+				tmp = std::min(1.0f,std::max(-1.0f,tmp));
+				tmp = (tmp + 1.0f) / 2.0f;
 				myvoxels->set_value_at_index(i,j,k, (unsigned char)(tmp*255));
 				
-				if( i % 4 == 0 || k % 4 == 0 ) myvoxels->set_value_at_index(i,j,k, 0);
+				if( i == 0 || i == myvoxels->get_width()-1 ||
+					j == 0 || j == myvoxels->get_height()-1 ||
+					k == 0 || k == myvoxels->get_width()-1)
+					myvoxels->set_value_at_index(i,j,k, 0);
 			}
 		}
 	}//*/
@@ -119,6 +124,42 @@ void MainScene::update(const float delta)
 
 void MainScene::render(RenderPass* pass)
 {
+	
+	MarchingCubes* myCubes = new MarchingCubes();
+	MCMesh* mesh = myCubes->Evaluate(myvoxels, 127);
+
+	for(int i=0; i < myvoxels->get_width(); i++)
+	{
+		for(int j=0; j < myvoxels->get_height(); j++)
+		{
+			for(int k=0; k < myvoxels->get_width(); k++)
+			{
+				//glm::vec3 diff = glm::vec3((float)i,(float)j,(float)k) - glm::vec3((myvoxels->get_width()-1)*0.5f, (myvoxels->get_height()-1)*0.5f, (myvoxels->get_width()-1)*0.5f);
+				int time = (int)((float)Time::time_since_startup_sec() * 10.0f);
+				//int time = 0;
+				int x = i + time;
+				//float len = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+				//len = sqrt(len);
+				//float tmp = len / ((myvoxels->get_width()-1));
+				float tmp = fperlin_fractal(x * 0.13f,j * 0.13f,k * 0.13f, 2, 0.5f);
+				tmp = std::min(1.0f,std::max(-1.0f,tmp));
+				tmp = (tmp + 1.0f) / 2.0f;
+				myvoxels->set_value_at_index(i,j,k, (unsigned char)(tmp*255));
+				
+				if( i == 0 || i == myvoxels->get_width()-1 ||
+					j == 0 || j == myvoxels->get_height()-1 ||
+					k == 0 || k == myvoxels->get_width()-1)
+					myvoxels->set_value_at_index(i,j,k, 0);
+			}
+		}
+	}//*/
+	
+	voxel_model->set_vertices(mesh->vertices);
+	
+	delete mesh;
+	delete myCubes;
+
+
 	assert(mat->texture);
 	static bool wire = false;
 	

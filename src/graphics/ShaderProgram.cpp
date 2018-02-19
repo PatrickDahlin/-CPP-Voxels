@@ -7,10 +7,10 @@
 #include <glm/gtc/type_ptr.hpp>
 
 ShaderProgram::ShaderProgram(std::string vert_src, std::string frag_src, std::string header) :
-shader_program(0),
-mat4_proj_loc(0),
-mat4_view_loc(0),
-mat4_model_loc(0)
+shader_program(-1),
+mat4_proj_loc(-1),
+mat4_view_loc(-1),
+mat4_model_loc(-1)
 {
 	load_shaders(vert_src, frag_src, header);	
 }
@@ -121,11 +121,16 @@ void ShaderProgram::load_shaders(std::string v_src, std::string f_src, std::stri
 
 void ShaderProgram::load_uniform_locations()
 {
-
+	assert(shader_program != -1);
+	
 	mat4_proj_loc  = glGetUniformLocation(shader_program, SHADER_PROJECTIONMAT_UNIFORM_NAME);
 	mat4_view_loc  = glGetUniformLocation(shader_program, SHADER_VIEWMAT_UNIFORM_NAME);
 	mat4_model_loc = glGetUniformLocation(shader_program, SHADER_MODELMAT_UNIFORM_NAME);
 	
+	assert(mat4_proj_loc != -1);
+	assert(mat4_view_loc != -1);
+	assert(mat4_model_loc != -1);
+
 	cout("proj loc: ");
 	cout(mat4_proj_loc);
 	cout("\nview loc: ");
@@ -139,36 +144,43 @@ void ShaderProgram::load_uniform_locations()
 
 void ShaderProgram::upload_projection(glm::mat4 proj)
 {
+	assert(shader_program != -1);
 	glUniformMatrix4fv(mat4_proj_loc, 1, GL_FALSE, glm::value_ptr(proj));
 }
 
 void ShaderProgram::upload_view(glm::mat4 view)
 {
+	assert(shader_program != -1);
 	glUniformMatrix4fv(mat4_view_loc, 1, GL_FALSE, glm::value_ptr(view));
 }
 
 void ShaderProgram::upload_model(glm::mat4 model)
 {
+	assert(shader_program != -1);
 	glUniformMatrix4fv(mat4_model_loc, 1, GL_FALSE, glm::value_ptr(model));
 }
 
 void ShaderProgram::use()
 {
+	assert(shader_program != -1);
 	glUseProgram(shader_program);
 }
 
 void ShaderProgram::set_bool(const std::string& name, bool val) const
 {
+	assert(shader_program != -1);
 	glUniform1i(glGetUniformLocation(shader_program, name.c_str()), (int)val );
 }
 
 void ShaderProgram::set_int(const std::string& name, int val) const
 {
+	assert(shader_program != -1);
 	glUniform1i(glGetUniformLocation(shader_program, name.c_str()), val);
 }
 
 void ShaderProgram::set_float(const std::string& name, float val) const
 {
+	assert(shader_program != -1);
 	glUniform1f(glGetUniformLocation(shader_program, name.c_str()), val);
 }
 
