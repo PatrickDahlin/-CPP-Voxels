@@ -32,8 +32,8 @@ TODO:
 		soundfile-loading
 
 	Bugs:
-		- ShaderManager and TextureManager have some resource problems, segfaults are happening...
-		- DebugCamera freaks out at low framerates - Fixed
+		- [Fixed] ShaderManager and TextureManager have some resource problems, segfaults are happening...
+		- [Fixed] DebugCamera freaks out at low framerates
 
 	TODO:
 		- Octree data-structure for later voxel use (Later optimization)

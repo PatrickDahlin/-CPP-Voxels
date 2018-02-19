@@ -13,6 +13,8 @@
 #include <imgui/imgui.h>
 #include <iostream>
 
+#include "game/PerlinScene.hpp"
+
 bool 			Game::running = true;
 
 static const char* ImGui_GetClipboardText(void*)
@@ -86,8 +88,9 @@ Game::~Game()
 void Game::load()
 {
 	// No need to delete this scene, it's deleted in scenemanager
-	main_scene = new MainScene(&input, &scene_manager);
-	scene_manager.switch_to_scene(main_scene);
+	//main_scene = new MainScene(&input, &scene_manager);
+	//scene_manager.switch_to_scene(main_scene);
+	scene_manager.switch_to_scene(new PerlinScene(&input, &scene_manager));
 
 	glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -166,6 +169,7 @@ void Game::run()
 		//
 		static float target_fps = 60.0f;
 		ImGui::Begin("Game info");
+		ImGui::Text("FPS: %.2f", (1.0f / delta_time));
 		ImGui::Text("Deltatime: %.4f",delta_time);
 		ImGui::Text("Target FPS: %.1f",target_fps);
 		ImGui::SliderFloat("",&target_fps, 10.0f, 1000.0f, "%.1f");
