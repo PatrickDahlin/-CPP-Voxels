@@ -61,3 +61,27 @@ void Transform::set_scale(float x, float y, float z)
 	model_scale = glm::vec3(x, y, z);
 	needs_mat_update = true;
 }
+
+void Transform::set_position(glm::vec3 pos)
+{
+	position = pos;
+	needs_mat_update = true;
+}
+
+void Transform::set_rotation(glm::vec3 rot)
+{
+	euler_angles = rot;
+	needs_mat_update = true;
+}
+
+void Transform::set_scale(glm::vec3 scale)
+{
+	model_scale = scale;
+	needs_mat_update = true;
+}
+
+void Transform::set_uniform_scale(float scale)
+{
+	model_scale = glm::vec3(scale);
+	needs_mat_update = true;
+}

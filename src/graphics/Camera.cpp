@@ -70,6 +70,11 @@ glm::mat4 Camera::get_view()
 	return view_mat;
 }
 
+glm::vec3 Camera::get_position()
+{
+	return position;
+}
+
 void Camera::translate(float x, float y, float z)
 {
 	position += glm::vec3(x,y,z);

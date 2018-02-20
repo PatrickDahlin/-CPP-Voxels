@@ -22,7 +22,6 @@
 #include "graphics/VertexArray.hpp"
 #include "graphics/GLBuffer.hpp"
 #include "core/Time.hpp"
-#include "game/Skybox.hpp"
 
 
 MainScene::MainScene(Input* input, SceneManager* scene_manager) : Scene(input, scene_manager),
@@ -47,9 +46,15 @@ void MainScene::load(ShaderManager* sha_man, TextureManager* tex_man)
 	mat = new Material();
 	mat->texture = tex_man->get_texture("data/textures/grass.jpg", ColorFormat::RGB);
 
-	//skybox = new Skybox();
-	//skybox->set_skybox("data/textures/grass.jpg",tex_man);
+
+	skybox_shader = sha_man->get_shader("data/shaders/Skybox-vert.glsl","data/shaders/Skybox-frag.glsl");
+	skybox = load_obj_from_file("data/models/cubemapped_cube.obj");
+	skybox->get_material()->texture = tex_man->get_texture("data/textures/Skybox.png", ColorFormat::RGBA);
+	skybox->transform.scale(100.0f,100.0f,100.0f);
+
 	test_loaded_model = load_obj_from_file("data/models/Seeker_3.obj");
+	delete test_loaded_model->get_material();
+	test_loaded_model->set_material(mat);
 	assert(test_loaded_model);
 }
 
@@ -187,6 +192,8 @@ void MainScene::render(RenderPass* pass)
 	}
 	ImGui::End();
 
+
+	pass->draw_model(skybox, skybox_shader, cam);
 
 	pass->draw_model(tmp, shader, cam);
 

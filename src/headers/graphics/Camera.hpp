@@ -19,6 +19,7 @@ public:
 	void set_rotation(float x, float y, float z);
 	void set_rotation(glm::vec3 vec);
 
+	glm::vec3 get_position();
 	glm::mat4 get_projection();
 	glm::mat4 get_view();
 

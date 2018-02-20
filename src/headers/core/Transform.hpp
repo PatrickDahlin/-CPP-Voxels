@@ -17,8 +17,12 @@ public:
 	void scale(float x, float y, float z);
 
 	void set_position(float x, float y, float z);
+	void set_position(glm::vec3 pos);
 	void set_rotation(float x, float y, float z);
+	void set_rotation(glm::vec3 rot);
 	void set_scale(float x, float y, float z);
+	void set_scale(glm::vec3 scale);
+	void set_uniform_scale(float scale);
 
 private:
 	bool needs_mat_update = true;
