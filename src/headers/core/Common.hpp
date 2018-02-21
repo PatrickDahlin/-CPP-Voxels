@@ -2,7 +2,7 @@
 #define _COMMON_HPP_
 
 #include <cstdint>
-
+	
 typedef std::int64_t		s64;
 typedef std::uint64_t		u64;
 typedef std::int32_t 		s32;

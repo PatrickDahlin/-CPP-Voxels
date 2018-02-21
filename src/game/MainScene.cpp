@@ -49,7 +49,7 @@ void MainScene::load(ShaderManager* sha_man, TextureManager* tex_man)
 
 	skybox_shader = sha_man->get_shader("data/shaders/Skybox-vert.glsl","data/shaders/Skybox-frag.glsl");
 	skybox = load_obj_from_file("data/models/cubemapped_cube.obj");
-	skybox->get_material()->texture = tex_man->get_texture("data/textures/Skybox.png", ColorFormat::RGBA);
+	skybox->get_material()->texture = tex_man->get_texture("data/textures/Skybox.png", ColorFormat::RGB);
 	skybox->transform.scale(100.0f,100.0f,100.0f);
 
 	test_loaded_model = load_obj_from_file("data/models/Seeker_3.obj");

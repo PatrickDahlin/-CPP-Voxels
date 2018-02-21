@@ -6,7 +6,7 @@
 MarchingCubes::MarchingCubes(){}
 MarchingCubes::~MarchingCubes(){}
 
-MCMesh* MarchingCubes::Evaluate(VoxelData* data, byte iso)
+MCMesh* MarchingCubes::Evaluate(VoxelData* data, unsigned char iso)
 {
 	int ntriang = 0;
 	vec3 current;
@@ -106,7 +106,7 @@ MCMesh* MarchingCubes::Evaluate(VoxelData* data, byte iso)
 	return mesh;
 }
 
-vec3 MarchingCubes::interp(byte iso, vec3 p1, vec3 p2, byte val1, byte val2)
+vec3 MarchingCubes::interp(unsigned char iso, vec3 p1, vec3 p2, unsigned char val1, unsigned char val2)
 {
 	if(abs(iso-val1) <= 0)
 		return p1;

@@ -7,7 +7,6 @@
 class VoxelData;
 class VertexArray;
 
-typedef unsigned char byte;
 
 struct MCMesh {
 	std::vector<vec3> vertices;
@@ -23,14 +22,14 @@ public:
 	~MarchingCubes();
 
 	// Evaluates voxeldata and puts it in MCMesh as geometry
-	MCMesh* Evaluate(VoxelData* data, byte iso);
+	MCMesh* Evaluate(VoxelData* data, unsigned char iso);
 	
 
 private:
 	
 
 	// Interpolates two vector3s depending on their values and an iso value
-	vec3 interp(byte iso, vec3 p1, vec3 p2, byte val1, byte val2);
+	vec3 interp(unsigned char iso, vec3 p1, vec3 p2, unsigned char val1, unsigned char val2);
 
 	vec3 p0 = vec3(0.0f, 0, 1.0f);
 	vec3 p1 = vec3(1.0f, 0, 1.0f);
