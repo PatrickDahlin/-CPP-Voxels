@@ -44,6 +44,22 @@
 			]
 		},
 		{
+			"label": "(Debug) Build - Single Thread",
+			"type": "shell",
+			"command": "@del bin\\build.exe & mingw32-make build-single-thread",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "(Debug) Clean Build - Single Thread",
+			"type": "shell",
+			"command": "@del bin\\build.exe & mingw32-make clean & mingw32-make build-single-thread",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
 			"label": "(Debug) Clean Build",
 			"type": "shell",
 			"command": "@del bin\\build.exe & mingw32-make clean & mingw32-make build",

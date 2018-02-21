@@ -4,12 +4,19 @@ SFLAGS = -I./src
 SFLAGS+= -I./src/headers
 SFLAGS+= -I./include
 SFLAGS+= -std=c++11 -Wall -Wextra -Werror=return-type -Og -ggdb3
+
+SFLAGS+= -Wno-unused-parameter
+
 LFLAGS = -Og -ggdb3
 LFLAGS+= -L./lib
 LFLAGS+= -lglew32 -lopengl32 -lmingw32 -lsdl2main -lsdl2
 SRC=$(wildcard *.cpp) $(wildcard */*.cpp) $(wildcard */*/*.cpp)
 OBJDIR=obj
 OBJ=$(addprefix $(OBJDIR)/,$(SRC:%.cpp=%.o))
+
+build-single-thread:
+	@echo -- Starting build --
+	@mingw32-make link -j1 --silent
 
 build:
 	@echo -- Starting build --

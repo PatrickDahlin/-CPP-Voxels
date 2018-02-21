@@ -83,7 +83,7 @@ Model* load_obj_from_file(std::string path)
 	std::vector<tinyobj::material_t> materials;
 	
 	std::string err;
-	bool ret = tinyobj::LoadObj(&attrib, 
+	tinyobj::LoadObj(&attrib, 
 								&shapes, 
 								&materials, 
 								&err, 
@@ -109,7 +109,7 @@ Model* load_obj_from_file(std::string path)
 		// Loop over faces(polygon)
 		size_t index_offset = 0;
 		for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
-			int fv = shapes[s].mesh.num_face_vertices[f];
+			size_t fv = (size_t)shapes[s].mesh.num_face_vertices[f];
 
 			// Loop over vertices in the face.
 			for (size_t v = 0; v < fv; v++) {
