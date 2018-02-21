@@ -1,5 +1,5 @@
 #include "voxel/VoxelData.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 
 VoxelData::VoxelData(int size) :
 width(size),

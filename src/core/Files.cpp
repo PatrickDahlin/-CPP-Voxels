@@ -1,5 +1,5 @@
 #include "core/Files.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 
 std::string read_file(const char* path)
 {

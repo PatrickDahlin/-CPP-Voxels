@@ -1,5 +1,5 @@
 #include "game/Game.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 #include "graphics/RenderPass.hpp"
 #include "graphics/GLTexture.hpp"
 #include "graphics/ShaderProgram.hpp"
@@ -208,6 +208,6 @@ void Game::run()
 void Game::quit()
 {
 	running = false;
-	coutln("Reqested quit");
+	printf("Reqested quit\n");
 }
 

@@ -1,12 +1,12 @@
 #include "core/Thread.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 #include <SDL2/SDL.h>
 
 static int run(void* data)
 {
 	Thread* t = (Thread*)data;
 	
-	cout("Hai from thread");
+	printf("Hai from thread\n");
 
 	t->run_internal();
 

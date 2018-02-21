@@ -1,6 +1,6 @@
 #include "graphics/VertexArray.hpp"
 #include "graphics/GLBuffer.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 #include <GL/glew.h>
 
 

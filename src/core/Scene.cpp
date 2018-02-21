@@ -1,5 +1,5 @@
 #include "core/Scene.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 
 int Scene::UUID_COUNTER = 0;
 

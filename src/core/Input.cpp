@@ -1,5 +1,5 @@
 #include "core/Input.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 #include "core/GameWindow.hpp"
 #include <SDL2/SDL.h>
 #include <glm/vec2.hpp>
@@ -58,7 +58,7 @@ void Input::set_mouse_pos(const int x, const int y)
 	if(!lock_mouse)
 		window->set_mouse_pos(x,y);
 	else
-		coutln("Tried moving mouse while it's locked");
+		printf("Tried moving mouse while it's locked\n");
 }
 
 void Input::show_cursor(bool show)
@@ -247,9 +247,9 @@ void Input::poll_events()
 			if(event.button.button == SDL_BUTTON_MIDDLE) io.MouseDown[2] = false;
 			break;
 		case SDL_JOYDEVICEADDED:
-			coutln("Controller add event");
+			printf("Controller add event\n");
 			if(controller != nullptr) break;
-			coutln("Has no controller connected so we aquire one");
+			printf("Has no controller connected so we aquire one\n");
 			// Look for first avaliable game controller
 			for(int i = 0; i < SDL_NumJoysticks(); ++i)
 			{
@@ -260,9 +260,9 @@ void Input::poll_events()
 			}
 			break;
 		case SDL_JOYDEVICEREMOVED:
-			coutln("Controller remove event");
+			printf("Controller remove event\n");
 			if(controller == nullptr) break;
-			coutln("Has no controller connected so we aquire one");
+			printf("Has no controller connected so we aquire one\n");
 			// If we disconnected this joystick, find another one if avaliable
 			controller = nullptr;
 			for(int i = 0; i < SDL_NumJoysticks(); ++i)
@@ -301,38 +301,27 @@ void Input::poll_events()
 			switch(event.window.event)
 			{
 				case SDL_WINDOWEVENT_ENTER:
-					//coutln("Windowevent enter");
 					break;
 				case SDL_WINDOWEVENT_LEAVE:
-					//coutln("Windowevent leave");
 					break;
 				case SDL_WINDOWEVENT_EXPOSED:
-					//coutln("Windowevent exposed");
 					break;
 				case SDL_WINDOWEVENT_HIDDEN:
-					//coutln("Windowevent hidden");
 					break;
 				case SDL_WINDOWEVENT_MAXIMIZED:
-					//coutln("Windowevent maximized");
 					break;
 				case SDL_WINDOWEVENT_MINIMIZED:
-					//coutln("Windowevent minimized");
 					break;
 				case SDL_WINDOWEVENT_RESTORED:
-					//coutln("Windowevent restored");
 					break;
 				case SDL_WINDOWEVENT_SHOWN:
-					//coutln("Windowevent shown");
 					break;
 				case SDL_WINDOWEVENT_TAKE_FOCUS:
-					//coutln("Windowevent take focus");
 					break;
 				case SDL_WINDOWEVENT_FOCUS_LOST:
-					//coutln("Windowevent focus lost");
 					window_focused = false;
 					break;
-				case SDL_WINDOWEVENT_FOCUS_GAINED:
-					//coutln("Windowevent focus gained");					
+				case SDL_WINDOWEVENT_FOCUS_GAINED:				
 					window_focused = true;
 					last_mouse_x = mouse_x;
 					last_mouse_y = mouse_y;

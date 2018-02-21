@@ -1,4 +1,4 @@
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 #include "graphics/Camera.hpp"
 #include "graphics/RenderPass.hpp"
 #include "graphics/Model.hpp"
@@ -51,9 +51,6 @@ void RenderPass::do_render()
 
 	}
 
-	//cout("There are ");
-	//cout(draw_calls.size());
-	//cout(" calls this frame\n");
 
 	draw_calls.clear(); 
 }

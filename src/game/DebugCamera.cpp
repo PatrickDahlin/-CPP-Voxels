@@ -1,6 +1,6 @@
 #include "game/DebugCamera.hpp"
 #include "core/Input.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 #include <algorithm>
 
 DebugCamera::DebugCamera(float fov, int width, int height, float near, float far) : 

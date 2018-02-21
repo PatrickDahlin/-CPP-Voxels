@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "game/Game.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 #include "core/GameWindow.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 	{
 		//@Error
 		printf("GLEW failed to initialize!\n");
-		coutln(glewGetErrorString(res));
+		printf("%s\n",glewGetErrorString(res));
 		return -1;
 	}
 
@@ -114,9 +114,9 @@ int main(int argc, char* argv[])
 	window->destroy();
 	delete window;
 
-	coutln("Closed game, cleaning up window");
+	printf("Closed game, cleaning up window\n");
 	
 	SDL_Quit();
-	coutln("Bai");
+	printf("Bai\n");
 	return 0;
 }

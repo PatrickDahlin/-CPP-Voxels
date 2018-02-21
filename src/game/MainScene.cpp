@@ -1,6 +1,6 @@
 #include "game/MainScene.hpp"
 #include "graphics/Material.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 #include "core/Input.hpp"
 #include "graphics/RenderPass.hpp"
 #include "graphics/ShaderManager.hpp"
@@ -103,9 +103,7 @@ void MainScene::init()
 	MarchingCubes* myCubes = new MarchingCubes();
 	MCMesh* mesh = myCubes->Evaluate(myvoxels, 127);
 
-	cout("Evaluated Marching cubes and got ");
-	cout(mesh->tri_count);
-	coutln(" triangles in resulting mesh");
+	printf("Evaluated Marching cubes and got %i triangles\n",mesh->tri_count);
 
 	voxel_model = new Model();
 	voxel_model->set_vertices(mesh->vertices);

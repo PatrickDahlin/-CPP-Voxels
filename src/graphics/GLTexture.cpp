@@ -1,5 +1,5 @@
 #include "graphics/GLTexture.hpp"
-#include "core/Macros.hpp"
+#include "core/Common.hpp"
 #include <stb_image.h>
 
 GLTexture* load_image(const char* path, ColorFormat format)
@@ -27,9 +27,7 @@ GLTexture::~GLTexture()
 
 void GLTexture::bind()
 {
-    if(!tex_id)
-        cout("Texture bound location 0");
-
+	assert(tex_id);
     glBindTexture(GL_TEXTURE_2D, tex_id);
 }
 
@@ -46,7 +44,7 @@ void GLTexture::dispose()
 void GLTexture::upload_data(unsigned char* data)
 {
 	if(tex_id != 0){
-		cout("error tried uploading data to existing texture");
+		printf("error tried uploading data to existing texture\n");
 		return;
 	}
     glGenTextures(1, &tex_id);
