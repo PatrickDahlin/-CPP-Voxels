@@ -51,7 +51,8 @@ void VertexArray::upload_data()
 	}
 	else 
 	{
-		error("No vertices to upload");
+		//@Error
+		printf("No vertices to upload\n");
 		return;	// We don't want to render if we have no vertices
 	}
 	//
@@ -61,7 +62,8 @@ void VertexArray::upload_data()
 	{
 		if(normals.size() != vertices.size())
 		{
-			error("VertexArray: Normal and Vertex count mismatch!");
+			//@Error
+			printf("VertexArray: Normal and Vertex count mismatch!\n");
 			return;
 		}
 		GLBuffer norms = GLBuffer(BufferType::ARRAY, normals.data(), normals.size() * 3 * sizeof(float), normals.size());
@@ -76,7 +78,8 @@ void VertexArray::upload_data()
 	{
 		if(colors.size() != vertices.size())
 		{
-			error("VertexArray: Color and Vertex count mismatch!");
+			//@Error
+			printf("VertexArray: Color and Vertex count mismatch!\n");
 			return;
 		}
 		GLBuffer cols = GLBuffer(BufferType::ARRAY, colors.data(), colors.size() * 4 * sizeof(float), colors.size());
@@ -91,7 +94,8 @@ void VertexArray::upload_data()
 	{
 		if(texcoords.size() != vertices.size())
 		{
-			error("VertexArray: UV and Vertex count mismatch!");
+			//@Error
+			printf("VertexArray: UV and Vertex count mismatch!\n");
 			return;
 		}
 		GLBuffer tex = GLBuffer(BufferType::ARRAY, texcoords.data(), texcoords.size() * 2 * sizeof(float), texcoords.size());
@@ -185,7 +189,7 @@ void VertexArray::bind()
 	if(vao != 0)
 		glBindVertexArray(vao);
 
-	if(vao == 0) error("tried to bind vertexarray with 0 id");
+	assert(vao);
 }
 
 void VertexArray::unbind()

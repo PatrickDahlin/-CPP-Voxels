@@ -1,6 +1,5 @@
 #include "graphics/ShaderProgram.hpp"
 #include "graphics/Shader_vars.hpp"
-#include "core/Errors.hpp"
 #include "core/Macros.hpp"
 #include "core/Files.hpp"
 #include <vector>

@@ -1,5 +1,6 @@
 #include "core/GameWindow.hpp"
-#include "core/Errors.hpp"
+#include <iostream>
+#include <stdio.h>
 
 GameWindow::GameWindow(const char* title, int width, int height, SDL_WindowFlags flags) : 
 window(NULL), context(NULL), flags(flags), title(title), width(width), height(height), vsync(false)
@@ -66,8 +67,9 @@ void GameWindow::create_window()
 
 	if(!window)
 	{
-		error("Window couldn't be created!");
-		error(SDL_GetError());
+		//@Error
+		printf("Window couldn't be created!\n");
+		printf("%s\n",SDL_GetError());
 		return;
 	}
 
@@ -84,8 +86,9 @@ void GameWindow::create_window()
 
 	if(!context)
 	{
-		error("GL Context couldn't be created!");
-		error(SDL_GetError());
+		//@Error
+		printf("GL Context couldn't be created!\n");
+		printf("%s\n",SDL_GetError());
 		return;
 	}
 

@@ -19,7 +19,8 @@ Thread::Thread()
 
 	if(thread == NULL)
 	{
-		error("Failed to create thread!\n");
+		//@Error
+		printf("Failed to create thread!\n");
 		return;
 	}
 }

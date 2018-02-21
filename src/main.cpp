@@ -81,7 +81,8 @@ int main(int argc, char* argv[])
 	SDL_ClearError();
 	if(SDL_Init( SDL_INIT_EVERYTHING ) < 0)
 	{
-		error("SDL failed to initialize");
+		//@Error
+		printf("SDL failed to initialize\n");
 		// @TODO Get sdl error and log it
 		return -1;
 	}
@@ -94,7 +95,8 @@ int main(int argc, char* argv[])
 	GLenum res = glewInit();
 	if(res != GLEW_OK)
 	{
-		error("GLEW failed to initialize!");
+		//@Error
+		printf("GLEW failed to initialize!\n");
 		coutln(glewGetErrorString(res));
 		return -1;
 	}

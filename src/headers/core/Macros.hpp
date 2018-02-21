@@ -1,7 +1,6 @@
 #ifndef _MACROS_HPP_
 #define _MACROS_HPP_
 #include <iostream>
-#include "Errors.hpp"
 #include <GL/glew.h>
 #include <assert.h>
 

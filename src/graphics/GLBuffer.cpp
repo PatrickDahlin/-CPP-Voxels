@@ -58,7 +58,7 @@ void GLBuffer::bind()
 	else
 		glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
 
-	if(vbo_id == 0) error("bound glbuffer with 0 id");
+	assert(vbo_id);
 }
 
 void GLBuffer::unbind()
