@@ -69,13 +69,24 @@ void Input::show_cursor(bool show)
 		SDL_ShowCursor(0);
 }
 
-KeyState Input::get_key(SDL_Keycode key)
+KeyState Input::get_key_state(SDL_Keycode key)
 {
 	if(!enabled) return KeyState::NONE;
 	return key_map[key];
 }
 
-KeyState Input::get_mouse_btn(unsigned short button)
+bool Input::get_mouse_btn_down(unsigned short button)
+{
+	return get_mouse_btn_state(button) == KeyState::PRESSED;
+}
+
+bool Input::get_mouse_btn(unsigned short button)
+{
+	return get_mouse_btn_state(button) == KeyState::PRESSED ||
+			get_mouse_btn_state(button) == KeyState::REPEAT;
+}
+
+KeyState Input::get_mouse_btn_state(unsigned short button)
 {
 	if(!enabled) return KeyState::NONE;
 
@@ -107,6 +118,12 @@ int Input::get_scroll_delta() const
 	return scroll_delta;
 }
 
+
+bool Input::get_key(SDL_Keycode code)
+{
+	return get_key_state(code) == KeyState::PRESSED;
+}
+
 bool Input::is_enabled() const
 {
 	return enabled;
@@ -121,8 +138,8 @@ void Input::set_input_enabled(bool ena)
 
 bool Input::get_key_down(SDL_Keycode code)
 {
-	if(get_key(code) == KeyState::PRESSED ||
-		get_key(code) == KeyState::REPEAT)
+	if(get_key_state(code) == KeyState::PRESSED ||
+		get_key_state(code) == KeyState::REPEAT)
 		return true;
 
 	return false;

@@ -3,6 +3,7 @@
 
 #include "graphics/VertexArray.hpp"
 #include "graphics/GLBuffer.hpp"
+#include "graphics/GLTexture.hpp"
 #include "graphics/Shader_vars.hpp"
 
 #include <imgui/imgui.h>
