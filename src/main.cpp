@@ -64,6 +64,7 @@ TODO:
 
 
 	Lower prio TODO
+		- (L) GameWindow DisplayMode support for multiple refreshrate options
 		- (L) GameWindow really needs an openwindow function instead of
 			opening window in constructor []
 

@@ -17,6 +17,8 @@ struct WindowSettings {
 	bool is_vulkan; // OpenGL otherwise
 };
 
+// @TODO add support for changing displaymodes with different refreshrates
+
 class GameWindow 
 {
 public:

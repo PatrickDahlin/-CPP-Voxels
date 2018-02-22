@@ -81,7 +81,6 @@ void GameWindow::create_window()
 		printf("\t- Vulkan\n");
 		
 	
-	std::cout << std::endl;
 
 	window = SDL_CreateWindow(settings.title, 
 								SDL_WINDOWPOS_CENTERED, 
