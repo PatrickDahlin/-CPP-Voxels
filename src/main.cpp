@@ -87,7 +87,14 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	GameWindow* window = new GameWindow("Game", 1280, 720, SDL_WINDOW_OPENGL);
+	
+	WindowSettings settings {
+		"Game", 1280, 720,
+		false, true,
+		false, false
+	};
+
+	GameWindow* window = new GameWindow(settings);
 
 	//
 	// GLEW

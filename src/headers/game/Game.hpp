@@ -19,11 +19,13 @@ public:
 
 	static void quit();
 
+	static GameWindow* get_window();
+
 protected:
 
 	static bool				running;
 	SceneManager			scene_manager;
-	GameWindow*				game_window;
+	static GameWindow*		game_window;
 	Input					input;
 	MainScene*				main_scene;
 

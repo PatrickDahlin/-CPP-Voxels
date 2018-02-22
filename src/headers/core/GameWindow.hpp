@@ -3,23 +3,35 @@
 // We want pointers
 #pragma GCC diagnostic ignored "-Weffc++"
 
+#include "core/Common.hpp"
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 
+struct WindowSettings {
+	const char* title;
+	int width;
+	int height;
+	bool fullscreen;
+	bool borderless_fullscreen;
+	bool vsync;
+	bool is_vulkan; // OpenGL otherwise
+};
 
 class GameWindow 
 {
 public:
-	GameWindow(const char* title, int width, int height, SDL_WindowFlags flags);
+	GameWindow(WindowSettings settings);
 	~GameWindow();
-
-	/// This sets all windowflags for window
-	/// SDL_WINDOW_OPENGL is needed!!
-	void set_window_flags(SDL_WindowFlags flags);
 
 	void swap_buffers();
 
 	void set_vsync(bool vsync);
+
+	void set_fullscreen(bool fullscreen);
+
+	void set_window_size(int w, int h);
+
+	void set_mouse_pos(int x, int y);
 
 	void destroy();
 
@@ -27,7 +39,9 @@ public:
 
 	int get_height();
 
-	void set_mouse_pos(int x, int y);
+	bool is_fullscreen();
+
+	WindowSettings get_settings();
 
 protected:
 
@@ -37,12 +51,9 @@ protected:
 
 	SDL_Window*		window;
 	SDL_GLContext 	context;
-	SDL_WindowFlags	flags;
 
-	const char*		title;
-	int				width, height;
-	bool			vsync;
-
+	WindowSettings 	settings;
+	
 };
 
 #endif

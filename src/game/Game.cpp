@@ -12,20 +12,21 @@
 
 #include "game/PerlinScene.hpp"
 
-bool 			Game::running = true;
-
+bool Game::running = true;
+GameWindow* Game::game_window = nullptr;
 
 Game::Game(GameWindow* window) :
-game_window(window),
 input(window),
 main_scene(nullptr)
 {
+	Game::game_window = window;
 	printf("Setting up Game\n");
 	
 	input.show_cursor(false);
 	input.set_lock_mouse(true);
 
 	init_imgui(window->get_width(), window->get_height());
+	assert(Game::game_window);
 }
 
 Game::~Game()
@@ -160,3 +161,7 @@ void Game::quit()
 	printf("Reqested quit\n");
 }
 
+GameWindow* Game::get_window()
+{
+	return game_window;
+}
