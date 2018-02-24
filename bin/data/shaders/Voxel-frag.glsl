@@ -8,7 +8,10 @@ out vec4 outColor;
 
 void main()
 {
-	//outColor = vec4(0.6,0.6,0.6,1.0);
-	float light = max(0.0,dot(fragNorm, normalize(vec3(1,1,1))));
-	outColor = texture(myTex, fragUv);
+	vec3 norm = normalize(fragNorm);
+	norm = mat3(transpose(inverse(modelMatrix))) * norm;
+	vec3 lightDir = vec3(1,1,1);
+	float diff = max(dot(norm, lightDir),0.4);
+	outColor = texture(myTex, fragUv) * diff;
+	outColor.a = 1.0;
 }

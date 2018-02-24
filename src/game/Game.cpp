@@ -47,6 +47,10 @@ void Game::load()
 
 }
 
+void Game::window_resize(int width, int height)
+{
+	printf("Hai, resized in game\n");
+}
 
 void Game::run()
 {
@@ -125,6 +129,37 @@ void Game::run()
 		ImGui::SliderFloat("",&target_fps, 10.0f, 1000.0f, "%.1f");
 		ImGui::End();
 
+		ImGui::Begin("WindowSettings");
+		ImGui::Text("Resolution: %ix%i",game_window->get_width(),game_window->get_height());
+		
+		WindowSettings settings = game_window->get_settings(); // @Cleanup
+		static bool b = false, f = false;
+		bool updates = false;
+		if(ImGui::Checkbox("Borderless",&b))
+		{
+			updates = true;
+		}
+		if(ImGui::Checkbox("Fullscreen",&f))
+		{
+			updates = true;
+		}
+		static int size[2] = {1280,720};
+
+		ImGui::InputInt2("Request size",size, 0);
+		if(ImGui::Button("Resize", ImVec2(100,25)))
+		{
+			settings.width = size[0];
+			settings.height = size[1];
+			updates = true;
+		}
+		ImGui::End();
+		
+		if(updates)
+		{
+			settings.fullscreen = f;
+			settings.borderless = b;
+			game_window->apply_settings(settings);
+		}
 
 		// Do imgui rendering
 		post_render_imgui();

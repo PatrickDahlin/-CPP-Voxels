@@ -1,17 +1,22 @@
 #include "core/GameWindow.hpp"
 #include <iostream>
 #include <stdio.h>
+#include "game/Game.hpp"
 
-GameWindow::GameWindow(WindowSettings settings) ://(const char* title, int width, int height, int flags) : 
-window(NULL), context(NULL)
+GameWindow::GameWindow(WindowSettings settings) :
+	window(NULL), context(NULL), settings(settings), game(nullptr)
 {
-	this->settings = settings;
 	create_window();
 }
 
 GameWindow::~GameWindow()
 {
 	destroy();
+}
+
+void GameWindow::attach_game(Game* game)
+{
+	this->game = game;
 }
 
 void GameWindow::destroy()
@@ -25,32 +30,11 @@ void GameWindow::destroy()
 	window = nullptr;
 }
 
-void GameWindow::set_fullscreen(bool fullscreen)
-{
-	assert(window);
-	// SDL_WINDOW_FULLSCREEN is true fullscreen
-	// while SDL_WINDOW_FULLSCREEN_DESKTOP is windowed with size of desktop
-	if(fullscreen && !settings.fullscreen)
-		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-	else if(!fullscreen && settings.fullscreen)
-		SDL_SetWindowFullscreen(window, 0);
-
-	settings.fullscreen = fullscreen;
-}
-
-void GameWindow::set_window_size(int w, int h)
-{
-	assert(window);
-	settings.width = w;
-	settings.height = h;
-	SDL_SetWindowSize(window, w, h);
-}
-
 void GameWindow::create_window()
 {
 	SDL_ClearError();
 
-	int flags = ( settings.is_vulkan ? SDL_WINDOW_VULKAN : SDL_WINDOW_OPENGL );
+	int flags = ( settings.vulkan_renderer ? SDL_WINDOW_VULKAN : SDL_WINDOW_OPENGL );
 
 	printf("Setting up window with settings:\n");
 	printf("\t%ix%i\n",settings.width,settings.height);
@@ -103,6 +87,8 @@ void GameWindow::create_window()
 
 	setup_gl_context();
 
+	// Update window to match settings
+	
 	printf("Successfully created window\n");
 }
 
@@ -134,23 +120,10 @@ void GameWindow::setup_gl_context()
 
 	SDL_GL_MakeCurrent(window, context);
 
-	// -1 possible for late-swap tearing, not used here though
-	set_vsync(settings.vsync);
-
 	printf("VSync: %s",(settings.vsync?"On":"Off"));
 
 	glClearColor(0.3,0.6,0.8,1);
-	glViewport(0,0, settings.width, settings.height);
-}
 
-void GameWindow::set_vsync(bool vsync)
-{
-	if(vsync)
-		SDL_GL_SetSwapInterval(1); 
-	else
-		SDL_GL_SetSwapInterval(0);
-	
-	settings.vsync = vsync;
 }
 
 int GameWindow::get_width()
@@ -163,12 +136,109 @@ int GameWindow::get_height()
 	return settings.height;
 }
 
-
 void GameWindow::set_mouse_pos(int x, int y)
 {
 	assert(window);
 	SDL_WarpMouseInWindow(window, x, y);
 }
+
+void GameWindow::apply_settings(WindowSettings new_settings)
+{
+	assert(window);
+	settings = new_settings;
+
+	//
+	// Find closest matching displaymode
+	//
+
+	SDL_DisplayMode target, closest;
+
+	target.w = settings.width;
+	target.h = settings.height;
+	target.format = 0; // Anything
+	target.refresh_rate = settings.refresh_rate;
+	target.driverdata = 0; // initialize
+	printf("Requesting DisplayMode: %ix%i %iHz\n",target.w, target.h, target.refresh_rate);
+
+	if(SDL_GetClosestDisplayMode(settings.display_index, &target, &closest) == 0)
+	{
+		// Didn't find any matching our request, get the first one supported by the display!
+		printf("Error! Requested DisplayMode not supported nor was any similar to it!\n");
+		int ret = 0;
+		ret = SDL_GetDesktopDisplayMode(settings.display_index, &closest);
+		if(ret != 0)
+		{
+			printf("No supported display found! Code: %i\nSDL_Error:%s\n",ret,SDL_GetError());
+			exit(-1);
+		}
+	}
+	else
+	{
+		printf("Supported DisplayMode selected: %ix%i %iHz\n",closest.w,closest.h,closest.refresh_rate);
+
+		settings.width = closest.w;
+		settings.height = closest.h;
+		settings.refresh_rate = closest.refresh_rate;
+
+	}
+
+	//
+	// Assume a valid displaymode
+	//
+
+	// Get native desktop size for use in borderless fullscreen
+	SDL_DisplayMode native;
+	SDL_GetDesktopDisplayMode(settings.display_index, &native);
+
+
+	// Apply window resize
+
+	if(settings.fullscreen)
+	{
+		if(settings.borderless)
+		{
+			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			SDL_SetWindowSize(window, native.w, native.h);
+			glViewport(0,0,native.w,native.h);
+			if(game) game->window_resize(native.w,native.h);
+		}
+		else
+		{
+			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+			SDL_SetWindowSize(window, closest.w, closest.h);
+			glViewport(0,0,closest.w,closest.h);
+			if(game) game->window_resize(closest.w, closest.h);
+		}
+	}
+	else
+	{
+		if(settings.borderless)
+		{
+			SDL_SetWindowFullscreen(window, 0);
+			SDL_SetWindowBordered(window, SDL_FALSE);
+			SDL_SetWindowSize(window, closest.w, closest.h);
+			glViewport(0,0,closest.w,closest.h);
+			if(game) game->window_resize(closest.w, closest.h);
+		}
+		else
+		{
+			SDL_SetWindowFullscreen(window, 0);
+			SDL_SetWindowBordered(window, SDL_TRUE);
+			SDL_SetWindowSize(window, closest.w, closest.h);
+			glViewport(0,0,closest.w,closest.h);
+			if(game) game->window_resize(closest.w,closest.h);
+		}
+	}
+
+
+	// -1 possible for late-swap tearing, not used here though
+	if(settings.vsync)
+		SDL_GL_SetSwapInterval(1); 
+	else
+		SDL_GL_SetSwapInterval(0);
+
+}
+
 
 WindowSettings GameWindow::get_settings()
 {

@@ -190,7 +190,6 @@ void MainScene::render(RenderPass* pass)
 	}
 	ImGui::End();
 
-
 	pass->draw_model(skybox, skybox_shader, cam);
 
 	pass->draw_model(tmp, shader, cam);

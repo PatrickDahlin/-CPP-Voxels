@@ -91,7 +91,8 @@ int main(int argc, char* argv[])
 	
 	WindowSettings settings {
 		"Game", 1280, 720,
-		false, true,
+		144, 0,
+		false, false,
 		false, false
 	};
 
@@ -113,6 +114,7 @@ int main(int argc, char* argv[])
 	stbi_set_flip_vertically_on_load(true);
 	
 	Game* game = new Game(window);
+	window->attach_game(game); // Give window the game handle to send resize "event"
 
 	game->load();
 	game->run();

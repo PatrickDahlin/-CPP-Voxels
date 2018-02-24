@@ -17,6 +17,8 @@ public:
 
 	void run();
 
+	void window_resize(int width, int height);
+
 	static void quit();
 
 	static GameWindow* get_window();
