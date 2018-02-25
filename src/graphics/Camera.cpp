@@ -27,6 +27,11 @@ glm::mat4 Camera::get_projection()
 	return projection_mat;
 }
 
+glm::vec3 Camera::get_euler()
+{
+	return glm::vec3(pitch, yaw, roll);
+}
+
 glm::vec3 Camera::get_forward()
 {
 	glm::vec4 res = glm::vec4(0,0,1,1) * get_view();

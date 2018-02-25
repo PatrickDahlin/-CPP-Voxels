@@ -59,13 +59,7 @@ void MainScene::load(ShaderManager* sha_man, TextureManager* tex_man)
 }
 
 void MainScene::init()
-{
-	cam = new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
-	cam->set_input(input);
-	cam->set_fly_speed(3.0f);
-	cam->set_mouse_sensitivity(1.5f);
-
-	
+{	
 	
 	tmp = Primitives::create_cube();
 
@@ -202,6 +196,25 @@ void MainScene::render(RenderPass* pass)
 	//bool val = true;
 	//ImGui::ShowDemoWindow(&val);
 
+}
+
+void MainScene::resized_window(int width, int height)
+{
+	vec3 lastpos = vec3(0,0,0);
+	vec3 lastrot = vec3(0,0,0);
+	if(cam)
+	{
+		lastpos = cam->get_position();
+		lastrot = cam->get_euler();
+		delete cam;
+	}
+
+	cam = new DebugCamera(60.0f, width, height, 0.1f, 500.0f);
+	cam->set_position(lastpos);
+	cam->set_rotation(lastrot);
+	cam->set_input(input);
+	cam->set_fly_speed(3.0f);
+	cam->set_mouse_sensitivity(1.5f);
 }
 
 void MainScene::dispose()

@@ -39,6 +39,9 @@ TODO:
 		- [Fixed] DebugCamera freaks out at low framerates
 
 	TODO:
+		- Load/Save window settings
+		- Fullscreen borderless forces native screen size for now, FBOs might fix this (change viewport before rendering to target framebuffer)
+		- GameWindow needs a GetSupportedDisplayModes to get a list of WindowSettings for use in options dropdown
 		- Octree data-structure for later voxel use (Later optimization)
 		- (M) Actor class []
 		- (M) Text rendering []

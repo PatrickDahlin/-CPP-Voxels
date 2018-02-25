@@ -36,6 +36,10 @@ Game::~Game()
 
 void Game::load()
 {
+	// We need to tell scenemanager the size of the window before loading any new scenes
+	// As they'll be called resize on when initializing
+	scene_manager.resized_window(game_window->get_width(), game_window->get_height());
+	
 	// No need to delete this scene, it's deleted in scenemanager
 	scene_manager.switch_to_scene(new MainScene(&input, &scene_manager));
 	//scene_manager.switch_to_scene(new PerlinScene(&input, &scene_manager));
@@ -50,9 +54,9 @@ void Game::load()
 // Window size in fbo size
 void Game::window_resize(int width, int height)
 {
-	printf("Hai, resized in game\n");
 	resize_imgui(width, height);
 
+	scene_manager.resized_window(width,height);
 }
 
 void Game::run()

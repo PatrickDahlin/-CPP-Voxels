@@ -28,13 +28,18 @@ public:
 	void render(RenderPass* pass);
 	// Effect: Renders the current scene
 	// Postcond: Current scene is queued up for rendering
-	
+
+	void resized_window(int width, int height);
+	// Effect: Reloads content for new resolution
+	// Postcond: Scenes can be rendered using new resolution without distortion
+
 	void dispose();
 	// Effect: Unloads all scenes and disposes them
 	// Postcond: All scenes are unloaded and disposed
 
 private:
 
+	int						last_width, last_height;
 	Scene*					cur_scene;
 	std::vector<Scene*>		loaded_scenes;
 

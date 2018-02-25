@@ -3,7 +3,9 @@
 #include "graphics/ShaderManager.hpp"
 #include "graphics/TextureManager.hpp"
 
-SceneManager::SceneManager() : 
+SceneManager::SceneManager() :
+last_width(0),
+last_height(0), 
 cur_scene(nullptr),
 loaded_scenes()
 {
@@ -39,6 +41,7 @@ void SceneManager::switch_to_scene(Scene* s)
 	if(!is_init)
 	{
 		cur_scene->init();
+		cur_scene->resized_window(last_width, last_height);
 		loaded_scenes.push_back(cur_scene);
 	}
 }
@@ -53,6 +56,16 @@ void SceneManager::render(RenderPass* pass)
 {
 	if(cur_scene)
 		cur_scene->render(pass);
+}
+
+void SceneManager::resized_window(int width, int height)
+{
+	last_width = width;
+	last_height = height;
+	for(Scene* it : loaded_scenes)
+	{	
+		it->resized_window(width,height);
+	}
 }
 
 void SceneManager::dispose()

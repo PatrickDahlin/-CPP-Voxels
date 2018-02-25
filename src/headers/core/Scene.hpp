@@ -7,6 +7,27 @@ class SceneManager;
 class ShaderManager;
 class TextureManager;
 
+/*
+
+ Order of methodcalls:
+
+ load()
+ init() ! Only first time setup !
+ resized_window() -- Setting up cameras and stuff that depend on screen size
+
+ ----
+
+ resized_window() -- Only in case of window resize, order not guaranteed between update/render
+
+ update()
+ render()
+
+ ^^^^ Repeated
+
+ unload()
+ dispose()
+*/
+
 class Scene
 {
 public:
@@ -32,6 +53,10 @@ public:
 	virtual void render(RenderPass* pass) = 0;
 	// Effect: Renders actors
 	// Postcond: All actors are queued up for rendering
+	
+	virtual void resized_window(int width, int height) = 0;
+	// Effect: Notifies Scene when window is resized
+	// Postcond: Scene is updated with new screen size
 
 	virtual void dispose();
 	// Effect: Disposes all actors and resources loaded

@@ -30,6 +30,8 @@ public:
 
 	void render(RenderPass* pass) override;
 
+	void resized_window(int width, int height) override;
+
 	void dispose() override;
 
 protected:

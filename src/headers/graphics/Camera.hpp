@@ -20,6 +20,7 @@ public:
 	void set_rotation(glm::vec3 vec);
 
 	glm::vec3 get_position();
+	glm::vec3 get_euler();
 	glm::mat4 get_projection();
 	glm::mat4 get_view();
 

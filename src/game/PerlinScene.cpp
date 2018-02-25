@@ -22,12 +22,13 @@ PerlinScene::PerlinScene(Input* input, SceneManager* scn_man) : Scene(input, scn
 perlin_tex(nullptr),
 perlin_mat(nullptr),
 perlin_model(nullptr),
+debug_cam(nullptr),
 perlin_shader(nullptr)
 {
-	debug_cam = new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
-	debug_cam->set_input(input);
-	debug_cam->set_fly_speed(3.0f);
-	debug_cam->set_mouse_sensitivity(1.5f);
+	//debug_cam = new DebugCamera(60.0f, 1280, 720, 0.1f, 500.0f);
+	//debug_cam->set_input(input);
+	//debug_cam->set_fly_speed(3.0f);
+	//debug_cam->set_mouse_sensitivity(1.5f);
 }
 
 PerlinScene::~PerlinScene()
@@ -49,6 +50,24 @@ int perlin_val(float x, float y)
 	int tex_val = (unsigned char)floor(perlin_val * 255.0f);
 
 	return tex_val;
+}
+
+void PerlinScene::resized_window(int width, int height)
+{
+	vec3 lastpos = vec3(0,0,0);
+	vec3 lastrot = vec3(0,0,0);
+	if(debug_cam)
+	{
+		lastpos = debug_cam->get_position();
+		lastrot = debug_cam->get_euler();
+		delete debug_cam;
+	}
+	debug_cam = new DebugCamera(60.0f, width, height, 0.1f, 500.0f);
+	debug_cam->set_input(input);
+	debug_cam->set_fly_speed(3.0f);
+	debug_cam->set_mouse_sensitivity(1.5f);
+	debug_cam->set_position(lastpos);
+	debug_cam->set_rotation(lastrot);
 }
 
 void PerlinScene::load(ShaderManager* sha_man, TextureManager* tex_man)

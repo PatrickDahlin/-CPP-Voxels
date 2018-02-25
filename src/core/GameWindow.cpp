@@ -200,7 +200,10 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 			SDL_SetWindowSize(window, native.w, native.h);
 			glViewport(0,0,native.w,native.h);
+			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
 			if(game) game->window_resize(native.w,native.h);
+			//printf("Fullscreen borderless size: %ix%i\n",closest.w,closest.h);
+			//if(game) game->window_resize(closest.w, closest.h);
 		}
 		else
 		{
