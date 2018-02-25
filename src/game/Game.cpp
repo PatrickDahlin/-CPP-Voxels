@@ -204,6 +204,8 @@ void Game::run()
 		delta_time = (float)(delta_ms / 1000.0);
 	}
 
+	cleanup_framebuffers();
+
 	delete framebuffer;
 
 	scene_manager.dispose();

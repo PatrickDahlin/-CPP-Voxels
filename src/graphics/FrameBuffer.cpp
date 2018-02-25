@@ -87,7 +87,8 @@ Framebuffer::Framebuffer(int width, int height) :
 fbo(0),
 width(width),
 height(height),
-color_tex(0)
+color_tex(0),
+depth_stencil_buffer(0)
 {
 	assert(width > 0 && height > 0);
 	create_buffer();
@@ -103,6 +104,7 @@ void Framebuffer::dispose()
 	fbo = 0;
 	color_tex = 0;
 }
+
 
 void Framebuffer::create_buffer()
 {
