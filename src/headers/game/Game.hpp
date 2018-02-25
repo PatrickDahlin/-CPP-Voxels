@@ -6,6 +6,7 @@
 #include "core/SceneManager.hpp"
 #include "game/MainScene.hpp"
 
+class Framebuffer;
 
 class Game
 {
@@ -30,6 +31,8 @@ protected:
 	static GameWindow*		game_window;
 	Input					input;
 	MainScene*				main_scene;
+
+	Framebuffer* 			framebuffer;
 
 };
 

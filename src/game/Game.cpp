@@ -10,6 +10,7 @@
 #include <iostream>
 #include <algorithm> // for std::max
 
+#include "graphics/Framebuffer.hpp"
 #include "game/PerlinScene.hpp"
 
 bool Game::running = true;
@@ -26,8 +27,12 @@ main_scene(nullptr)
 	input.set_lock_mouse(true);
 
 	init_imgui(window->get_width(), window->get_height());
+
+	framebuffer = new Framebuffer(game_window->get_width(), game_window->get_height());
+
 	assert(Game::game_window);
 }
+
 
 Game::~Game()
 {
@@ -121,10 +126,15 @@ void Game::run()
 
 		scene_manager.update(delta_time);
 		scene_manager.render(pass);
-		
+
+		framebuffer->prepare_render();
+
 		pass->do_render();
 
-		
+		framebuffer->end_render();
+
+		render_framebuffer(framebuffer);
+
 		//
 		//	Set fps limit
 		//
@@ -193,6 +203,8 @@ void Game::run()
 		delta_ms = std::chrono::duration_cast<std::chrono::nanoseconds>(delta).count() / 1000000.0;
 		delta_time = (float)(delta_ms / 1000.0);
 	}
+
+	delete framebuffer;
 
 	scene_manager.dispose();
 }
