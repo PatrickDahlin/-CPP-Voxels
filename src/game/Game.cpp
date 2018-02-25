@@ -47,9 +47,12 @@ void Game::load()
 
 }
 
+// Window size in fbo size
 void Game::window_resize(int width, int height)
 {
 	printf("Hai, resized in game\n");
+	resize_imgui(width, height);
+
 }
 
 void Game::run()

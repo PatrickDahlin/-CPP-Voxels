@@ -111,4 +111,14 @@ bool request_input_imgui()
 	return io.WantCaptureKeyboard || io.WantCaptureMouse;
 }
 
+void resize_imgui(int width, int height)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	io.DisplaySize = ImVec2(width,height);
+
+	delete imgui_camera;
+
+	imgui_camera = new OrthographicCamera(0, width, 0, height);
+}
+
 #endif
