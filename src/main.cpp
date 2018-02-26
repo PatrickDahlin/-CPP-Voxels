@@ -53,6 +53,7 @@ TODO:
 		- (L) Smoothed Input axes (Think mouse/controller axis in Unity)
 
 	Done:
+		- (L) GameWindow DisplayMode support for multiple refreshrate options [x]
 		- Marching cubes implementation
 		- Perlin noise implementation
 		- Wireframe mode for rendering
@@ -67,7 +68,6 @@ TODO:
 
 
 	Lower prio TODO
-		- (L) GameWindow DisplayMode support for multiple refreshrate options
 		- (L) GameWindow really needs an openwindow function instead of
 			opening window in constructor []
 
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 	
 	WindowSettings settings {
 		"Game", 1280, 720,
-		144, 0,
+		60, 0,
 		false, false,
 		false, false
 	};

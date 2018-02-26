@@ -4,6 +4,7 @@
 
 Transform::Transform() 
 {
+	parent = nullptr;
 	position = glm::vec3(0);
 	euler_angles = glm::vec3(0);
 	model_scale = glm::vec3(1,1,1);

@@ -25,12 +25,14 @@ public:
 	void set_uniform_scale(float scale);
 
 private:
+
+	Transform* parent;
+
 	bool needs_mat_update = true;
 	glm::mat4 combined;
 	glm::vec3 position;
 	glm::vec3 euler_angles;
 	glm::vec3 model_scale;
-
 	
 };
 
