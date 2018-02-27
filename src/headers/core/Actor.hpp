@@ -33,6 +33,8 @@ public:
 
 private:
 
+	Actor*				parent;
+
 	std::vector<Actor*>	children;
 	Model*				model;
 
