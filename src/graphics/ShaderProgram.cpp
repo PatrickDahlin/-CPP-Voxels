@@ -120,7 +120,7 @@ void ShaderProgram::load_uniform_locations()
 	mat4_model_loc = glGetUniformLocation(shader_program, SHADER_MODELMAT_UNIFORM_NAME);
 
 
-	printf("proj loc:%i\nview loc:%i\nmodel loc:%i\n",mat4_proj_loc,mat4_view_loc,mat4_model_loc);
+	//printf("proj loc:%i\nview loc:%i\nmodel loc:%i\n",mat4_proj_loc,mat4_view_loc,mat4_model_loc);
 
 	CHECK_GL_ERROR();
 }

@@ -12,6 +12,7 @@
 
 #include "graphics/Framebuffer.hpp"
 #include "game/PerlinScene.hpp"
+#include "game/TerrainScene.hpp"
 
 bool Game::running = true;
 GameWindow* Game::game_window = nullptr;
@@ -46,7 +47,8 @@ void Game::load()
 	scene_manager.resized_window(game_window->get_width(), game_window->get_height());
 	
 	// No need to delete this scene, it's deleted in scenemanager
-	scene_manager.switch_to_scene(new MainScene(&input, &scene_manager));
+	//scene_manager.switch_to_scene(new MainScene(&input, &scene_manager));
+	scene_manager.switch_to_scene(new TerrainScene(&input, &scene_manager));
 	//scene_manager.switch_to_scene(new PerlinScene(&input, &scene_manager));
 
 	glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
@@ -129,7 +131,7 @@ void Game::run()
 			static bool locked = true;
 			locked = !locked;
 			input.set_lock_mouse(locked);
-			input.show_cursor(true);//!locked
+			input.show_cursor(!locked);
 		}
 		
 		//

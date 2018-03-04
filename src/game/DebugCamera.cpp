@@ -6,8 +6,8 @@
 DebugCamera::DebugCamera(float fov, int width, int height, float near, float far) : 
 PerspectiveCamera(fov, width, height, near, far),
 input(nullptr),
-mouse_sensitivity(0.1),
-fly_speed(5),
+mouse_sensitivity(1.5f),
+fly_speed(3.0f),
 mouse_x_smoothing(0),
 mouse_y_smoothing(0),
 vertical(0),
