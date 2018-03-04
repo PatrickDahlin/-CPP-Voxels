@@ -30,13 +30,13 @@ public:
 
 	void init() override;
 
-    void load(ShaderManager* sha_man, TextureManager* tex_man) override;
+    void load(ShaderManager& sha_man, TextureManager& tex_man) override;
 
 	void unload() override;
 
     void update(const float delta) override;
 
-    void render(RenderPass* pass) override;
+    void render(RenderPass& pass) override;
 
 	void resized_window(int width, int height) override;
 

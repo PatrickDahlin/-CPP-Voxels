@@ -1,6 +1,7 @@
 #include "core/Actor.hpp"
 #include "graphics/Model.hpp"
 #include "core/Transform.hpp"
+#include <algorithm>
 
 Actor::Actor() : model(nullptr)
 {}
@@ -29,7 +30,7 @@ void Actor::set_parent(Actor* parent)
 void Actor::add_child(Actor* child)
 {
 	assert(child);
-	if(std::find(children.begin(), children.end(), child) != children.end())
+	if(std::find(children.begin(), children.end(), child) == children.end())
 		children.push_back(child);
 }
 
@@ -43,7 +44,7 @@ void Actor::remove_child(Actor* child)
 
 Actor* Actor::child_at(int index)
 {
-	assert(index >= 0 && index < children.size());
+	assert(index >= 0 && index < (int)children.size());
 	return children[index];
 }
 

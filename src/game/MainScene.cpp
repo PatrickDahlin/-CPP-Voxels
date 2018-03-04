@@ -35,21 +35,21 @@ test_loaded_model(nullptr)
 MainScene::~MainScene()
 {}
 
-void MainScene::load(ShaderManager* sha_man, TextureManager* tex_man)
+void MainScene::load(ShaderManager& sha_man, TextureManager& tex_man)
 {
 	// Voxel shader
-	voxel_shader = sha_man->get_shader("data/shaders/Voxel-vert.glsl", "data/shaders/Voxel-frag.glsl");
+	voxel_shader = sha_man.get_shader("data/shaders/Voxel-vert.glsl", "data/shaders/Voxel-frag.glsl");
 
 	// Basic shader
-	shader = sha_man->get_shader("data/shaders/Basic-vert.glsl", "data/shaders/Basic-frag.glsl");
+	shader = sha_man.get_shader("data/shaders/Basic-vert.glsl", "data/shaders/Basic-frag.glsl");
 
 	mat = new Material();
-	mat->texture = tex_man->get_texture("data/textures/grass.jpg", ColorFormat::RGB);
+	mat->texture = tex_man.get_texture("data/textures/grass.jpg", ColorFormat::RGB);
 
 
-	skybox_shader = sha_man->get_shader("data/shaders/Skybox-vert.glsl","data/shaders/Skybox-frag.glsl");
+	skybox_shader = sha_man.get_shader("data/shaders/Skybox-vert.glsl","data/shaders/Skybox-frag.glsl");
 	skybox = load_obj_from_file("data/models/cubemapped_cube.obj");
-	skybox->get_material()->texture = tex_man->get_texture("data/textures/Skybox.png", ColorFormat::RGB);
+	skybox->get_material()->texture = tex_man.get_texture("data/textures/Skybox.png", ColorFormat::RGB);
 	skybox->transform.scale(100.0f,100.0f,100.0f);
 
 	test_loaded_model = load_obj_from_file("data/models/Seeker_3.obj");
@@ -127,7 +127,7 @@ void MainScene::update(const float delta)
 	ImGui::End();
 }
 
-void MainScene::render(RenderPass* pass)
+void MainScene::render(RenderPass& pass)
 {
 	voxel_model->dispose();
 	delete voxel_model;
@@ -184,14 +184,14 @@ void MainScene::render(RenderPass* pass)
 	}
 	ImGui::End();
 
-	pass->draw_model(skybox, skybox_shader, cam);
+	pass.draw_model(skybox, skybox_shader, cam);
 
-	pass->draw_model(tmp, shader, cam);
+	pass.draw_model(tmp, shader, cam);
 
-	pass->draw_model(voxel_model, voxel_shader, cam);
+	pass.draw_model(voxel_model, voxel_shader, cam);
 
 	if(test_loaded_model)
-		pass->draw_model(test_loaded_model, shader, cam);
+		pass.draw_model(test_loaded_model, shader, cam);
 
 	//bool val = true;
 	//ImGui::ShowDemoWindow(&val);

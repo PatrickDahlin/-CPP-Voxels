@@ -10,42 +10,6 @@
 class Game;
 
 struct WindowSettings {
-/*public:
-	WindowSettings(const char* title, 
-					int width, 
-					int height, 
-					int refresh_rate, 
-					int display_index, 
-					bool fullscreen,
-					bool borderless,
-					bool vsync,
-					bool is_vulkan) : 
-						title(title),
-						width(width),height(height),
-						refresh_rate(refresh_rate),
-						display_index(display_index),
-						fullscreen(fullscreen),
-						borderless(borderless),
-						vsync(vsync),
-						vulkan_renderer(is_vulkan)
-	{
-			assert(width > 0  && height > 0);
-			assert(refresh_rate >= 0 && refresh_rate < 9999);
-			assert(display_index >= 0 && display_index < SDL_GetNumVideoDisplays());
-	}
-	~WindowSettings(){}
-
-	int get_width() const { return width; }
-	int get_height() const { return height; }
-	int get_refresh_rate() const { return refresh_rate; }
-	int get_display_index() const { return display_index; }
-	bool get_vsync() const { return vsync; }
-	bool is_borderless() const { return borderless; }
-	bool is_fullscreen() const { return fullscreen; }
-	bool is_vulkan() const { return vulkan_renderer; }
-	const char* get_title() const { return title; }
-
-private://*/
 
 	const char* title;
 	// This is framebuffer size
@@ -88,6 +52,13 @@ public:
 
 	int get_height();
 
+	// Since borderless technically is native size but we
+	// render at a lower res, we'll return the real window size here
+
+	int get_real_screen_width();
+
+	int get_real_screen_height();
+
 	WindowSettings get_settings();
 
 protected:
@@ -100,6 +71,10 @@ protected:
 	SDL_GLContext 	context;
 
 	WindowSettings 	settings;
+
+	// These aren't window options, thus we keep them here
+	int real_width;
+	int real_height;
 
 	Game*			game;
 	

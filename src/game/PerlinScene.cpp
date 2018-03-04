@@ -70,9 +70,9 @@ void PerlinScene::resized_window(int width, int height)
 	debug_cam->set_rotation(lastrot);
 }
 
-void PerlinScene::load(ShaderManager* sha_man, TextureManager* tex_man)
+void PerlinScene::load(ShaderManager& sha_man, TextureManager& tex_man)
 {
-	perlin_shader = sha_man->get_shader("data/shaders/Voxel-vert.glsl", "data/shaders/Voxel-frag.glsl");
+	perlin_shader = sha_man.get_shader("data/shaders/Voxel-vert.glsl", "data/shaders/Voxel-frag.glsl");
 
 
 	perlin_mat = new Material();
@@ -121,7 +121,7 @@ void PerlinScene::update(const float delta)
 	debug_cam->update(delta);
 }
 
-void PerlinScene::render(RenderPass* pass)
+void PerlinScene::render(RenderPass& pass)
 {
 	if(perlin_mat->texture)
 	{
@@ -163,7 +163,7 @@ void PerlinScene::render(RenderPass* pass)
 
 	assert(perlin_tex && perlin_mat && perlin_model && debug_cam);
 
-	pass->draw_model(perlin_model, perlin_shader, debug_cam);
+	pass.draw_model(perlin_model, perlin_shader, debug_cam);
 }
 
 void PerlinScene::dispose()

@@ -292,8 +292,19 @@ void Input::poll_events()
 			break;
 		case SDL_MOUSEMOTION:
 			if(!window_focused) break;
-			mouse_x = event.motion.x;
-			mouse_y = event.motion.y;
+
+			// Here we need to scale from real screen coords to virtual coords
+			// Borderless has native size while rendering
+			// at a lower res, this messes up mouse positioning
+
+			mouse_x = (event.motion.x / (float)window->get_real_screen_width()) 
+						* window->get_width();
+
+			mouse_y = (event.motion.y / (float)window->get_real_screen_height())
+						* window->get_height();
+
+			//mouse_x = event.motion.x;
+			//mouse_y = event.motion.y;
 			io.MousePos = ImVec2(mouse_x, mouse_y);
 			// These values can't be used for camera control
 			// Seems like SDL somehow doesn't update xrel too often

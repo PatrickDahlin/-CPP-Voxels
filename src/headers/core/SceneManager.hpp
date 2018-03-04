@@ -25,7 +25,7 @@ public:
 	// Effect: Updates current scene
 	// Postond: Current scene is updated to this frame
 
-	void render(RenderPass* pass);
+	void render(RenderPass& pass);
 	// Effect: Renders the current scene
 	// Postcond: Current scene is queued up for rendering
 

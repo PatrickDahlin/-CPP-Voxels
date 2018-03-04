@@ -38,7 +38,7 @@ public:
 	// Effect: Initializes this scene
 	// Postcond: Scene is initialized
 
-	virtual void load(ShaderManager* sha_man, TextureManager* tex_man) = 0;
+	virtual void load(ShaderManager& sha_man, TextureManager& tex_man) = 0;
 	// Effect: Loads resources and sets up scene for rendering & updating, can be called multiple times
 	// Postcond: All resources needed at initialization are loaded
 
@@ -50,7 +50,7 @@ public:
 	// Effect: Updates scene with actors
 	// Postcond: All actors are updated
 
-	virtual void render(RenderPass* pass) = 0;
+	virtual void render(RenderPass& pass) = 0;
 	// Effect: Renders actors
 	// Postcond: All actors are queued up for rendering
 	

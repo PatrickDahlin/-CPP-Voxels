@@ -20,7 +20,7 @@ public:
 	PerlinScene(Input* input, SceneManager* scn_man);
 	~PerlinScene();
 
-	void load(ShaderManager* sha_man, TextureManager* tex_man) override;
+	void load(ShaderManager& sha_man, TextureManager& tex_man) override;
 
 	void init() override;
 
@@ -28,7 +28,7 @@ public:
 
 	void update(const float delta) override;
 
-	void render(RenderPass* pass) override;
+	void render(RenderPass& pass) override;
 
 	void resized_window(int width, int height) override;
 

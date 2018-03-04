@@ -35,7 +35,7 @@ void SceneManager::switch_to_scene(Scene* s)
 	}
 
 	cur_scene = s;
-	cur_scene->load(shader_manager, texture_manager);
+	cur_scene->load(*shader_manager, *texture_manager);
 
 	// Initialize and add to list only if it hasn't been initialized before
 	if(!is_init)
@@ -52,7 +52,7 @@ void SceneManager::update(const float delta)
 		cur_scene->update(delta);
 }
 
-void SceneManager::render(RenderPass* pass)
+void SceneManager::render(RenderPass& pass)
 {
 	if(cur_scene)
 		cur_scene->render(pass);

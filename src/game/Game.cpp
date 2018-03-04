@@ -122,18 +122,11 @@ void Game::run()
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		RenderPass* pass = new RenderPass;
+		RenderPass pass;// = new RenderPass;
 
 		scene_manager.update(delta_time);
-		scene_manager.render(pass);
-
-		framebuffer->prepare_render();
-
-		pass->do_render();
-
-		framebuffer->end_render();
-
-		render_framebuffer(framebuffer);
+		scene_manager.render(pass); // Give RenderPass all data needed to render this frame
+		
 
 		//
 		//	Set fps limit
@@ -178,12 +171,22 @@ void Game::run()
 			game_window->apply_settings(settings);
 		}
 
+		
+		
+		framebuffer->prepare_render();
+
+		pass.do_render(); // This does the actual rendering to screen
+
 		// Do imgui rendering
 		post_render_imgui();
 
+		framebuffer->end_render();
+		render_framebuffer(framebuffer);
+
+
 		// Lastly swap buffers and delete old renderpass
 		game_window->swap_buffers();
-		delete pass;
+		
 
 		//
 		// Frametime calculation

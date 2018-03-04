@@ -4,7 +4,12 @@
 #include "game/Game.hpp"
 
 GameWindow::GameWindow(WindowSettings settings) :
-	window(NULL), context(NULL), settings(settings), game(nullptr)
+	window(NULL), 
+	context(NULL), 
+	settings(settings), 
+	real_width(settings.width), 
+	real_height(settings.height), 
+	game(nullptr)
 {
 	create_window();
 }
@@ -122,7 +127,7 @@ void GameWindow::setup_gl_context()
 
 	printf("VSync: %s",(settings.vsync?"On":"Off"));
 
-	glClearColor(0.3,0.6,0.8,1);
+	glClearColor(0.3,0.6,0.8,1); // Cornflower blue <3
 
 }
 
@@ -200,16 +205,18 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 			SDL_SetWindowSize(window, native.w, native.h);
 			glViewport(0,0,native.w,native.h);
+			real_width = native.w;
+			real_height = native.h;
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-			if(game) game->window_resize(native.w,native.h);
-			//printf("Fullscreen borderless size: %ix%i\n",closest.w,closest.h);
-			//if(game) game->window_resize(closest.w, closest.h);
+			if(game) game->window_resize(closest.w,closest.h);
 		}
 		else
 		{
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 			SDL_SetWindowSize(window, closest.w, closest.h);
 			glViewport(0,0,closest.w,closest.h);
+			real_width = closest.w;
+			real_height = closest.h;
 			if(game) game->window_resize(closest.w, closest.h);
 		}
 	}
@@ -221,6 +228,8 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 			SDL_SetWindowBordered(window, SDL_FALSE);
 			SDL_SetWindowSize(window, closest.w, closest.h);
 			glViewport(0,0,closest.w,closest.h);
+			real_width = closest.w;
+			real_height = closest.h;
 			if(game) game->window_resize(closest.w, closest.h);
 		}
 		else
@@ -229,6 +238,8 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 			SDL_SetWindowBordered(window, SDL_TRUE);
 			SDL_SetWindowSize(window, closest.w, closest.h);
 			glViewport(0,0,closest.w,closest.h);
+			real_width = closest.w;
+			real_height = closest.h;
 			if(game) game->window_resize(closest.w,closest.h);
 		}
 	}
@@ -246,4 +257,14 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 WindowSettings GameWindow::get_settings()
 {
 	return settings;
+}
+
+int GameWindow::get_real_screen_width()
+{
+	return real_width;
+}
+
+int GameWindow::get_real_screen_height()
+{
+	return real_height;
 }
