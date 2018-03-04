@@ -17,6 +17,10 @@ public:
 
 	void dispose() override;
 
+	int get_width() const;
+
+	int get_height() const;
+
 private:
 
 	void create_buffer();

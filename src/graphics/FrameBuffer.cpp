@@ -57,7 +57,6 @@ in vec2 TexCoords;\
 uniform sampler2D screenTexture;\
 void main()\
 {\
-	float val = texture(screenTexture, TexCoords).r;\
     FragColor = vec4(texture(screenTexture, TexCoords).rgb,1.0);\
 }";
 
@@ -99,12 +98,22 @@ Framebuffer::~Framebuffer()
 
 void Framebuffer::dispose()
 {
-	glDeleteFramebuffers(1, &fbo);
-	glDeleteBuffers(1, &color_tex);
+	if(color_tex) glDeleteTextures(1, &color_tex);
+	if(depth_stencil_buffer) glDeleteTextures(1, &depth_stencil_buffer);
+	if(fbo) glDeleteFramebuffers(1, &fbo);
 	fbo = 0;
 	color_tex = 0;
 }
 
+int Framebuffer::get_width() const
+{
+	return width;
+}
+
+int Framebuffer::get_height() const
+{
+	return height;
+}
 
 void Framebuffer::create_buffer()
 {
@@ -118,8 +127,8 @@ void Framebuffer::create_buffer()
 	glGenTextures(1, &color_tex);
 	glBindTexture(GL_TEXTURE_2D, color_tex);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_tex, 0);
 
@@ -129,8 +138,8 @@ void Framebuffer::create_buffer()
 		glGenTextures(1, &depth_stencil_buffer);
 		glBindTexture(GL_TEXTURE_2D, depth_stencil_buffer);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depth_stencil_buffer, 0);
 

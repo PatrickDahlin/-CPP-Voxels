@@ -203,8 +203,7 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 		if(settings.borderless)
 		{
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-			SDL_SetWindowSize(window, native.w, native.h);
-			glViewport(0,0,native.w,native.h);
+			glViewport(0,0,closest.w,closest.h);
 			real_width = native.w;
 			real_height = native.h;
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
@@ -213,7 +212,7 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 		else
 		{
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-			SDL_SetWindowSize(window, closest.w, closest.h);
+			//SDL_SetWindowSize(window, closest.w, closest.h); // No effect in fullscreen
 			glViewport(0,0,closest.w,closest.h);
 			real_width = closest.w;
 			real_height = closest.h;
@@ -227,6 +226,7 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 			SDL_SetWindowFullscreen(window, 0);
 			SDL_SetWindowBordered(window, SDL_FALSE);
 			SDL_SetWindowSize(window, closest.w, closest.h);
+			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
 			glViewport(0,0,closest.w,closest.h);
 			real_width = closest.w;
 			real_height = closest.h;
@@ -237,6 +237,7 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 			SDL_SetWindowFullscreen(window, 0);
 			SDL_SetWindowBordered(window, SDL_TRUE);
 			SDL_SetWindowSize(window, closest.w, closest.h);
+			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
 			glViewport(0,0,closest.w,closest.h);
 			real_width = closest.w;
 			real_height = closest.h;

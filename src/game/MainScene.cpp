@@ -209,6 +209,8 @@ void MainScene::resized_window(int width, int height)
 		delete cam;
 	}
 
+	printf("Resizing camera to %i x %i\n",width,height);
+
 	cam = new DebugCamera(60.0f, width, height, 0.1f, 500.0f);
 	cam->set_position(lastpos);
 	cam->set_rotation(lastrot);

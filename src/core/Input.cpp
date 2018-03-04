@@ -7,6 +7,7 @@
 #include <iostream>
 #include <imgui/imgui.h> // Not really liking the use of imgui here
 #include <algorithm>
+#include <cmath>
 
 Input::Input(GameWindow* window) : key_map(),
 				 mouse_x(window->get_width()/2),
@@ -25,7 +26,7 @@ Input::Input(GameWindow* window) : key_map(),
 				 scroll_delta(0),
 				 controller(nullptr)
 {
-	window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
+	window->set_mouse_pos( window->get_real_screen_width()/2, window->get_real_screen_height()/2 );
 	
 }
 
@@ -295,13 +296,16 @@ void Input::poll_events()
 
 			// Here we need to scale from real screen coords to virtual coords
 			// Borderless has native size while rendering
-			// at a lower res, this messes up mouse positioning
+			// at a lower res, therefore we need to translate real->virtual screen pos
+			// specifically for borderless
 
-			mouse_x = (event.motion.x / (float)window->get_real_screen_width()) 
-						* window->get_width();
+			mouse_x = (int)floor((event.motion.x / (float)window->get_real_screen_width()) 
+						* window->get_width());
 
-			mouse_y = (event.motion.y / (float)window->get_real_screen_height())
-						* window->get_height();
+			mouse_y = (int)floor((event.motion.y / (float)window->get_real_screen_height())
+						* (float)window->get_height());
+
+
 
 			//mouse_x = event.motion.x;
 			//mouse_y = event.motion.y;
@@ -375,7 +379,7 @@ void Input::poll_events()
 
 	mouse_delta_x = mouse_x - last_mouse_x;
 	mouse_delta_y = mouse_y - last_mouse_y;
-	
+
 	if(!lock_mouse)
 	{
 		last_mouse_x = mouse_x;
@@ -383,8 +387,11 @@ void Input::poll_events()
 	}
 	else
 	{
-		window->set_mouse_pos( window->get_width()/2, window->get_height()/2 );
+		// We have to set mouse to real screen pos
+		window->set_mouse_pos( window->get_real_screen_width()/2, window->get_real_screen_height()/2 );
+		// Mouse X/Y is in virtual screen-space, as should last pos be
 		last_mouse_x = window->get_width()/2;
 		last_mouse_y = window->get_height()/2;
 	}
+
 }
