@@ -147,30 +147,24 @@ void GameWindow::set_mouse_pos(int x, int y)
 	SDL_WarpMouseInWindow(window, x, y);
 }
 
-void GameWindow::apply_settings(WindowSettings new_settings)
+SDL_DisplayMode get_closest_display_mode(WindowSettings requested_settings)
 {
-	assert(window);
-	settings = new_settings;
-
-	//
-	// Find closest matching displaymode
-	//
-
 	SDL_DisplayMode target, closest;
 
-	target.w = settings.width;
-	target.h = settings.height;
+	target.w = requested_settings.width;
+	target.h = requested_settings.height;
 	target.format = 0; // Anything
-	target.refresh_rate = settings.refresh_rate;
+	target.refresh_rate = requested_settings.refresh_rate;
 	target.driverdata = 0; // initialize
 	printf("Requesting DisplayMode: %ix%i %iHz\n",target.w, target.h, target.refresh_rate);
 
-	if(SDL_GetClosestDisplayMode(settings.display_index, &target, &closest) == 0)
+	if(SDL_GetClosestDisplayMode(requested_settings.display_index, &target, &closest) == 0)
 	{
 		// Didn't find any matching our request, get the first one supported by the display!
 		printf("Error! Requested DisplayMode not supported nor was any similar to it!\n");
+		printf("-> Getting first one avaliable\n");
 		int ret = 0;
-		ret = SDL_GetDesktopDisplayMode(settings.display_index, &closest);
+		ret = SDL_GetDesktopDisplayMode(requested_settings.display_index, &closest);
 		if(ret != 0)
 		{
 			printf("No supported display found! Code: %i\nSDL_Error:%s\n",ret,SDL_GetError());
@@ -181,15 +175,19 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 	{
 		printf("Supported DisplayMode selected: %ix%i %iHz\n",closest.w,closest.h,closest.refresh_rate);
 
-		settings.width = closest.w;
-		settings.height = closest.h;
-		settings.refresh_rate = closest.refresh_rate;
+		requested_settings.width = closest.w;
+		requested_settings.height = closest.h;
+		requested_settings.refresh_rate = closest.refresh_rate;
 
 	}
 
-	//
-	// Assume a valid displaymode
-	//
+	return closest;
+}
+
+void GameWindow::apply_settings(WindowSettings new_settings)
+{
+	assert(window);
+	settings = new_settings;
 
 	// Get native desktop size for use in borderless fullscreen
 	SDL_DisplayMode native;
@@ -200,17 +198,22 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 
 	if(settings.fullscreen)
 	{
+	
 		if(settings.borderless)
 		{
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-			glViewport(0,0,closest.w,closest.h);
+			glViewport(0,0,settings.width,settings.height);
 			real_width = native.w;
 			real_height = native.h;
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-			if(game) game->window_resize(closest.w,closest.h);
+			if(game) game->window_resize(settings.width,settings.height);
 		}
 		else
 		{
+			// Find closest matching displaymode
+			// We only need displaymodes in real fullscreen
+			SDL_DisplayMode closest = get_closest_display_mode(new_settings);
+
 			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 			//SDL_SetWindowSize(window, closest.w, closest.h); // No effect in fullscreen
 			glViewport(0,0,closest.w,closest.h);
@@ -225,23 +228,23 @@ void GameWindow::apply_settings(WindowSettings new_settings)
 		{
 			SDL_SetWindowFullscreen(window, 0);
 			SDL_SetWindowBordered(window, SDL_FALSE);
-			SDL_SetWindowSize(window, closest.w, closest.h);
+			SDL_SetWindowSize(window, settings.width, settings.height);
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-			glViewport(0,0,closest.w,closest.h);
-			real_width = closest.w;
-			real_height = closest.h;
-			if(game) game->window_resize(closest.w, closest.h);
+			glViewport(0,0,settings.width,settings.height);
+			real_width = settings.width;
+			real_height = settings.height;
+			if(game) game->window_resize(settings.width, settings.height);
 		}
 		else
 		{
 			SDL_SetWindowFullscreen(window, 0);
 			SDL_SetWindowBordered(window, SDL_TRUE);
-			SDL_SetWindowSize(window, closest.w, closest.h);
+			SDL_SetWindowSize(window, settings.width, settings.height);
 			SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
-			glViewport(0,0,closest.w,closest.h);
-			real_width = closest.w;
-			real_height = closest.h;
-			if(game) game->window_resize(closest.w,closest.h);
+			glViewport(0,0,settings.width,settings.height);
+			real_width = settings.width;
+			real_height = settings.height;
+			if(game) game->window_resize(settings.width,settings.height);
 		}
 	}
 
