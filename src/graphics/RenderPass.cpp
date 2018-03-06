@@ -4,6 +4,8 @@
 #include "graphics/Model.hpp"
 #include "graphics/ShaderProgram.hpp"
 #include "graphics/Material.hpp"
+#include "graphics/VertexArray.hpp"
+#include "imgui/imgui.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -56,6 +58,8 @@ void RenderPass::do_instant_render(Model* model, ShaderProgram* shader, Camera* 
 
 void RenderPass::do_render()
 {
+	int v_c = 0;
+	int t_c = 0;
 	assert(main_camera);
 	for(auto it : draw_calls)
 	{
@@ -72,7 +76,14 @@ void RenderPass::do_render()
 
 		it.model->draw();
 
+		t_c += it.model->get_vertex_array()->get_triangle_count();
+		v_c += it.model->get_vertex_array()->get_vertex_count();
 	}
+
+	ImGui::Begin("RenderPass");
+	ImGui::Text("Triangle count: %i",t_c);
+	ImGui::Text("Vertex count: %i", v_c);
+	ImGui::End();
 
 	draw_calls.clear(); 
 }

@@ -97,7 +97,7 @@ void GLBuffer::data_pointer(int location,
 	enabled_attributes[attribute_count++] = location;
 }
 
-int GLBuffer::get_size()
+int GLBuffer::get_element_count()
 {
 	return element_count;
 }

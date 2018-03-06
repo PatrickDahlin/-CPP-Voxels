@@ -65,7 +65,7 @@ void Terrain::chunk_drawdist_update()
 		{
 			for(int k = 0; k < side_len; k++)
 			{
-				TerrainChunk c = TerrainChunk(vec3(i*16,j*16,k*16), 16, terrain_atlas, terrain_shader);
+				TerrainChunk c = TerrainChunk(vec3(i*16,j*16,k*16), 17, terrain_atlas, terrain_shader);
 				c.init();
 				chunks.emplace_back(c);
 			}

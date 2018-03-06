@@ -116,6 +116,19 @@ void VertexArray::add_element_buffer(GLBuffer* buf)
 	element_buffer = buf;
 }
 
+int VertexArray::get_vertex_count()
+{
+	return vertices.size();
+}
+
+int VertexArray::get_triangle_count()
+{
+	if(element_buffer)
+		return element_buffer->get_element_count() / 3;
+	else
+		return vertices.size() / 3;
+}
+
 void VertexArray::add_buffer(GLBuffer buf)
 {
 	glbuffers.emplace_back(buf);
@@ -175,7 +188,7 @@ void VertexArray::draw(RenderMode mode)
 	
 
 	if(element_buffer != nullptr)
-		glDrawElements(gl_mode, element_buffer->get_size(), GL_INT, (void*)0);
+		glDrawElements(gl_mode, element_buffer->get_element_count(), GL_INT, (void*)0);
 	else
 		glDrawArrays(gl_mode, 0, vertices.size());
 

@@ -54,6 +54,10 @@ public:
 
 	void dispose();
 
+	int get_vertex_count();
+
+	int get_triangle_count();
+
 private:
 	
 	vector<vec3>			vertices;

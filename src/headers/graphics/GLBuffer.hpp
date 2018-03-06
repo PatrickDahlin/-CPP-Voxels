@@ -44,7 +44,7 @@ class GLBuffer
 
 	void dispose();
 
-	int get_size();
+	int get_element_count();
 
   protected:
 
