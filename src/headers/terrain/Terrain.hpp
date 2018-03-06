@@ -20,6 +20,8 @@ public:
 
 	void set_draw_dist(int new_dist);
 
+	void init();
+
 	void update(float delta);
 
 	void render(RenderPass& pass);
@@ -32,7 +34,12 @@ public:
 
 private:
 
+	void chunk_drawdist_update();
+
 	void remove_outliers();
+
+	ShaderProgram*				terrain_shader;
+	GLTexture*					terrain_atlas;
 
 	vec3						center;
 	std::vector<TerrainChunk>	chunks;

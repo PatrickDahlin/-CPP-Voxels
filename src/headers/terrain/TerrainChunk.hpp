@@ -13,7 +13,7 @@ class ShaderProgram;
 
 class TerrainChunk : public Disposable {
 public:
-	TerrainChunk(int size, GLTexture* tex, ShaderProgram* shader);
+	TerrainChunk(vec3 pos, int size, GLTexture* tex, ShaderProgram* shader);
 	~TerrainChunk();
 
 	void set_active(bool active);
@@ -28,8 +28,6 @@ public:
 	
 	void dispose();
 
-	Transform transform;
-
 private:
 
 	bool			active;
@@ -37,6 +35,7 @@ private:
 	VoxelData		data;
 
 	Model*			mesh;
+	vec3			chunk_pos;
 
 	GLTexture*		mesh_tex;
 	ShaderProgram*	shader;

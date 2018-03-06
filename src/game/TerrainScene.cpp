@@ -13,18 +13,24 @@
 TerrainScene::TerrainScene(Input* input, SceneManager* scene_manager) : Scene(input, scene_manager),
 skybox_shader(nullptr),
 skybox_model(nullptr),
-debug_camera(60.0f, 1280, 720, 0.1f, 500.0f),
+debug_camera(60.0f, 1280, 720, 1.0f, 1000.0f),
 voxel_terrain()
 {
 	debug_camera.set_input(input);
+	debug_camera.set_fly_speed(5);
 	voxel_terrain.set_center(debug_camera.get_position());
+	voxel_terrain.set_draw_dist(5);
 }
 
 TerrainScene::~TerrainScene()
+
 {}
 
 void TerrainScene::init()
-{}
+{
+	printf("Initialize voxel terrain\n");
+	voxel_terrain.init();
+}
 
 void TerrainScene::load(ShaderManager& sha_man, TextureManager& tex_man)
 {
@@ -48,7 +54,12 @@ void TerrainScene::update(const float delta)
 void TerrainScene::render(RenderPass& pass)
 {
 	
-	pass.draw_model(skybox_model, skybox_shader, &debug_camera);
+	pass.switch_to_cam(&debug_camera);
+
+	// Disable depth mask to make sure skybox doesn't cover up any objects
+	glDepthMask(GL_FALSE);
+	pass.do_instant_render(skybox_model, skybox_shader, &debug_camera);
+	glDepthMask(GL_TRUE);
 
 	voxel_terrain.render(pass);
 }
@@ -58,7 +69,8 @@ void TerrainScene::resized_window(int width, int height)
 	vec3 lastpos = debug_camera.get_position();
 	vec3 lastrot = debug_camera.get_euler();
 
-	debug_camera = DebugCamera(60.0f, width, height, 0.1f, 500.0f);
+	debug_camera = DebugCamera(60.0f, width, height, 1.0f, 1000.0f);
+	debug_camera.set_fly_speed(5);
 	debug_camera.set_input(input);
 	debug_camera.set_position(lastpos);
 	debug_camera.set_rotation(lastrot);

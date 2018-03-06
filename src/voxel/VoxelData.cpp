@@ -16,8 +16,7 @@ data_length(0)
 { init_data(); }
 
 VoxelData::~VoxelData()
-{ 
-	dispose();
+{
 }
 
 int VoxelData::get_width() const

@@ -18,10 +18,14 @@ class Camera;
 
 class RenderPass {
 public:
-	RenderPass();
+	RenderPass(Camera* main_camera = nullptr);
 	~RenderPass();
 
-	void draw_model(Model* model, ShaderProgram* shader, Camera* c);
+	void draw_model(Model* model, ShaderProgram* shader, Camera* c = nullptr);
+
+	void switch_to_cam(Camera* cam);
+
+	void do_instant_render(Model* model, ShaderProgram* shader, Camera* c = nullptr);
 
 	void do_render();
 
@@ -34,6 +38,8 @@ protected:
 	};
 
 	std::vector<DrawCall>		draw_calls;
+
+	Camera*						main_camera;
 
 };
 

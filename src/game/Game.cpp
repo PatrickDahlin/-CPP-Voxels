@@ -161,9 +161,7 @@ void Game::run()
 		RenderPass pass;// = new RenderPass;
 
 		scene_manager.update(delta_time);
-		scene_manager.render(pass); // Give RenderPass all data needed to render this frame
 		
-
 		//
 		//	Set fps limit
 		//
@@ -190,6 +188,11 @@ void Game::run()
 		}
 		
 		framebuffer->prepare_render();
+
+		
+		// Do rendercall here to allow for direct gl-render calls
+		scene_manager.render(pass); // Give RenderPass all data needed to render this frame
+		
 
 		pass.do_render(); // This does the actual rendering to screen
 
