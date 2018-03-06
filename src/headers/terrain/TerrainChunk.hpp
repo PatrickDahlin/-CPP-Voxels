@@ -3,12 +3,15 @@
 
 #include "core/Common.hpp"
 #include "voxel/VoxelData.hpp"
-#include "core/Actor.hpp"
+#include "core/Disposable.hpp"
+#include "core/Transform.hpp"
+#include "graphics/Model.hpp"
+#include "graphics/RenderPass.hpp"
 
 class GLTexture;
 class ShaderProgram;
 
-class TerrainChunk : public Actor {
+class TerrainChunk : public Disposable {
 public:
 	TerrainChunk(int size, GLTexture* tex, ShaderProgram* shader);
 	~TerrainChunk();
@@ -17,16 +20,23 @@ public:
 
 	bool is_active() const;
 
-	// Actor methods
-	void init() override;
-	void update(float delta) override;
-	void dispose() override;
+	void init();
+
+	void render(RenderPass& pass);
+	
+	void update(float delta);
+	
+	void dispose();
+
+	Transform transform;
 
 private:
 
 	bool			active;
-	int			size;
+	int				size;
 	VoxelData		data;
+
+	Model*			mesh;
 
 	GLTexture*		mesh_tex;
 	ShaderProgram*	shader;

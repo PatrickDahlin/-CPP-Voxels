@@ -5,6 +5,7 @@
 #include "core/Scene.hpp"
 
 #include "game/DebugCamera.hpp"
+#include "terrain/Terrain.hpp"
 
 class ShaderProgram;
 class Model;
@@ -40,6 +41,8 @@ private:
 	Model*				skybox_model;
 
 	DebugCamera			debug_camera;
+
+	Terrain				voxel_terrain;
 
 };
 

@@ -4,12 +4,12 @@
 #include "core/Common.hpp"
 #include "core/Disposable.hpp"
 #include "terrain/TerrainChunk.hpp"
+#include "graphics/RenderPass.hpp"
 
 #include <vector>
 #include <glm/vec3.hpp>
 
 class RenderPass;
-typedef glm::vec3 vec3;
 
 class Terrain : public Disposable {
 public:
@@ -22,7 +22,7 @@ public:
 
 	void update(float delta);
 
-	void render(RenderPass* pass);
+	void render(RenderPass& pass);
 
 	void dispose() override;
 

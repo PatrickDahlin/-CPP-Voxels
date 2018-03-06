@@ -86,3 +86,19 @@ void Transform::set_uniform_scale(float scale)
 	model_scale = glm::vec3(scale);
 	needs_mat_update = true;
 }
+
+vec3 Transform::get_position()
+{
+	return position;
+}
+
+vec3 Transform::get_euler()
+{
+	return euler_angles;
+}
+
+vec3 Transform::get_scale()
+{
+	return model_scale;
+}
+

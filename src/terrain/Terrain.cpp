@@ -42,9 +42,15 @@ void Terrain::update(float delta)
 	// generate mesh for it
 }
 
-void Terrain::render(RenderPass* pass)
+void Terrain::render(RenderPass& pass)
 {
-	// chunks should be automatically rendered by scene
+	// Chunk rendering is handled here
+	
+	for(auto& it : chunks)
+	{
+		it.render(pass);
+	}
+
 }
 
 void Terrain::dispose()

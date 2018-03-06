@@ -16,8 +16,10 @@ public:
 
 	void dispose() {
 		for(auto it : resources)
+		{	
 			it.second->dispose();
-	
+			delete it.second;
+		}
 		resources.clear();
 	}
 
