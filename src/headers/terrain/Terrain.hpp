@@ -8,6 +8,8 @@
 
 #include <vector>
 #include <glm/vec3.hpp>
+#include <glm/gtx/hash.hpp>
+#include <unordered_map>
 
 class RenderPass;
 
@@ -38,12 +40,16 @@ private:
 
 	void remove_outliers();
 
+	void fill_empty_slots();
+
 	ShaderProgram*				terrain_shader;
 	GLTexture*					terrain_atlas;
 
 	vec3						center;
-	std::vector<TerrainChunk>	chunks;
-	std::vector<TerrainChunk>	inactive_chunks;
+
+	std::unordered_map<ivec3, TerrainChunk*> 	chunk_lookup;
+	std::vector<TerrainChunk>					chunks;
+	
 	int 						draw_dist;
 
 };

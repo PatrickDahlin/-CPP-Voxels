@@ -63,3 +63,14 @@ bool TerrainChunk::is_active() const
 {
 	return active;
 }
+
+vec3 TerrainChunk::get_chunk_pos() const
+{
+	return chunk_pos;
+}
+
+
+int TerrainChunk::get_chunk_size() const
+{
+	return size;
+}

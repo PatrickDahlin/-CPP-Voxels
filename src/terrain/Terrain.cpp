@@ -10,7 +10,6 @@
 Terrain::Terrain() :
 center(0,0,0),
 chunks(),
-inactive_chunks(),
 draw_dist(0)
 {}
 
@@ -21,6 +20,7 @@ void Terrain::set_center(vec3 pos)
 {
 	center = pos;
 	remove_outliers();
+	fill_empty_slots();
 }
 
 vec3 Terrain::get_center() const
@@ -65,9 +65,12 @@ void Terrain::chunk_drawdist_update()
 		{
 			for(int k = 0; k < side_len; k++)
 			{
-				TerrainChunk c = TerrainChunk(vec3(i*16,j*16,k*16), 17, terrain_atlas, terrain_shader);
+				ivec3 ipos = ivec3(i,j,k);
+				ivec3 pos = vec3(i*CHUNK_SIZE,j*CHUNK_SIZE,k*CHUNK_SIZE);
+				TerrainChunk c = TerrainChunk(pos, CHUNK_SIZE_PLUSONE, terrain_atlas, terrain_shader);
 				c.init();
 				chunks.emplace_back(c);
+				chunk_lookup[ipos] = &c;
 			}
 		}
 	}
@@ -97,26 +100,80 @@ void Terrain::dispose()
 
 	for(auto& it : chunks)
 		it.dispose();
-	for(auto& it : inactive_chunks)
-		it.dispose();
 	
 	chunks.clear();
-	inactive_chunks.clear();
+}
+
+void Terrain::fill_empty_slots()
+{
+	int side_len = draw_dist*2 + 1;
+	vec3 center_chunk_offset(CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f);
+
+	for(int i=0; i < side_len; i++)
+	{
+		for(int j=0; j < side_len; j++)
+		{
+			for(int k=0; k < side_len; k++)
+			{
+
+
+				ivec3 ipos(i,j,k);
+				vec3 cur_pos = vec3(i*CHUNK_SIZE,j*CHUNK_SIZE,k*CHUNK_SIZE) + center_chunk_offset;
+				float dist = glm::length(center - cur_pos);
+
+				if(dist > (float)(draw_dist*CHUNK_SIZE)) continue;
+
+				auto it = chunk_lookup.find(ipos);
+				if(it == chunk_lookup.end())
+				{
+					ivec3 pos = vec3(i*CHUNK_SIZE,j*CHUNK_SIZE,k*CHUNK_SIZE);
+					TerrainChunk c = TerrainChunk(pos, CHUNK_SIZE_PLUSONE, terrain_atlas, terrain_shader);
+					c.init();
+					chunks.emplace_back(c);
+					chunk_lookup[ipos] = &c;
+
+					//printf("Added chunk %.2f %i,%i,%i status: ", dist, ipos.x, ipos.y, ipos.z);
+					//if(chunk_lookup.find(ipos) == chunk_lookup.end()) printf("NOT ");
+					//printf("OK\n");
+				}
+			}
+		}
+	}
 }
 
 void Terrain::remove_outliers()
 {
-	return;
-	/*
-	for(int i=chunks.size();i>=0;i--)
+	if(chunks.size() == 0) return;
+
+	vec3 center_chunk_offset(CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f);
+
+	int n = 0;
+	for(int i=chunks.size()-1;i>=0;i--)
 	{
-		vec3 cur_pos = chunks[i].get_transform()->get_position();
-		float32 dist = (center - cur_pos).length();
-		if(dist > draw_dist)
+		vec3 c_pos = chunks[i].get_chunk_pos();
+		vec3 cur_pos = c_pos + center_chunk_offset;
+		ivec3 ipos((int)(c_pos.x/CHUNK_SIZE),
+					(int)(c_pos.y/CHUNK_SIZE),
+					(int)(c_pos.z/CHUNK_SIZE));
+
+		float dist = glm::length(center - cur_pos); // vec3.length gives dimension not length of vector!!!!!!!!!!11!!1111!
+
+		if(dist > (float)(draw_dist*CHUNK_SIZE))
 		{
 			TerrainChunk c = chunks[i];
-			inactive_chunks.push_back(c);
+			c.dispose();
+			n++;
+
+			auto it = chunk_lookup.find(ipos);
+			if(it != chunk_lookup.end()) chunk_lookup.erase(it);
+			//printf("Remove chunk %i,%i,%i status: ",ipos.x,ipos.y,ipos.z);
+
+			//if(chunk_lookup.find(ipos) != chunk_lookup.end()) printf("NOT ");
+
+			//printf(" OK\n");
+
 			chunks.erase(chunks.begin() + i); // Erase is slow, prefer std::remove
 		}
-	}*/
+	}
+
 }

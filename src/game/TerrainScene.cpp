@@ -19,11 +19,10 @@ voxel_terrain()
 	debug_camera.set_input(input);
 	debug_camera.set_fly_speed(5);
 	voxel_terrain.set_center(debug_camera.get_position());
-	voxel_terrain.set_draw_dist(5);
+	voxel_terrain.set_draw_dist(2);
 }
 
 TerrainScene::~TerrainScene()
-
 {}
 
 void TerrainScene::init()
@@ -70,7 +69,7 @@ void TerrainScene::resized_window(int width, int height)
 	vec3 lastrot = debug_camera.get_euler();
 
 	debug_camera = DebugCamera(60.0f, width, height, 1.0f, 1000.0f);
-	debug_camera.set_fly_speed(5);
+	debug_camera.set_fly_speed(25);
 	debug_camera.set_input(input);
 	debug_camera.set_position(lastpos);
 	debug_camera.set_rotation(lastrot);

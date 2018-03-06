@@ -8,6 +8,10 @@
 #include "graphics/Model.hpp"
 #include "graphics/RenderPass.hpp"
 
+// Needs to be size +1 since we need one voxel that overlaps on each chunk border
+#define CHUNK_SIZE_PLUSONE 17
+#define CHUNK_SIZE 16
+
 class GLTexture;
 class ShaderProgram;
 
@@ -27,6 +31,10 @@ public:
 	void update(float delta);
 	
 	void dispose();
+
+	vec3 get_chunk_pos() const;
+
+	int get_chunk_size() const;
 
 private:
 

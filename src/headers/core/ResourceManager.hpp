@@ -44,9 +44,6 @@ protected:
 
 
 
-//dfasf s 
-
-
 private:
 
 	std::unordered_map<U,T*> resources;

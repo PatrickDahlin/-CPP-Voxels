@@ -33,4 +33,5 @@ typedef glm::mat4			mat4;
 #define CHECK_GL_ERROR() { GLenum err; while( (err = glGetError()) != GL_NO_ERROR) { std::cout << "OpenGL error: " << err << std::endl; } }
 
 
+
 #endif
