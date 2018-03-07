@@ -1,5 +1,6 @@
 	#include "terrain/Terrain.hpp"
 	#include "core/Transform.hpp"
+	#include <iostream>
 
 	#include "graphics/ShaderProgram.hpp"
 	#include "graphics/GLTexture.hpp"
@@ -9,7 +10,7 @@
 
 	Terrain::Terrain() :
 	center(0,0,0),
-	terrain_origin(-999999,0,0),
+	terrain_origin(0,0,0),
 	chunk_lookup(),
 	chunks(),
 	draw_dist(0)
@@ -20,14 +21,15 @@
 
 	void Terrain::set_center(vec3 pos)
 	{
-		vec3 new_origin = pos / (float)CHUNK_SIZE;
-		new_origin.x = floor(new_origin.x) - draw_dist;
-		new_origin.y = floor(new_origin.y) - draw_dist;
-		new_origin.z = floor(new_origin.z) - draw_dist;
+		vec3 new_origin = pos / 16.0f;
+		new_origin.x = floor(new_origin.x) - (float)draw_dist;
+		new_origin.y = floor(new_origin.y) - (float)draw_dist;
+		new_origin.z = floor(new_origin.z) - (float)draw_dist;
 
 		if(terrain_origin != new_origin)
-			printf("Center in new chunk: %.0f,%.0f,%.0f\n",new_origin.x,new_origin.y,new_origin.z);
-		else return;
+			printf("Center in new chunk: %.1f,%.1f,%.1f\n",new_origin.x,new_origin.y,new_origin.z);
+		else 
+			return;
 		terrain_origin = new_origin;
 
 		center = pos;
@@ -126,6 +128,22 @@
 		int side_len = draw_dist*2 + 1;
 		vec3 center_chunk_offset(CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f);
 
+		/*if(chunk_lookup.size() > 0){
+			printf("currently in the list:\n");
+			ivec3 tmp2(1,1,1);
+			bool found = false;
+			for(auto& it : chunk_lookup)
+			{
+				//printf("(%i,%i,%i) ",it.x,it.y,it.z);
+				if(it == tmp2) found = true;	
+			}
+			printf("\n");
+
+
+			printf("first value was ");
+			if(!found) printf("NOT ");
+			printf("found\n");
+		}*/
 		for(int i=0; i < side_len; i++)
 		{
 			for(int j=0; j < side_len; j++)
@@ -133,12 +151,15 @@
 				for(int k=0; k < side_len; k++)
 				{
 					// Local chunk coords within terrain
-					my_ivec3 ipos(i,j,k);
+					ivec3 ipos(i,j,k);
 					
 					// World pos for current chunk origin
-					vec3 chunk_origin = vec3((float)i*CHUNK_SIZE,(float)j*CHUNK_SIZE,(float)k*CHUNK_SIZE);
-					chunk_origin += terrain_origin * (float)CHUNK_SIZE;
-
+					//vec3 chunk_origin = vec3((float)i*CHUNK_SIZE,(float)j*CHUNK_SIZE,(float)k*CHUNK_SIZE);
+					//chunk_origin += terrain_origin * (float)CHUNK_SIZE;
+					
+					vec3 chunk_origin((float)i,(float)j,(float)k);
+					chunk_origin += terrain_origin;
+					chunk_origin *= (float)CHUNK_SIZE;
 
 					// Calculate distance to center of chunk
 					float dist = glm::length(center - (chunk_origin + center_chunk_offset));
@@ -148,21 +169,26 @@
 					/*auto it = chunk_lookup.find(ipos);
 					if(it != chunk_lookup.end()) 
 						continue;
+					//printf("currently in the list:\n");
 					*/
 					bool found = false;
 					for(auto& it : chunk_lookup)
 					{
+						//printf("(%i,%i,%i) ",it.x,it.y,it.z);
 						if(it == ipos)
 						{
 							//printf("Found!!! %i, %i, %i == %i, %i, %i value = %i\n", it.first.x, it.first.y, it.first.z, ipos.x, ipos.y, ipos.z, it.second);
 							found = true;
 							break;
 						}
-					}	
+					}
+					//printf("\n");
 
 					if(found) 
 						continue;
-
+					
+					
+					
 					//auto it = std::find(chunk_lookup.begin(), chunk_lookup.end(), ipos);
 					//if(it == chunk_lookup.end())
 					{
@@ -171,15 +197,10 @@
 						c->init();
 						chunks.emplace_back(c);
 						//chunk_lookup[ipos] = chunks.size()-1;
-						chunk_lookup.emplace(ipos);
-						//printf("added a chunk\n");
+						chunk_lookup.emplace_back(ipos);
+						printf("Added chunk at (%i,%i,%i)\n",ipos.x,ipos.y,ipos.z);
 
-						//printf("Added chunk %.2f %i,%i,%i \n", dist, ipos.x, ipos.y, ipos.z);
-						//if(chunk_lookup.find(ipos) == chunk_lookup.end()) printf("NOT ");
-						//printf("OK\n");
 					}
-					//else
-					//	printf("chunk already found at %i, %i, %i\n", ipos.x, ipos.y, ipos.z);
 				}
 			}
 		}
@@ -193,22 +214,11 @@
 
 		int n = 0;
 
-/*
-
-for(auto it = c.begin(); it != c.end(); )
-    if(it->first % 2 == 1)
-        it = c.erase(it);
-    else
-        ++it;
-
-*/
-//printf("lookup size: %i\n",chunk_lookup.size());
-
 		for(auto it = chunks.begin(); it != chunks.end();)
 		{
 			
 			vec3 chunk_origin = (*it)->get_chunk_pos();
-			my_ivec3 ipos((int)chunk_origin.x/16,
+			ivec3 ipos((int)chunk_origin.x/16,
 						(int)chunk_origin.y/16,
 						(int)chunk_origin.z/16);
 
@@ -227,13 +237,16 @@ for(auto it = c.begin(); it != c.end(); )
 			(*it)->dispose();
 			delete (*it);
 
+			printf("Trying to remove (%i,%i,%i) from lookup\n",ipos.x,ipos.y,ipos.z);
 
-			/*for(auto it2 = chunk_lookup.begin(); it2 != chunk_lookup.end();)
+			for(auto it2 = chunk_lookup.begin(); it2 != chunk_lookup.end();)
 			{
+				//printf("comparing against (%i,%i,%i)\n",(*it2).x,(*it2).y,(*it2).z);
 				if( (*it2).x == ipos.x &&
 					(*it2).y == ipos.y &&
 					(*it2).z == ipos.z )
 				{
+					printf("found and removed\n");
 					//wprintf("Removed lookup %i,%i,%i\n",(*it2).x, (*it2).y, (*it2).z);
 					it2 = chunk_lookup.erase(it2);
 				}

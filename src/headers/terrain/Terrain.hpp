@@ -13,32 +13,6 @@
 
 class RenderPass;
 
-struct my_ivec3 {
-	my_ivec3(int x, int y, int z) : x(x), y(y), z(z) {}
-	int x, y, z;
-};
-
-inline bool operator==(const my_ivec3& left, const my_ivec3& right)
-{
-	return left.x == right.x && left.y == right.y && left.z == right.z;
-}
-
-namespace std {
-	template<> struct hash<my_ivec3>
-	{
-		typedef my_ivec3 arg_type;
-		typedef std::size_t result;
-		result operator()(arg_type const& arg) const noexcept
-		{
-			std::size_t h1 = std::hash<int>{}(arg.x);
-			std::size_t h2 = std::hash<int>{}(arg.y);
-			std::size_t h3 = std::hash<int>{}(arg.z);
-			return h1 ^ (h2 >> 1) ^ (h3 >> 2);
-		}
-	};
-}
-
-
 class Terrain : public Disposable {
 public:
 	Terrain();
@@ -75,7 +49,7 @@ private:
 	vec3						terrain_origin; // 0,0,0 origin of local chunk coords
 	
 
-	std::unordered_set<my_ivec3> 					chunk_lookup;
+	std::vector<ivec3> 					chunk_lookup;
 	std::vector<TerrainChunk*>					chunks;
 	
 	int 						draw_dist;
