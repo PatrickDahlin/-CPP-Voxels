@@ -29,10 +29,11 @@ void TerrainChunk::init()
 	data->init();
 	generate_voxels(chunk_pos, data);
 
-	mesh = generate_terrain(*data);
+	mesh = generate_terrain_alloc(*data);
 	mesh->transform.set_position(chunk_pos);
 	Material* m = new Material();
 	m->texture = mesh_tex;
+	assert(!mesh->get_material());
 	mesh->set_material(m);
 	assert(mesh);
 }
@@ -53,10 +54,12 @@ void TerrainChunk::dispose()
 	if(mesh) {
 		delete mesh->get_material();
 		delete mesh;
+		mesh = nullptr;
 	}
 	if(data){
 		data->dispose();
 		delete data;
+		data = nullptr;
 	} 
 }
 

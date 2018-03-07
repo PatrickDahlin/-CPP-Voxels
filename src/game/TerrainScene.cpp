@@ -19,7 +19,7 @@ voxel_terrain()
 	debug_camera.set_input(input);
 	debug_camera.set_fly_speed(5);
 	voxel_terrain.set_center(debug_camera.get_position());
-	voxel_terrain.set_draw_dist(2);
+	voxel_terrain.set_draw_dist(8);
 }
 
 TerrainScene::~TerrainScene()
@@ -46,7 +46,14 @@ void TerrainScene::update(const float delta)
 
 	debug_camera.update(delta);
 
-	voxel_terrain.set_center(debug_camera.get_position());
+	static bool update_center = true;
+
+	if(update_center)
+		voxel_terrain.set_center(debug_camera.get_position());
+	
+	if(input->get_key(SDLK_f))
+		update_center = !update_center;
+
 	voxel_terrain.update(delta);
 }
 

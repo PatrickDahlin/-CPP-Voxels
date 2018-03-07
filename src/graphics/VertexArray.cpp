@@ -52,7 +52,7 @@ void VertexArray::upload_data()
 	else 
 	{
 		//@Error
-		printf("No vertices to upload\n");
+		//printf("No vertices to upload\n");
 		return;	// We don't want to render if we have no vertices
 	}
 	//
