@@ -19,7 +19,7 @@ voxel_terrain()
 	debug_camera.set_input(input);
 	debug_camera.set_fly_speed(5);
 	voxel_terrain.set_center(debug_camera.get_position());
-	voxel_terrain.set_draw_dist(1);
+	voxel_terrain.set_draw_dist(2);
 }
 
 TerrainScene::~TerrainScene()

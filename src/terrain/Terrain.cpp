@@ -153,6 +153,10 @@
 					// Local chunk coords within terrain
 					ivec3 ipos(i,j,k);
 					
+					ipos.x += terrain_origin.x;
+					ipos.y += terrain_origin.y;
+					ipos.z += terrain_origin.z;
+
 					// World pos for current chunk origin
 					//vec3 chunk_origin = vec3((float)i*CHUNK_SIZE,(float)j*CHUNK_SIZE,(float)k*CHUNK_SIZE);
 					//chunk_origin += terrain_origin * (float)CHUNK_SIZE;
@@ -196,7 +200,6 @@
 						TerrainChunk* c = new TerrainChunk(chunk_origin, CHUNK_SIZE_PLUSONE, terrain_atlas, terrain_shader);
 						c->init();
 						chunks.emplace_back(c);
-						//chunk_lookup[ipos] = chunks.size()-1;
 						chunk_lookup.emplace_back(ipos);
 						printf("Added chunk at (%i,%i,%i)\n",ipos.x,ipos.y,ipos.z);
 
@@ -205,6 +208,8 @@
 			}
 		}
 	}
+
+	
 
 	void Terrain::remove_outliers()
 	{
@@ -222,9 +227,6 @@
 						(int)chunk_origin.y/16,
 						(int)chunk_origin.z/16);
 
-			ipos.x -= (int)terrain_origin.x;
-			ipos.y -= (int)terrain_origin.y;
-			ipos.z -= (int)terrain_origin.z;
 
 			float dist = glm::length(center - (chunk_origin + center_chunk_offset)); 
 			

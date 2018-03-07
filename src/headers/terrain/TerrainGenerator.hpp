@@ -24,7 +24,7 @@ void generate_voxels(vec3 pos, VoxelData* data)
 				float x = i + pos.x;
 				float y = j + pos.y;
 				float z = k + pos.z;
-				float tmp = fperlin_fractal(x * 0.13f,y * 0.13f,z * 0.13f, 2, 0.5f);
+				float tmp = fperlin_fractal(x * 0.23f,y * 0.13f,z * 0.23f, 2, 0.5f);
 				tmp = std::min(1.0f,std::max(-1.0f,tmp));
 				tmp = (tmp + 1.0f) / 2.0f;
 				data->set_value_at_index(i,j,k, (unsigned char)(tmp*255));
