@@ -6,17 +6,22 @@ width(size),
 height(size),
 data(nullptr),
 data_length(0)
-{ init_data(); }
+{}
 
 VoxelData::VoxelData(int width, int height) :
 width(width),
 height(height),
 data(nullptr),
 data_length(0)
-{ init_data(); }
+{}
 
 VoxelData::~VoxelData()
 {
+}
+
+void VoxelData::init()
+{
+	init_data();
 }
 
 int VoxelData::get_width() const
@@ -50,7 +55,8 @@ void VoxelData::set_value_at_index(int x, int y, int z, unsigned char val)
 {
 	assert(x < width  && x >= 0);
 	assert(z < width  && z >= 0);
-	assert(y < height && y >= 0);	
+	assert(y < height && y >= 0);
+	assert(data);
 	data[get_index(x,y,z)] = val;
 }
 

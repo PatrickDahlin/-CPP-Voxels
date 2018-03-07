@@ -11,7 +11,7 @@
 
 TerrainChunk::TerrainChunk(vec3 pos, int size, GLTexture* tex, ShaderProgram* shader) :
 size(size),
-data(size,size),
+data(nullptr),
 mesh(nullptr),
 chunk_pos(pos),
 mesh_tex(tex),
@@ -23,10 +23,13 @@ TerrainChunk::~TerrainChunk()
 
 void TerrainChunk::init()
 {
-	
-	generate_voxels(chunk_pos, &data);
+	assert(!data);
 
-	mesh = generate_terrain(data);
+	data = new VoxelData(size, size);
+	data->init();
+	generate_voxels(chunk_pos, data);
+
+	mesh = generate_terrain(*data);
 	mesh->transform.set_position(chunk_pos);
 	Material* m = new Material();
 	m->texture = mesh_tex;
@@ -51,6 +54,10 @@ void TerrainChunk::dispose()
 		delete mesh->get_material();
 		delete mesh;
 	}
+	if(data){
+		data->dispose();
+		delete data;
+	} 
 }
 
 

@@ -14,6 +14,8 @@ public:
 	VoxelData(int width, int height);
 	~VoxelData();
 
+	void init();
+
 	unsigned char get_value_at_index(int x, int y, int z);
 
 	void set_value_at_index(int x, int y, int z, unsigned char val);

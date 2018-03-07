@@ -9,8 +9,8 @@
 #include "graphics/RenderPass.hpp"
 
 // Needs to be size +1 since we need one voxel that overlaps on each chunk border
-#define CHUNK_SIZE_PLUSONE 17
-#define CHUNK_SIZE 16
+constexpr int CHUNK_SIZE_PLUSONE = 17;
+constexpr int CHUNK_SIZE = 16;
 
 class GLTexture;
 class ShaderProgram;
@@ -18,7 +18,8 @@ class ShaderProgram;
 class TerrainChunk : public Disposable {
 public:
 	TerrainChunk(vec3 pos, int size, GLTexture* tex, ShaderProgram* shader);
-	~TerrainChunk();
+	virtual ~TerrainChunk();
+	//T(T const& other) = delete;
 
 	void set_active(bool active);
 
@@ -40,7 +41,7 @@ private:
 
 	bool			active;
 	int				size;
-	VoxelData		data;
+	VoxelData*		data;
 
 	Model*			mesh;
 	vec3			chunk_pos;
