@@ -53,6 +53,7 @@ void TerrainChunk::dispose()
 {
 	if(mesh) {
 		delete mesh->get_material();
+		mesh->dispose();
 		delete mesh;
 		mesh = nullptr;
 	}

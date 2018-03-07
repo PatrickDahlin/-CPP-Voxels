@@ -5,7 +5,7 @@
 #include "core/Scene.hpp"
 
 #include "game/DebugCamera.hpp"
-#include "terrain/Terrain.hpp"
+
 
 class ShaderProgram;
 class Model;
@@ -15,6 +15,8 @@ class SceneManager;
 class ShaderManager;
 class TextureManager;
 class RenderPass;
+
+class Terrain;
 
 class TerrainScene : public Scene {
 public:
@@ -42,7 +44,7 @@ private:
 
 	DebugCamera			debug_camera;
 
-	Terrain				voxel_terrain;
+	Terrain*			voxel_terrain;
 
 };
 

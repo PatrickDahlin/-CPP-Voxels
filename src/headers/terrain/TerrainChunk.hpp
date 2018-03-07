@@ -9,8 +9,8 @@
 #include "graphics/RenderPass.hpp"
 
 // Needs to be size +1 since we need one voxel that overlaps on each chunk border
-constexpr int CHUNK_SIZE_PLUSONE = 17;
-constexpr int CHUNK_SIZE = 16;
+constexpr int CHUNK_SIZE_PLUSONE = 33;
+constexpr int CHUNK_SIZE = 32;
 
 class GLTexture;
 class ShaderProgram;

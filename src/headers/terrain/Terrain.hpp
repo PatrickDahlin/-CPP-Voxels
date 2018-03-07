@@ -16,7 +16,7 @@ class RenderPass;
 class Terrain : public Disposable {
 public:
 	Terrain();
-	~Terrain();
+	virtual ~Terrain();
 
 	void set_center(vec3 pos);
 
