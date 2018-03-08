@@ -7,14 +7,7 @@
 class VoxelData;
 class VertexArray;
 
-
-struct MCMesh {
-	std::vector<vec3> vertices;
-	std::vector<vec3> normals;
-	std::vector<vec2> texcoords;
-	int tri_count;
-};
-
+class Model;
 
 class MarchingCubes {
 public:
@@ -22,7 +15,7 @@ public:
 	~MarchingCubes();
 
 	// Evaluates voxeldata and puts it in MCMesh as geometry
-	MCMesh* Evaluate(VoxelData* data, unsigned char iso);
+	void Evaluate(Model* mesh, VoxelData* data, unsigned char iso);
 	
 
 private:

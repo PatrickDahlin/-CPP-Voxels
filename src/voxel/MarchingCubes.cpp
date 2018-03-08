@@ -2,15 +2,19 @@
 #include "voxel/VoxelData.hpp"
 #include "graphics/VertexArray.hpp"
 #include <glm/glm.hpp>
+#include "graphics/Model.hpp"
 
 MarchingCubes::MarchingCubes(){}
 MarchingCubes::~MarchingCubes(){}
 
-MCMesh* MarchingCubes::Evaluate(VoxelData* data, unsigned char iso)
+void MarchingCubes::Evaluate(Model* mesh, VoxelData* data, unsigned char iso)
 {
 	int ntriang = 0;
 	vec3 current;
-	MCMesh* mesh = new MCMesh();
+	assert(mesh);
+	assert(data);
+	VertexArray* varr = mesh->get_vertex_array();
+
 	// i is z
 	for(int i = data->get_width()-2; i >= 0; i--)
 	{
@@ -83,27 +87,26 @@ MCMesh* MarchingCubes::Evaluate(VoxelData* data, unsigned char iso)
 					vec3 vert2 = vertlist[triTable[cubeindex][l+1]];
 					vec3 vert3 = vertlist[triTable[cubeindex][l+2]];
 					
-					mesh->vertices.emplace_back((vert1 + current));
-					mesh->vertices.emplace_back((vert2 + current));
-					mesh->vertices.emplace_back((vert3 + current));
+					varr->add_vertex((vert1 + current));
+					varr->add_vertex((vert2 + current));
+					varr->add_vertex((vert3 + current));
 					
 					vec3 normal = glm::cross((vert2 - vert1),(vert3 - vert1));
-
-					mesh->normals.emplace_back(normal);
-					mesh->normals.emplace_back(normal);
-					mesh->normals.emplace_back(normal);
 					
-					mesh->texcoords.emplace_back(vec2(0,0));
-					mesh->texcoords.emplace_back(vec2(1,0));
-					mesh->texcoords.emplace_back(vec2(1,1));
+					varr->add_normal(normal);
+					varr->add_normal(normal);
+					varr->add_normal(normal);
+					
+					varr->add_texcoord(vec2(0,0));
+					varr->add_texcoord(vec2(1,0));
+					varr->add_texcoord(vec2(1,1));
 
 					ntriang++;
 				}
 			}
 		}
 	}
-	mesh->tri_count = ntriang;
-	return mesh;
+	varr->upload_data();
 }
 
 vec3 MarchingCubes::interp(unsigned char iso, vec3 p1, vec3 p2, unsigned char val1, unsigned char val2)

@@ -95,19 +95,15 @@ void MainScene::init()
 
 
 	MarchingCubes* myCubes = new MarchingCubes();
-	MCMesh* mesh = myCubes->Evaluate(myvoxels, 127);
-
-	printf("Evaluated Marching cubes and got %i triangles\n",mesh->tri_count);
 
 	voxel_model = new Model();
-	voxel_model->set_vertices(mesh->vertices);
-	voxel_model->set_texcoords(mesh->texcoords);
-	voxel_model->set_normals(mesh->normals);	
+	
+	myCubes->Evaluate(voxel_model, myvoxels, 127);
+
 	voxel_model->set_material(mat);
 	voxel_model->transform.translate(-5,0,0);
 
 	
-	delete mesh; // You need to clean up mesh after it's created
 	delete myCubes;
 }
 
@@ -132,7 +128,6 @@ void MainScene::render(RenderPass& pass)
 	voxel_model->dispose();
 	delete voxel_model;
 	MarchingCubes* myCubes = new MarchingCubes();
-	MCMesh* mesh = myCubes->Evaluate(myvoxels, 127);
 
 	for(int i=0; i < myvoxels->get_width(); i++)
 	{
@@ -161,13 +156,12 @@ void MainScene::render(RenderPass& pass)
 	}//*/
 	
 	voxel_model = new Model();
-	voxel_model->set_vertices(mesh->vertices);
-	voxel_model->set_texcoords(mesh->texcoords);
-	voxel_model->set_normals(mesh->normals);	
+	
+	myCubes->Evaluate(voxel_model, myvoxels, 127);
+
 	voxel_model->set_material(mat);
 	voxel_model->transform.translate(-5,0,0);
 
-	delete mesh;
 	delete myCubes;
 
 

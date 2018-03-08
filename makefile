@@ -47,5 +47,3 @@ run: build
 clean:
 	@echo -- Cleaning --
 	-del /s /q *.o
-
-	
