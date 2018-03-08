@@ -35,6 +35,11 @@ void generate_voxels(vec3 pos, VoxelData* data)
 
 }
 
+void generate_terrain(Model* model, VoxelData& data)
+{
+	m_cubes.Evaluate(model, &data, 128);
+}
+
 Model* generate_terrain_alloc(VoxelData& data)
 {
 	Model* voxel_model = new Model();

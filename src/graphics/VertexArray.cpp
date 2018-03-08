@@ -141,9 +141,11 @@ void VertexArray::clear()
 	colors.clear();
 	texcoords.clear();
 
+
 	// Do buffer clearing stuff
 	for(GLBuffer& it : glbuffers)
 	{
+		it.bind();
 		it.clear(); // Frees/releases the underlying data for this buffer
 	}
 

@@ -49,9 +49,9 @@ private:
 	vec3						terrain_origin; // 0,0,0 origin of local chunk coords
 	
 
-	//std::vector<ivec3> 					chunk_lookup;
 	std::unordered_map<ivec3, TerrainChunk*>	chunk_lookup;
 	std::vector<TerrainChunk*>					chunks;
+	std::vector<TerrainChunk*>					inactive_chunks;
 	
 	int 						draw_dist;
 

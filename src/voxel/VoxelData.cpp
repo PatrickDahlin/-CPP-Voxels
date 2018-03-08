@@ -21,7 +21,10 @@ VoxelData::~VoxelData()
 
 void VoxelData::init()
 {
-	init_data();
+	if(data) return;
+	
+	data_length = width * width * height;
+	data = new unsigned char[data_length];
 }
 
 int VoxelData::get_width() const
@@ -34,14 +37,6 @@ int VoxelData::get_height() const
 	return height;
 }
 
-void VoxelData::init_data() 
-{
-	if(data != nullptr)
-		delete[] data;
-	
-	data_length = width * width * height;
-	data = new unsigned char[data_length];	
-}
 
 unsigned char VoxelData::get_value_at_index(int x, int y, int z) 
 {
@@ -67,7 +62,7 @@ int VoxelData::get_index(int x, int y, int z)
 
 void VoxelData::dispose()
 {
-	if(data != nullptr)
+	if(data)
 	{
 		delete[] data;
 		data = nullptr;

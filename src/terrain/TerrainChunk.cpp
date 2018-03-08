@@ -6,6 +6,7 @@
 #include "graphics/Material.hpp"
 #include "graphics/RenderPass.hpp"
 #include "core/Common.hpp"
+#include "graphics/VertexArray.hpp"
 
 #include "terrain/TerrainGenerator.hpp"
 
@@ -16,47 +17,57 @@ mesh(nullptr),
 chunk_pos(pos),
 mesh_tex(tex),
 shader(shader)
-{}
+{
+	assert(tex);
+	assert(shader);
+	assert(size > 0);
+}
 
 TerrainChunk::~TerrainChunk()
 {}
 
 void TerrainChunk::init()
 {
-	assert(!data);
-
-	data = new VoxelData(size, size);
+	//printf("chunk init\n");
+	if(!data) data = new VoxelData(size, size);
 	data->init();
 	generate_voxels(chunk_pos, data);
 
-	if(mesh) {
-		mesh->dispose();
-		if(mesh->get_material()) delete mesh->get_material();
-		delete mesh;
+	if(mesh) 
+	{
+		assert(mesh->get_vertex_array());
+		mesh->get_vertex_array()->clear();
 	}
-	mesh = generate_terrain_alloc(*data);
+	else
+	{
+		mesh = new Model();
+		Material* m = new Material();
+		m->texture = mesh_tex;
+		mesh->set_material(m);
+	}
+	
 	assert(mesh);
+	generate_terrain(mesh, *data);
 	mesh->transform.set_position(chunk_pos);
-	Material* m = new Material();
-	m->texture = mesh_tex;
-	assert(!mesh->get_material());
-	mesh->set_material(m);
-	assert(mesh);
+	//printf("done chunk init\n");
 }
 
 void TerrainChunk::render(RenderPass& pass)
 {
-	assert(shader && mesh);
+	if(!active) return;
+	assert(shader);
+	assert(mesh);
 	pass.draw_model(mesh, shader);
 }
 
 void TerrainChunk::update(float delta)
 {
-
+	if(!active) return;
 }
 
 void TerrainChunk::dispose()
 {
+	printf("chunk dispose\n");
 	if(mesh) {
 		delete mesh->get_material();
 		mesh->dispose();
@@ -79,6 +90,11 @@ void TerrainChunk::set_active(bool active)
 bool TerrainChunk::is_active() const
 {
 	return active;
+}
+
+void TerrainChunk::set_position(vec3 pos)
+{
+	chunk_pos = pos;
 }
 
 vec3 TerrainChunk::get_chunk_pos() const

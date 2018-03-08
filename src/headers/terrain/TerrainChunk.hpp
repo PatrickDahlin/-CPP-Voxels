@@ -20,10 +20,13 @@ public:
 	TerrainChunk(vec3 pos, int size, GLTexture* tex, ShaderProgram* shader);
 	virtual ~TerrainChunk();
 	//T(T const& other) = delete;
+	TerrainChunk(TerrainChunk const& other) = delete;
 
 	void set_active(bool active);
 
 	bool is_active() const;
+
+	void set_position(vec3 pos);
 
 	void init();
 

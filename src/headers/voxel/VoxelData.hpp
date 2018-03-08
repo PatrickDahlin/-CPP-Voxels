@@ -13,6 +13,7 @@ public:
 	VoxelData(int size);
 	VoxelData(int width, int height);
 	~VoxelData();
+	VoxelData(VoxelData const& other) = delete;
 
 	void init();
 
@@ -28,8 +29,6 @@ public:
 private:
 
 	int get_index(int x, int y, int z);
-
-	void init_data();
 
 	int				width, height;
 	unsigned char*	data;

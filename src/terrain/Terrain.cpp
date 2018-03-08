@@ -80,21 +80,6 @@ void Terrain::init()
 void Terrain::chunk_drawdist_update()
 {
 	return;
-	int side_len = 2 * draw_dist + 1;
-	for(int i = 0; i < side_len; i++)
-	{
-		for(int j = 0; j < side_len; j++)
-		{
-			for(int k = 0; k < side_len; k++)
-			{
-				//ivec3 ipos = ivec3(i,j,k);
-				ivec3 pos = vec3(i*CHUNK_SIZE,j*CHUNK_SIZE,k*CHUNK_SIZE);
-				TerrainChunk* c = new TerrainChunk(pos, CHUNK_SIZE_PLUSONE, terrain_atlas, terrain_shader);
-				c->init();
-				chunks.emplace_back(c);
-			}
-		}
-	}
 }
 
 void Terrain::update(float delta)
@@ -131,7 +116,13 @@ void Terrain::dispose()
 		it->dispose();
 		delete it;
 	}
+	for(auto& it : inactive_chunks)
+	{
+		it->dispose();
+		delete it;
+	}
 	chunks.clear();
+	inactive_chunks.clear();
 
 	terrain_shader->dispose();
 	delete terrain_shader;
@@ -181,11 +172,34 @@ void Terrain::fill_empty_slots()
 
 				if(found) 
 					continue;
+
+				TerrainChunk* chunk = nullptr;
+				if(inactive_chunks.size() > 0)
+				{
+					// Look for inactive chunk to put here
+					for(auto it = inactive_chunks.begin(); it != inactive_chunks.end();)
+					{
+						if( (*it) != nullptr )
+						{
+							chunk = *it;
+							inactive_chunks.erase(it);
+							break;
+						}
+						it++;
+					}
+					
+				}
 				
-				TerrainChunk* c = new TerrainChunk(chunk_origin, CHUNK_SIZE_PLUSONE, terrain_atlas, terrain_shader);
-				c->init();
-				chunks.emplace_back(c);
-				chunk_lookup[ipos] = c;
+				if(!chunk)
+					chunk = new TerrainChunk(chunk_origin, CHUNK_SIZE_PLUSONE, terrain_atlas, terrain_shader);
+				
+
+				//TerrainChunk* c = new TerrainChunk(chunk_origin, CHUNK_SIZE_PLUSONE, terrain_atlas, terrain_shader);
+				chunk->set_active(true);
+				chunk->set_position(chunk_origin);
+				chunk->init();
+				chunks.emplace_back(chunk);
+				chunk_lookup[ipos] = chunk;
 				n++;
 			}
 		}
@@ -216,8 +230,8 @@ void Terrain::remove_outliers()
 			continue;
 		}
 
-		(*it)->dispose();
-		delete (*it);
+		//(*it)->dispose();
+		//delete (*it);
 
 		//printf("Trying to remove (%i,%i,%i) from lookup\n",ipos.x,ipos.y,ipos.z);
 
@@ -235,6 +249,8 @@ void Terrain::remove_outliers()
 				it2++;
 		}
 
+		(*it)->set_active(false);
+		inactive_chunks.emplace_back(*it);
 
 		it = chunks.erase(it);
 	}
