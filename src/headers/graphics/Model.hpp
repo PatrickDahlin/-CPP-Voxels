@@ -1,9 +1,7 @@
 #ifndef _MODEL_HPP_
 #define _MODEL_HPP_
 
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/vec2.hpp>
+#include "core/Common.hpp"
 #include <vector>
 #include "core/Transform.hpp"
 
@@ -13,6 +11,12 @@ using namespace glm;
 using namespace std;
 class VertexArray;
 class Material;
+
+struct AABB {
+	AABB() : min(0,0,0), max(0,0,0) {}
+	vec3 min;
+	vec3 max;
+};
 
 class Model {
 public:
@@ -33,7 +37,11 @@ public:
 	Material* get_material() const;
 
 	VertexArray* get_vertex_array() const;
+
+	AABB get_AABB() const;
 	
+	void recalculate_AABB();
+
 	Transform		transform;
 	
 protected:
@@ -42,6 +50,8 @@ protected:
     
     VertexArray*	vert_arr;
 	Material*		material;
+
+	AABB			aabb;
 
 };
 

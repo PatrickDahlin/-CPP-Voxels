@@ -58,6 +58,12 @@ public:
 
 	int get_triangle_count();
 
+	vector<vec3> get_vertices() const;
+	vector<vec3> get_normals() const;
+	vector<vec4> get_colors() const;
+	vector<vec2> get_texcoords() const;
+	
+
 private:
 	
 	vector<vec3>			vertices;

@@ -3,13 +3,15 @@
 #include "graphics/Material.hpp"
 
 #include <stdio.h>
+#include <algorithm>
 
 #include "graphics/GLBuffer.hpp"
 #include <tiny_obj_loader.h>
 
 Model::Model() :
 needs_upload(false),
-material(nullptr)
+material(nullptr),
+aabb()
 {
 	vert_arr = new VertexArray();
 }
@@ -25,6 +27,11 @@ void Model::dispose()
 	delete vert_arr;
 }
 
+AABB Model::get_AABB() const
+{
+	return aabb;
+}
+
 VertexArray* Model::get_vertex_array() const
 {
 	return vert_arr;
@@ -38,6 +45,30 @@ void Model::set_material(Material* mat)
 Material* Model::get_material() const
 {
 	return material;
+}
+
+void Model::recalculate_AABB()
+{
+	assert(vert_arr);
+	if(vert_arr->get_vertices().size() == 0) return;
+
+	vec3 v0 = vert_arr->get_vertices()[0];
+	aabb.min = v0;
+	aabb.max = v0;
+	for(vec3 v : vert_arr->get_vertices())
+	{
+		aabb.min.x = std::min(aabb.min.x, v.x);
+		aabb.min.y = std::min(aabb.min.y, v.y);
+		aabb.min.z = std::min(aabb.min.z, v.z);
+
+		aabb.max.x = std::max(aabb.max.x, v.x);
+		aabb.max.y = std::max(aabb.max.y, v.y);
+		aabb.max.z = std::max(aabb.max.z, v.z);
+	}
+	aabb.min += transform.get_position();
+	aabb.min *= transform.get_scale();
+	aabb.max += transform.get_position();
+	aabb.max *= transform.get_scale();
 }
 
 void Model::set_vertices(vector<vec3> verts)

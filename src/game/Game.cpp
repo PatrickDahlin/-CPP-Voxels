@@ -47,8 +47,8 @@ void Game::load()
 	scene_manager.resized_window(game_window->get_width(), game_window->get_height());
 	
 	// No need to delete this scene, it's deleted in scenemanager
-	//scene_manager.switch_to_scene(new MainScene(&input, &scene_manager));
-	scene_manager.switch_to_scene(new TerrainScene(&input, &scene_manager));
+	scene_manager.switch_to_scene(new MainScene(&input, &scene_manager));
+	//scene_manager.switch_to_scene(new TerrainScene(&input, &scene_manager));
 	//scene_manager.switch_to_scene(new PerlinScene(&input, &scene_manager));
 
 	glClearColor(0.3f, 0.5f, 0.8f, 1.0f);

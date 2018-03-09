@@ -48,8 +48,6 @@ void Terrain::set_draw_dist(int drawdist)
 {
 	assert(drawdist > 0);
 	draw_dist = drawdist;
-	remove_outliers();
-	fill_empty_slots();
 }
 
 int Terrain::get_draw_dist() const
@@ -72,14 +70,6 @@ void Terrain::init()
 	assert(terrain_atlas);
 
 	printf("Done init\n");
-	//if(!draw_dist) return;
-
-	//chunk_drawdist_update();
-}
-
-void Terrain::chunk_drawdist_update()
-{
-	return;
 }
 
 void Terrain::update(float delta)
@@ -229,9 +219,6 @@ void Terrain::remove_outliers()
 			it++;
 			continue;
 		}
-
-		//(*it)->dispose();
-		//delete (*it);
 
 		//printf("Trying to remove (%i,%i,%i) from lookup\n",ipos.x,ipos.y,ipos.z);
 

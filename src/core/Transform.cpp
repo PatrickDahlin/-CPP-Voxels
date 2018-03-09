@@ -43,7 +43,7 @@ void Transform::rotate(float x, float y, float z)
 }
 void Transform::scale(float x, float y, float z)
 {
-	model_scale += glm::vec3(x, y, z);
+	model_scale *= glm::vec3(x, y, z);
 	needs_mat_update = true;
 }
 

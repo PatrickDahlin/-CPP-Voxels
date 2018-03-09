@@ -38,11 +38,13 @@ TODO:
 		- [Fixed] ShaderManager and TextureManager have some resource problems, segfaults are happening...
 		- [Fixed] DebugCamera freaks out at low framerates
 
+	Woking on:
+		- (H) Frustum culling
+
 	TODO:
-		- Load/Save window settings
-		- Fullscreen borderless forces native screen size for now, FBOs might fix this (change viewport before rendering to target framebuffer)
-		- GameWindow needs a GetSupportedDisplayModes to get a list of WindowSettings for use in options dropdown
-		- Octree data-structure for later voxel use (Later optimization)
+		- (H) Terrain LOD system
+		- (L) Load/Save window settings
+		- (L) Octree data-structure for later voxel use (Later optimization)
 		- (M) Actor class []
 		- (M) Text rendering []
 		- (M) Uniform buffer objects []
@@ -53,6 +55,9 @@ TODO:
 		- (L) Smoothed Input axes (Think mouse/controller axis in Unity)
 
 	Done:
+		- (H) AABB for models
+		- GameWindow needs a GetSupportedDisplayModes to get a list of WindowSettings for use in options dropdown
+		- Fullscreen borderless forces native screen size no more, FBOs might fixed this (change viewport before rendering to target framebuffer)
 		- (L) GameWindow DisplayMode support for multiple refreshrate options [x]
 		- Marching cubes implementation
 		- Perlin noise implementation

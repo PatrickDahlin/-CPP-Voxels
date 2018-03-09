@@ -30,6 +30,28 @@ void VertexArray::dispose()
 	glDeleteVertexArrays(1, &vao);
 }
 
+
+vector<vec3> VertexArray::get_vertices() const
+{
+	return vertices;
+}
+
+vector<vec3> VertexArray::get_normals() const
+{
+	return normals;
+}
+
+vector<vec4> VertexArray::get_colors() const
+{
+	return colors;
+}
+
+vector<vec2> VertexArray::get_texcoords() const
+{
+	return texcoords;
+}
+
+
 void VertexArray::upload_data()
 {
 	// Clean up old buffers

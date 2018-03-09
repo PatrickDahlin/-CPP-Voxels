@@ -8,6 +8,7 @@
 
 #include "graphics/Model.hpp"
 #include "graphics/Material.hpp"
+#include <imgui/imgui.h>
 
 
 TerrainScene::TerrainScene(Input* input, SceneManager* scene_manager) : Scene(input, scene_manager),
@@ -60,6 +61,12 @@ void TerrainScene::update(const float delta)
 	else
 		debug_camera.set_fly_speed(50);
 		
+	static int draw_dist = 5;
+	ImGui::Begin("Terrain");
+	ImGui::InputInt("Draw distance", &draw_dist, 1,20);
+	ImGui::End();
+
+	voxel_terrain->set_draw_dist(draw_dist);
 
 	voxel_terrain->update(delta);
 }

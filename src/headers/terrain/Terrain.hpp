@@ -36,7 +36,6 @@ public:
 
 private:
 
-	void chunk_drawdist_update();
 
 	void remove_outliers();
 

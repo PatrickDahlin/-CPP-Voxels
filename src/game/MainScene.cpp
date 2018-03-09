@@ -50,7 +50,12 @@ void MainScene::load(ShaderManager& sha_man, TextureManager& tex_man)
 	skybox_shader = sha_man.get_shader("data/shaders/Skybox-vert.glsl","data/shaders/Skybox-frag.glsl");
 	skybox = load_obj_from_file("data/models/cubemapped_cube.obj");
 	skybox->get_material()->texture = tex_man.get_texture("data/textures/Skybox.png", ColorFormat::RGB);
-	skybox->transform.scale(100.0f,100.0f,100.0f);
+	skybox->transform.set_scale(100.0f,100.0f,100.0f);
+
+	skybox->recalculate_AABB();
+	AABB aabb = skybox->get_AABB();
+	printf("AABB for skybox: %.2f %.2f %.2f - %.2f %.2f %.2f\n",aabb.min.x, aabb.min.y, aabb.min.z,
+																aabb.max.x, aabb.max.y, aabb.max.z);
 
 	test_loaded_model = load_obj_from_file("data/models/Seeker_3.obj");
 	delete test_loaded_model->get_material();
@@ -66,6 +71,7 @@ void MainScene::init()
 	tmp->set_material(mat);
 
 	myvoxels = new VoxelData(32,32);
+	myvoxels->init();
 	
 	
 	for(int i=0; i < myvoxels->get_width(); i++)
@@ -125,7 +131,8 @@ void MainScene::update(const float delta)
 
 void MainScene::render(RenderPass& pass)
 {
-	voxel_model->dispose();
+	pass.switch_to_cam(cam);
+	/*voxel_model->dispose();
 	delete voxel_model;
 	MarchingCubes* myCubes = new MarchingCubes();
 
@@ -155,7 +162,7 @@ void MainScene::render(RenderPass& pass)
 		}
 	}//*/
 	
-	voxel_model = new Model();
+	/*voxel_model = new Model();
 	
 	myCubes->Evaluate(voxel_model, myvoxels, 127);
 
@@ -163,7 +170,7 @@ void MainScene::render(RenderPass& pass)
 	voxel_model->transform.translate(-5,0,0);
 
 	delete myCubes;
-
+*/
 
 	assert(mat->texture);
 	static bool wire = false;
