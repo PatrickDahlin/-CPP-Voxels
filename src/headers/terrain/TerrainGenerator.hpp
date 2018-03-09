@@ -11,7 +11,7 @@
 
 static MarchingCubes m_cubes;
 
-void generate_voxels(vec3 pos, VoxelData* data)
+void generate_voxels(vec3 pos, float scale, VoxelData* data)
 {
 	assert(data);
 
@@ -21,9 +21,9 @@ void generate_voxels(vec3 pos, VoxelData* data)
 		{
 			for(int k = 0; k < data->get_width(); k++)
 			{
-				float x = i + pos.x;
-				float y = j + pos.y;
-				float z = k + pos.z;
+				float x = i*scale + pos.x;
+				float y = j*scale + pos.y;
+				float z = k*scale + pos.z;
 				float tmp = fperlin_fractal(x * 0.014f,y * 0.014f,z * 0.014f, 2, 0.5f);
 				tmp = std::min(1.0f,std::max(-1.0f,tmp));
 				tmp = (tmp + 1.0f) / 2.0f;

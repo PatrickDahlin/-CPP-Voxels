@@ -31,7 +31,7 @@ void TerrainChunk::init()
 	//printf("chunk init\n");
 	if(!data) data = new VoxelData(size, size);
 	data->init();
-	generate_voxels(chunk_pos, data);
+	generate_voxels(chunk_pos, (float)CHUNK_WORLD_SIZE / (float)CHUNK_SIZE ,data);
 
 	if(mesh) 
 	{
@@ -49,6 +49,7 @@ void TerrainChunk::init()
 	assert(mesh);
 	generate_terrain(mesh, *data);
 	mesh->transform.set_position(chunk_pos);
+	mesh->transform.set_uniform_scale(2.0f);
 	//printf("done chunk init\n");
 }
 
@@ -67,7 +68,6 @@ void TerrainChunk::update(float delta)
 
 void TerrainChunk::dispose()
 {
-	printf("chunk dispose\n");
 	if(mesh) {
 		delete mesh->get_material();
 		mesh->dispose();

@@ -22,7 +22,7 @@ Terrain::~Terrain()
 
 void Terrain::set_center(vec3 pos)
 {
-	vec3 new_origin = pos / (float)CHUNK_SIZE;
+	vec3 new_origin = pos / (float)CHUNK_WORLD_SIZE;
 	new_origin.x = floor(new_origin.x) - (float)draw_dist;
 	new_origin.y = floor(new_origin.y) - (float)draw_dist;
 	new_origin.z = floor(new_origin.z) - (float)draw_dist;
@@ -131,7 +131,7 @@ void Terrain::dispose()
 void Terrain::fill_empty_slots()
 {
 	int side_len = draw_dist*2 + 1;
-	vec3 center_chunk_offset(CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f);
+	vec3 center_chunk_offset(CHUNK_WORLD_SIZE / 2.0f, CHUNK_WORLD_SIZE / 2.0f, CHUNK_WORLD_SIZE / 2.0f);
 
 	int n = 0;
 
@@ -151,11 +151,11 @@ void Terrain::fill_empty_slots()
 				// World pos for current chunk origin
 				vec3 chunk_origin((float)i,(float)j,(float)k);
 				chunk_origin += terrain_origin;
-				chunk_origin *= (float)CHUNK_SIZE;
+				chunk_origin *= (float)CHUNK_WORLD_SIZE;
 
 				// Calculate distance to center of chunk
 				float dist = glm::length(center - (chunk_origin + center_chunk_offset));
-				if(dist > (float)(draw_dist*CHUNK_SIZE)) continue;
+				if(dist > (float)(draw_dist*CHUNK_WORLD_SIZE)) continue;
 
 				// Look for chunk if location is occupied
 				bool found = false;
@@ -211,20 +211,20 @@ void Terrain::fill_empty_slots()
 void Terrain::remove_outliers()
 {
 
-	vec3 center_chunk_offset(CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f, CHUNK_SIZE / 2.0f);
+	vec3 center_chunk_offset(CHUNK_WORLD_SIZE / 2.0f, CHUNK_WORLD_SIZE / 2.0f, CHUNK_WORLD_SIZE / 2.0f);
 
 	for(auto it = chunks.begin(); it != chunks.end();)
 	{
 		
 		vec3 chunk_origin = (*it)->get_chunk_pos();
-		ivec3 ipos((int)chunk_origin.x/CHUNK_SIZE,
-					(int)chunk_origin.y/CHUNK_SIZE,
-					(int)chunk_origin.z/CHUNK_SIZE);
+		ivec3 ipos((int)chunk_origin.x/CHUNK_WORLD_SIZE,
+					(int)chunk_origin.y/CHUNK_WORLD_SIZE,
+					(int)chunk_origin.z/CHUNK_WORLD_SIZE);
 
 
 		float dist = glm::length(center - (chunk_origin + center_chunk_offset)); 
 		
-		if(dist <= (float)(draw_dist*CHUNK_SIZE)) 
+		if(dist <= (float)(draw_dist*CHUNK_WORLD_SIZE)) 
 		{
 			it++;
 			continue;

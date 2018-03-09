@@ -128,6 +128,9 @@ void GameWindow::setup_gl_context()
 	printf("VSync: %s",(settings.vsync?"On":"Off"));
 
 	glClearColor(0.3,0.6,0.8,1); // Cornflower blue <3
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CCW);
+	glCullFace(GL_BACK);
 
 }
 

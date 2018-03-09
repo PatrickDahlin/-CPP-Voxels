@@ -73,7 +73,7 @@ void TerrainScene::render(RenderPass& pass)
 	glDepthMask(GL_FALSE);
 	pass.do_instant_render(skybox_model, skybox_shader, &debug_camera);
 	glDepthMask(GL_TRUE);
-
+	
 	voxel_terrain->render(pass);
 }
 
