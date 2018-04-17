@@ -58,7 +58,13 @@ void MainScene::load(ShaderManager& sha_man, TextureManager& tex_man)
 																aabb.max.x, aabb.max.y, aabb.max.z);
 
 	test_loaded_model = load_obj_from_file("data/models/Seeker_3.obj");
-	delete test_loaded_model->get_material();
+	test_loaded_model->recalculate_AABB();
+
+	aabb = test_loaded_model->get_AABB();
+	printf("AABB for loaded model: %.2f %.2f %.2f - %.2f %.2f %.2f\n",aabb.min.x, aabb.min.y, aabb.min.z,
+																aabb.max.x, aabb.max.y, aabb.max.z);
+
+	if(test_loaded_model->get_material()) delete test_loaded_model->get_material();
 	test_loaded_model->set_material(mat);
 	assert(test_loaded_model);
 }
@@ -108,7 +114,8 @@ void MainScene::init()
 
 	voxel_model->set_material(mat);
 	voxel_model->transform.translate(-5,0,0);
-
+	//voxel_model->recalculate_AABB();
+	
 	
 	delete myCubes;
 }
@@ -191,8 +198,13 @@ void MainScene::render(RenderPass& pass)
 
 	pass.draw_model(voxel_model, voxel_shader, cam);
 
-	if(test_loaded_model)
-		pass.draw_model(test_loaded_model, shader, cam);
+	pass.draw_model(test_loaded_model, shader, cam);
+
+	//printf("Model is ");
+	//if(!cam->inside_frustum(test_loaded_model->get_AABB()))
+	//	printf("NOT ");
+	
+	//printf("in view frustum\n");
 
 	//bool val = true;
 	//ImGui::ShowDemoWindow(&val);

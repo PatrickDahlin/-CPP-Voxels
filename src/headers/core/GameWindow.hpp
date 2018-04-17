@@ -40,8 +40,8 @@ public:
 
 	void swap_buffers();
 
-	void attach_game(Game* game);
-
+	void attach_game(const std::shared_ptr<Game>& game);
+	
 	void set_mouse_pos(int x, int y);
 
 	void apply_settings(WindowSettings new_settings);
@@ -76,7 +76,7 @@ protected:
 	int real_width;
 	int real_height;
 
-	Game*			game;
+	std::shared_ptr<Game>			game;
 	
 };
 

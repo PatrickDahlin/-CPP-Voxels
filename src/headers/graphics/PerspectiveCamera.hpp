@@ -19,6 +19,7 @@ public:
 protected:
 
     void update_projection() override;
+	void update_frustum() override;
 
     float			fov;
 	int				width;

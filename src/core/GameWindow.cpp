@@ -19,7 +19,7 @@ GameWindow::~GameWindow()
 	destroy();
 }
 
-void GameWindow::attach_game(Game* game)
+void GameWindow::attach_game(const std::shared_ptr<Game>& game)
 {
 	this->game = game;
 }

@@ -15,11 +15,10 @@
 #include "game/TerrainScene.hpp"
 
 bool Game::running = true;
-GameWindow* Game::game_window = nullptr;
+std::shared_ptr<GameWindow> Game::game_window;
 
-Game::Game(GameWindow* window) :
-input(window),
-main_scene(nullptr)
+Game::Game(const std::shared_ptr<GameWindow>& window) :
+input(window)
 {
 	Game::game_window = window;
 	printf("Setting up Game\n");
@@ -29,7 +28,8 @@ main_scene(nullptr)
 
 	init_imgui(window->get_width(), window->get_height());
 
-	framebuffer = new Framebuffer(game_window->get_width(), game_window->get_height());
+
+	framebuffer = std::make_unique<Framebuffer>(game_window->get_width(), game_window->get_height());
 
 	assert(Game::game_window);
 }
@@ -47,8 +47,8 @@ void Game::load()
 	scene_manager.resized_window(game_window->get_width(), game_window->get_height());
 	
 	// No need to delete this scene, it's deleted in scenemanager
-	scene_manager.switch_to_scene(new MainScene(&input, &scene_manager));
-	//scene_manager.switch_to_scene(new TerrainScene(&input, &scene_manager));
+	//scene_manager.switch_to_scene(new MainScene(&input, &scene_manager));
+	scene_manager.switch_to_scene(new TerrainScene(&input, &scene_manager));
 	//scene_manager.switch_to_scene(new PerlinScene(&input, &scene_manager));
 
 	glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
@@ -183,8 +183,7 @@ void Game::run()
 		{
 			printf("Resizing fbo\n");
 			framebuffer->dispose();
-			delete framebuffer;
-			framebuffer = new Framebuffer(game_window->get_width(), game_window->get_height());
+			framebuffer = std::make_unique<Framebuffer>(game_window->get_width(), game_window->get_height());
 			printf("Done fbo resize\n");
 		}
 		
@@ -234,8 +233,6 @@ void Game::run()
 
 	cleanup_framebuffers();
 
-	delete framebuffer;
-
 	scene_manager.dispose();
 }
 
@@ -245,7 +242,7 @@ void Game::quit()
 	printf("Reqested quit\n");
 }
 
-GameWindow* Game::get_window()
+auto Game::get_window()
 {
 	return game_window;
 }

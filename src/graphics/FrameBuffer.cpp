@@ -18,7 +18,7 @@ void cleanup_framebuffers()
 	initialized = false;
 }
 
-void render_framebuffer(Framebuffer* buf)
+void render_framebuffer(const std::unique_ptr<Framebuffer>& buf)
 {
 
 	if(!initialized){

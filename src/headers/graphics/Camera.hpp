@@ -1,9 +1,31 @@
 #ifndef _CAMERA_HPP_
 #define _CAMERA_HPP_
 
-#include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include "core/Common.hpp"
 #include "core/Transform.hpp"
+#include "graphics/AABB.hpp"
+
+struct Plane {
+	float a,b,c,d;
+	float distance(vec3 other)
+	{
+		return a*other.x + b*other.y + c*other.z + d;
+	}
+	/*Plane() : p(0), n(0,1,0) {}
+	Plane(vec3 p, vec3 n) : p(p), n(n) {
+		d = -(glm::dot(n, p));
+	}
+	vec3 p;
+	vec3 n;
+	float d;
+
+	float distance(vec3 other)
+	{
+		return (d + glm::dot(n, other));
+	}*/
+};
 
 class Camera {
 public:
@@ -28,9 +50,12 @@ public:
 	glm::vec3 get_up();
 	glm::vec3 get_right();
 
+	bool inside_frustum(AABB aabb);
+
 protected:
 
 	virtual void update_projection() = 0;
+	virtual void update_frustum() = 0;
 
 	bool			update_proj;
 	glm::mat4		projection_mat;
@@ -40,6 +65,8 @@ protected:
 
 	glm::vec3		position;
 	float			pitch, yaw, roll;
+
+	Plane			frustum[6];
 	
 };
 

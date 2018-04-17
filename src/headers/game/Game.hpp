@@ -11,7 +11,7 @@ class Framebuffer;
 class Game
 {
 public:
-	Game(GameWindow* window);
+	Game(const std::shared_ptr<GameWindow>& window);
 	~Game();
 
 	void load();
@@ -22,17 +22,16 @@ public:
 
 	static void quit();
 
-	static GameWindow* get_window();
+	static auto get_window();
 
 protected:
 
 	static bool				running;
 	SceneManager			scene_manager;
-	static GameWindow*		game_window;
+	static std::shared_ptr<GameWindow> game_window;
 	Input					input;
-	MainScene*				main_scene;
 
-	Framebuffer* 			framebuffer;
+	std::unique_ptr<Framebuffer> 			framebuffer;
 
 };
 

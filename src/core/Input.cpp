@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <cmath>
 
-Input::Input(GameWindow* window) : key_map(),
+Input::Input(const std::shared_ptr<GameWindow>& window) : key_map(),
 				 mouse_x(window->get_width()/2),
 				 mouse_y(window->get_height()/2),
 				 last_mouse_x(mouse_x),
@@ -19,11 +19,11 @@ Input::Input(GameWindow* window) : key_map(),
 				 mouse_delta_y(0),
 				 mouse_last_enabled_x(mouse_x),
 				 mouse_last_enabled_y(mouse_y),
-				 window(window),
 				 enabled(true),
 				 window_focused(true),
 				 mouse_btn_state(),
 				 scroll_delta(0),
+				 window(window),
 				 controller(nullptr)
 {
 	window->set_mouse_pos( window->get_real_screen_width()/2, window->get_real_screen_height()/2 );

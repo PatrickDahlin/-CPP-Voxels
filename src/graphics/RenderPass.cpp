@@ -63,6 +63,8 @@ void RenderPass::do_render()
 	assert(main_camera);
 	for(auto it : draw_calls)
 	{
+		//if(!it.cam->inside_frustum(it.model->get_AABB())) continue;
+
 		it.shader->use();
 
 		it.shader->upload_projection(it.cam->get_projection());

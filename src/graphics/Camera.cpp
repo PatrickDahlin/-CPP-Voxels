@@ -70,8 +70,9 @@ glm::mat4 Camera::get_view()
 		view_mat = glm::inverse(view_mat);
 		
 		update_view = false;
+		update_frustum();
 	}
-	
+
 	return view_mat;
 }
 
@@ -134,4 +135,46 @@ void Camera::set_rotation(float x, float y, float z)
 void Camera::set_rotation(glm::vec3 amount)
 {
 	set_rotation(amount.x, amount.y, amount.z);
+}
+
+bool Camera::inside_frustum(AABB aabb)
+{
+	return true;
+	// Get 8 vertices of AABB
+	vec3 v[8] = {
+		// Front
+		aabb.min,
+		vec3(aabb.max.x, aabb.min.y, aabb.min.z),
+		vec3(aabb.max.x, aabb.max.y, aabb.min.z),
+		vec3(aabb.min.x, aabb.max.y, aabb.min.z),
+		
+		// Back
+		aabb.max,
+		vec3(aabb.max.x, aabb.min.y, aabb.max.z),
+		vec3(aabb.min.x, aabb.min.y, aabb.max.z),
+		vec3(aabb.min.x, aabb.max.y, aabb.max.z)
+	};
+
+	bool result = true;
+
+	// Compare all vertices against all planes, one plane at a time
+	for(int i = 0; i < 6; i++)
+	{
+		int in = 0,out = 0;
+		// Check all 8 vertices against this plane, if there are both in & out vertices, break
+		for(int j = 0; j < 8 && (in == 0 || out == 0); j++)
+		{
+			if( frustum[i].distance(v[j]) < 0 )
+				out++;
+			else
+				in++;
+		}
+
+		// If all corners are outside this plane, it can't be inside frustum
+		if(!in)
+			return false;
+		else if(out)
+			result = true;
+	}
+	return result;
 }

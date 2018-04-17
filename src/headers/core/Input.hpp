@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include <glm/fwd.hpp>
 
-class GameWindow;
+#include "core/GameWindow.hpp"
 
 // States for each key
 // PRESSED = the frame the key was pressed
@@ -58,7 +58,7 @@ enum class GamePadBtn
 class Input
 {
   public:
-	Input(GameWindow* window);
+	Input(const std::shared_ptr<GameWindow>& window);
 	~Input();
 
 	// Updates key state and mouse state
@@ -144,13 +144,14 @@ class Input
 	int mouse_delta_y;
 	int mouse_last_enabled_x;
 	int mouse_last_enabled_y;
-	GameWindow* window;
+	
 	bool enabled;
 	bool window_focused;
 
 	std::unordered_map<int, KeyState> mouse_btn_state;
 	int scroll_delta;
 
+	std::shared_ptr<GameWindow> window;
 	SDL_GameController*	controller;
 };
 

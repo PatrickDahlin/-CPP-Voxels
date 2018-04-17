@@ -34,7 +34,7 @@ private:
 
 };
 
-extern void render_framebuffer(Framebuffer* buf);
+extern void render_framebuffer(const std::unique_ptr<Framebuffer>& buf);
 
 extern void cleanup_framebuffers();
 

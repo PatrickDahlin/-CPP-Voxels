@@ -4,6 +4,8 @@
 
 class SDL_Thread;
 
+// !!! No cleanup of threads!!
+
 class Thread {
 public:
 	Thread();

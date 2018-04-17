@@ -49,12 +49,14 @@ Material* Model::get_material() const
 
 void Model::recalculate_AABB()
 {
+	return;
 	assert(vert_arr);
 	if(vert_arr->get_vertices().size() == 0) return;
 
 	vec3 v0 = vert_arr->get_vertices()[0];
 	aabb.min = v0;
 	aabb.max = v0;
+	
 	for(vec3 v : vert_arr->get_vertices())
 	{
 		aabb.min.x = std::min(aabb.min.x, v.x);
@@ -65,10 +67,14 @@ void Model::recalculate_AABB()
 		aabb.max.y = std::max(aabb.max.y, v.y);
 		aabb.max.z = std::max(aabb.max.z, v.z);
 	}
-	aabb.min += transform.get_position();
+	vec4 min = vec4(aabb.min,1.0) * transform.get_combined();
+	vec4 max = vec4(aabb.max,1.0) * transform.get_combined();
+	aabb.min = vec3(min.x,min.y,min.z);
+	aabb.max = vec3(max.x,max.y,max.z);
+	/*aabb.min += transform.get_position();
 	aabb.min *= transform.get_scale();
 	aabb.max += transform.get_position();
-	aabb.max *= transform.get_scale();
+	aabb.max *= transform.get_scale();*/
 }
 
 void Model::set_vertices(vector<vec3> verts)

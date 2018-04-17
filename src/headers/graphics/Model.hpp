@@ -4,6 +4,7 @@
 #include "core/Common.hpp"
 #include <vector>
 #include "core/Transform.hpp"
+#include "graphics/AABB.hpp"
 
 #include <string>
 
@@ -12,11 +13,7 @@ using namespace std;
 class VertexArray;
 class Material;
 
-struct AABB {
-	AABB() : min(0,0,0), max(0,0,0) {}
-	vec3 min;
-	vec3 max;
-};
+
 
 class Model {
 public:

@@ -11,6 +11,7 @@ public:
 protected:
 
     void update_projection() override;
+	void update_frustum() override;
 
     int			left, right, top, bottom;
 	

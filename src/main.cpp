@@ -104,12 +104,12 @@ int main(int argc, char* argv[])
 		false, false
 	};
 
-	GameWindow* window = new GameWindow(settings);
+	auto window = std::make_shared<GameWindow>(settings);
 
 	//
 	// GLEW
 	//
-	GLenum res = glewInit();
+	auto res = glewInit();
 	if(res != GLEW_OK)
 	{
 		//@Error
@@ -121,16 +121,13 @@ int main(int argc, char* argv[])
 	// Flip images right side up since opengl has y axis flipped
 	stbi_set_flip_vertically_on_load(true);
 	
-	Game* game = new Game(window);
+	auto game = std::make_shared<Game>(window);
 	window->attach_game(game); // Give window the game handle to send resize "event"
 
 	game->load();
 	game->run();
 	
-	delete game;
-
 	window->destroy();
-	delete window;
 
 	printf("Closed game, cleaning up window\n");
 	

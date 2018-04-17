@@ -2,7 +2,6 @@
 #define _DebugCamera_HPP_
 
 #include "graphics/PerspectiveCamera.hpp"
-
 class Input;
 
 class DebugCamera : public PerspectiveCamera 

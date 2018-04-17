@@ -6,7 +6,12 @@
 #include <GL/glew.h>
 #include <cstdint>
 #include <assert.h>
-#include <glm/fwd.hpp>
+#include <memory>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/mat3x3.hpp>
 
 typedef std::int64_t		s64;
 typedef std::uint64_t		u64;

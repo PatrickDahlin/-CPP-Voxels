@@ -3,7 +3,7 @@ SFLAGS+= -I.
 SFLAGS = -I./src
 SFLAGS+= -I./src/headers
 SFLAGS+= -I./include
-SFLAGS+= -std=c++11 -Wall -Wextra -Werror=return-type -O3 -ggdb3
+SFLAGS+= -std=c++14 -Wall -Wextra -Werror=return-type -Og -ggdb3
 
 SFLAGS+= -Wno-unused-parameter
 
